@@ -1,0 +1,12 @@
+{
+  "name": "dde-course",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Course site for Data Engineering (ITMO): MkDocs + Marp",
+  "scripts": {
+    "slides": "bash scripts/build_slides.sh"
+  },
+  "devDependencies": {
+    "@marp-team/marp-cli": "4.5.1"
+  }
+}

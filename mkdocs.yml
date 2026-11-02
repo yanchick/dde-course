@@ -1,0 +1,107 @@
+site_name: ДДЕ · ИТМО
+site_description: Курс «Инжиниринг данных» — программа, лекции, семинары и проект
+site_url: https://yanchick.github.io/dde-course/
+repo_url: https://github.com/yanchick/dde-course
+repo_name: yanchick/dde-course
+edit_uri: edit/main/docs/
+copyright: >-
+  Код — MIT, тексты — CC BY-NC-SA 4.0 · ИТМО, 2025
+
+theme:
+  name: material
+  custom_dir: overrides
+  language: ru
+  font: false
+  favicon: assets/logo.svg
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/weather-night
+        name: Тёмная тема
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/weather-sunny
+        name: Светлая тема
+  features:
+    - navigation.tabs
+    - navigation.top
+    - navigation.indexes
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - toc.follow
+
+plugins:
+  - search:
+      lang: ru
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - toc:
+      permalink: true
+      toc_depth: 3
+
+extra_css:
+  - stylesheets/extra.css
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
+
+not_in_nav: /404.md
+
+nav:
+  - Главная: index.md
+  - Программа: syllabus.md
+  - Лекции:
+      - Обзор: lectures/index.md
+      - 01. Архитектура систем обработки данных: lectures/01-architecture.md
+      - 02. Продвинутый сбор данных: lectures/02-data-collection.md
+      - 03. Очистка и валидация: lectures/03-cleaning-validation.md
+      - 04. Предобработка и трансформация: lectures/04-transformation.md
+      - 05. Разметка и аннотация: lectures/05-labeling.md
+      - 06. ETL/ELT и оркестрация: lectures/06-etl-orchestration.md
+      - 07. Хранилища данных: lectures/07-storage.md
+      - 08. Дашборды и BI: lectures/08-bi-dashboards.md
+      - 09. LLM и AI-агенты: lectures/09-llm-agents.md
+      - 10. Agentic workflows и LLMOps: lectures/10-agentic-workflows.md
+  - Семинары:
+      - Обзор: seminars/index.md
+      - 01. Архитектура: seminars/01-architecture.md
+      - 02. Сбор данных: seminars/02-data-collection.md
+      - 03. Event-системы: seminars/03-event-systems.md
+      - 04. Валидация: seminars/04-validation.md
+      - 05. Трансформация: seminars/05-transformation.md
+      - 06. Разметка: seminars/06-labeling.md
+      - 07. Оркестрация: seminars/07-orchestration.md
+      - 08. Хранилища: seminars/08-storage.md
+      - 09. Observability: seminars/09-observability.md
+      - 10. Сквозной прогон: seminars/10-end-to-end.md
+  - Проект: project.md
+  - Самопроверка: self-check.md
+  - FAQ: faq.md
+  - Литература: literature.md
+
+extra:
+  semester: "Осень 2025"

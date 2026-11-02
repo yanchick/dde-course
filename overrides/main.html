@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block extrahead %}
+  {{ super() }}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block footer %}
+  <footer class="md-footer dde-footer">
+    <div class="md-footer-meta md-typeset">
+      <div class="md-grid">
+        <div class="dde-footer__inner">
+          <span>© 2025 ИТМО · «Инжиниринг данных»</span>
+          <span>Семестр: {{ config.extra.semester }}</span>
+          <span>Код — MIT · тексты — CC BY-NC-SA 4.0</span>
+          <a href="https://github.com/yanchick/dde-course">GitHub</a>
+          <span class="dde-footer__note">Материалы курса предоставляются для обучения; программы и формулировки заданий могут меняться.</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+{% endblock %}

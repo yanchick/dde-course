@@ -1,0 +1,10 @@
+site/
+docs/slides/
+.venv/
+node_modules/
+__pycache__/
+*.pyc
+instructor/solutions/
+.DS_Store
+.cache/
+materials/

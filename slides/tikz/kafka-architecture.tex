@@ -1,0 +1,65 @@
+\documentclass[tikz,border=8pt]{standalone}
+\usepackage{fontspec}
+\setmainfont{Noto Sans}
+\setsansfont{Noto Sans}
+\usepackage{xcolor}
+\usetikzlibrary{positioning,arrows.meta,fit,backgrounds}
+\definecolor{primary}{RGB}{29,78,216}
+\definecolor{primarydark}{RGB}{30,58,138}
+\definecolor{accent}{RGB}{14,165,233}
+\definecolor{ink}{RGB}{15,23,42}
+\definecolor{muted}{RGB}{100,116,139}
+\definecolor{soft}{RGB}{241,245,249}
+\definecolor{teal}{RGB}{13,148,136}
+\begin{document}
+\begin{tikzpicture}[
+  node distance=0.8cm and 1.4cm,
+  bbox/.style={draw=primary, fill=soft, rounded corners=5pt,
+    minimum height=1.0cm, minimum width=2.0cm, align=center,
+    font=\sffamily\footnotesize, line width=0.9pt, text=ink},
+  part/.style={draw=teal, fill=white, rounded corners=3pt,
+    minimum height=0.55cm, minimum width=0.95cm, align=center,
+    font=\sffamily\scriptsize, line width=0.7pt, text=ink},
+  arr/.style={-{Stealth[length=2.6mm]}, line width=1.05pt, draw=accent},
+  lbl/.style={font=\sffamily\scriptsize, text=muted},
+]
+% Producers
+\node[bbox] (p1) {\textbf{Producer}};
+\node[bbox, below=0.45cm of p1] (p2) {\textbf{Producer}};
+% Cluster group
+\begin{scope}[on background layer]
+\node[draw=primarydark, dashed, rounded corners=8pt, inner sep=14pt,
+      fit=(p1) (p2), label={[font=\sffamily\scriptsize,text=primarydark]north west:Производители}] (prodgrp) {};
+\end{scope}
+
+% Brokers
+\node[bbox, right=3.4cm of prodgrp, yshift=0.9cm] (b1) {\textbf{Broker 1}};
+\node[bbox, below=0.4cm of b1] (b2) {\textbf{Broker 2}};
+\node[bbox, below=0.4cm of b2] (b3) {\textbf{Broker 3}};
+\node[part, right=0.28cm of b1] (t1) {P0\,P1\,P2};
+\node[part, right=0.28cm of b2] (t2) {P0\,P1\,P2};
+\node[part, right=0.28cm of b3] (t3) {P0\,P1\,P2};
+
+\begin{scope}[on background layer]
+\node[draw=primary, thick, rounded corners=8pt, inner sep=12pt,
+      fit=(b1)(b2)(b3)(t1)(t2)(t3),
+      label={[font=\sffamily\small,text=ink]north:Кластер Kafka}] (cluster) {};
+\end{scope}
+
+% ZooKeeper
+\node[bbox, above=0.7cm of cluster] (zk) {\textbf{ZooKeeper / KRaft}};
+\draw[arr, draw=muted] (zk.south) -- (cluster.north);
+
+% Consumers
+\node[bbox, right=3.0cm of cluster] (c1) {\textbf{Consumer}};
+\node[bbox, below=0.45cm of c1] (c2) {\textbf{Consumer}};
+\begin{scope}[on background layer]
+\node[draw=primarydark, dashed, rounded corners=8pt, inner sep=14pt,
+      fit=(c1) (c2), label={[font=\sffamily\scriptsize,text=primarydark]north east:Консьюмер-группа}] (consgrp) {};
+\end{scope}
+
+% Arrows
+\draw[arr] (prodgrp.east) -- node[above, lbl]{события} (cluster.west);
+\draw[arr] (cluster.east) -- node[above, lbl]{подписка} (consgrp.west);
+\end{tikzpicture}
+\end{document}

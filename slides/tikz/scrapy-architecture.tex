@@ -1,0 +1,37 @@
+\documentclass[tikz,border=8pt]{standalone}
+\usepackage{fontspec}
+\setmainfont{Noto Sans}
+\setsansfont{Noto Sans}
+\usepackage{xcolor}
+\usetikzlibrary{positioning,arrows.meta}
+\definecolor{primary}{RGB}{29,78,216}
+\definecolor{primarydark}{RGB}{30,58,138}
+\definecolor{accent}{RGB}{14,165,233}
+\definecolor{ink}{RGB}{15,23,42}
+\definecolor{muted}{RGB}{100,116,139}
+\definecolor{soft}{RGB}{241,245,249}
+\definecolor{teal}{RGB}{13,148,136}
+\begin{document}
+\begin{tikzpicture}[
+  node distance=0.85cm and 1.7cm,
+  box/.style={draw=primary, fill=soft, rounded corners=5pt,
+    minimum height=1.1cm, minimum width=2.55cm, align=center,
+    font=\sffamily\footnotesize, line width=0.9pt, text=ink},
+  arr/.style={-{Stealth[length=2.6mm]}, line width=1.05pt, draw=accent},
+  lbl/.style={font=\sffamily\scriptsize, text=muted, fill=white, inner sep=1pt},
+]
+\node[box] (spider) {\textbf{Spider}\\[-1pt]{\scriptsize логика извлечения}};
+\node[box, right=2.7cm of spider] (engine) {\textbf{Engine}\\[-1pt]{\scriptsize координатор}};
+\node[box, right=2.7cm of engine] (dl) {\textbf{Downloader}\\[-1pt]{\scriptsize загрузка страниц}};
+\node[box, above=1.25cm of engine] (sched) {\textbf{Scheduler}\\[-1pt]{\scriptsize очередь запросов}};
+\node[box, below=1.25cm of engine] (pipe) {\textbf{Item Pipeline}\\[-1pt]{\scriptsize обработка данных}};
+
+\draw[arr] (spider.north east) to[out=70,in=180] node[lbl]{requests / items} (engine.north);
+\draw[arr] (engine.south) to[out=-110,in=-110] node[lbl]{responses} (spider.south);
+\draw[arr] (engine.north) -- node[lbl]{request} (sched.south);
+\draw[arr] (sched.east) to[out=0,in=90] node[lbl]{next} (engine.north east);
+\draw[arr] (engine.east) -- node[lbl]{request} (dl.west);
+\draw[arr] (dl.west) to[out=180,in=0] node[lbl]{response} (engine.south east);
+\draw[arr] (engine.south) -- node[lbl]{items} (pipe.north);
+\end{tikzpicture}
+\end{document}

@@ -1,0 +1,34 @@
+\documentclass[tikz,border=8pt]{standalone}
+\usepackage{fontspec}
+\setmainfont{Noto Sans}
+\setsansfont{Noto Sans}
+\usepackage{xcolor}
+\usetikzlibrary{positioning,arrows.meta,calc}
+\definecolor{primary}{RGB}{29,78,216}
+\definecolor{primarydark}{RGB}{30,58,138}
+\definecolor{accent}{RGB}{14,165,233}
+\definecolor{ink}{RGB}{15,23,42}
+\definecolor{muted}{RGB}{100,116,139}
+\definecolor{soft}{RGB}{241,245,249}
+\definecolor{teal}{RGB}{13,148,136}
+\definecolor{amber}{RGB}{217,119,6}
+\definecolor{rose}{RGB}{225,29,72}
+\begin{document}
+\begin{tikzpicture}[
+  box/.style={draw=primary, fill=soft, rounded corners=7pt,
+    minimum height=1.15cm, minimum width=3.1cm, align=center,
+    font=\sffamily\footnotesize, line width=1.0pt, text=ink},
+  arr/.style={-{Stealth[length=3mm]}, line width=1.3pt, draw=rose},
+  lbl/.style={font=\sffamily\scriptsize, text=muted, fill=white, inner sep=2pt},
+]
+\node[box] (observe) {\textbf{1. Наблюдение}\\[-1pt]{\scriptsize Playwright: снапшот страницы}};
+\node[box, below right=1.4cm and 2.6cm of observe] (decide) {\textbf{2. Решение}\\[-1pt]{\scriptsize LLM: что делать дальше}};
+\node[box, below left=1.4cm and 2.6cm of observe] (act) {\textbf{3. Действие}\\[-1pt]{\scriptsize клик / скролл / ввод}};
+
+\draw[arr] (observe.south) to[out=-30,in=90] node[lbl]{HTML / скриншот} (decide.north);
+\draw[arr] (decide.west) to[out=180,in=-30] node[lbl]{план} (act.east);
+\draw[arr] (act.north) to[out=90,in=210] node[lbl]{результат} (observe.west);
+
+\node[font=\sffamily\small, text=primarydark, above=0.15cm of observe] {цикл «наблюдение $\rightarrow$ решение $\rightarrow$ действие»};
+\end{tikzpicture}
+\end{document}

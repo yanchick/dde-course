@@ -1,0 +1,52 @@
+\documentclass[tikz,border=8pt]{standalone}
+\usepackage{fontspec}
+\setmainfont{Noto Sans}
+\setsansfont{Noto Sans}
+\usepackage{xcolor}
+\usetikzlibrary{positioning,arrows.meta,fit,backgrounds}
+\definecolor{primary}{RGB}{29,78,216}
+\definecolor{primarydark}{RGB}{30,58,138}
+\definecolor{accent}{RGB}{14,165,233}
+\definecolor{ink}{RGB}{15,23,42}
+\definecolor{muted}{RGB}{100,116,139}
+\definecolor{soft}{RGB}{241,245,249}
+\definecolor{teal}{RGB}{13,148,136}
+\definecolor{amber}{RGB}{217,119,6}
+\begin{document}
+\begin{tikzpicture}[
+  node distance=0.9cm and 1.5cm,
+  box/.style={draw=primary, fill=soft, rounded corners=5pt,
+    minimum height=1.0cm, minimum width=2.3cm, align=center,
+    font=\sffamily\footnotesize, line width=0.9pt, text=ink},
+  block/.style={draw=amber, fill=amber!12, rounded corners=3pt,
+    minimum height=0.5cm, minimum width=0.9cm, align=center,
+    font=\sffamily\scriptsize, line width=0.7pt, text=ink},
+  arr/.style={-{Stealth[length=2.6mm]}, line width=1.05pt, draw=accent},
+  meta/.style={draw=muted, line width=0.8pt},
+  lbl/.style={font=\sffamily\scriptsize, text=muted},
+]
+% Client
+\node[box] (client) {\textbf{Client}};
+% NameNode
+\node[box, right=3.0cm of client, yshift=1.5cm] (namenode) {\textbf{NameNode}\\[-1pt]{\scriptsize метаданные}};
+% DataNodes
+\node[box, right=3.0cm of client, yshift=-1.5cm] (d1) {\textbf{DataNode 1}};
+\node[box, right=3.0cm of client, yshift=-2.7cm] (d2) {\textbf{DataNode 2}};
+\node[box, right=3.0cm of client, yshift=-3.9cm] (d3) {\textbf{DataNode 3}};
+
+% blocks inside datanodes
+\node[block, right=0.25cm of d1] (b1) {B1\,B2\,B3};
+\node[block, right=0.25cm of d2] (b2) {B1\,B2\,B3};
+\node[block, right=0.25cm of d3] (b3) {B1\,B2\,B3};
+
+% Arrows
+\draw[arr, meta] (client.north) to[out=70,in=180] node[above, lbl]{запись / чтение (метаданные)} (namenode.west);
+\draw[arr] (client.east) to[out=0,in=180] node[above, lbl]{блоки данных} (d1.west);
+\draw[arr] (client.east) to[out=0,in=180] (d2.west);
+\draw[arr] (client.east) to[out=0,in=180] (d3.west);
+\draw[arr, meta] (namenode.south) to[out=-70,in=90] node[right, lbl]{управление} (d1.north);
+
+% replication note
+\node[font=\sffamily\scriptsize, text=muted, below=0.3cm of d3] {репликация блоков для отказоустойчивости};
+\end{tikzpicture}
+\end{document}
