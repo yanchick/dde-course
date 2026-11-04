@@ -41,13 +41,18 @@ jobs:
 
       - name: Set up Chrome
         id: setup-chrome
-        uses: browser-actions/setup-chrome@v1
+        uses: browser-actions/setup-chrome@v2
+        with:
+          install-dependencies: true
         continue-on-error: true
 
       - name: Build slides
         run: bash scripts/build_slides.sh
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path || '/usr/bin/google-chrome' }}
+          # setup-chrome's Chrome for Testing is not setuid, and GitHub's
+          # Ubuntu 24.04 restricts unprivileged namespaces; Marp needs this.
+          CHROME_NO_SANDBOX: "1"
 
       - name: Build site
         run: mkdocs build --strict
