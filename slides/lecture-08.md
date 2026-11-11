@@ -3,21 +3,114 @@ marp: true
 theme: default
 size: 16:9
 paginate: true
+header: 'Лекция 8 · Построение дашбордов и обзор современных BI-систем'
+footer: 'ИТМО · Магистратура «Инженерия данных» · Осень 2025'
 math: katex
 ---
-# Лекция 8: Построение дашбордов и обзор современных BI-систем
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+
+:root {
+  --primary: #1d4ed8;
+  --primary-dark: #1e3a8a;
+  --accent: #0ea5e9;
+  --ink: #0f172a;
+  --muted: #64748b;
+  --bg: #ffffff;
+  --soft: #f1f5f9;
+  --teal: #0d9488;
+  --amber: #d97706;
+  --rose: #e11d48;
+}
+
+section {
+  font-family: 'Inter', 'Noto Sans', 'Segoe UI', system-ui, sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+  font-size: 24px;
+  line-height: 1.35;
+  padding: 72px 56px 40px;
+}
+
+h1 { font-size: 1.5em; color: var(--primary); margin: 0 0 .35em; font-weight: 800; letter-spacing: -.01em; }
+h2 { font-size: 1.18em; color: var(--ink); margin: 0 0 .55em; font-weight: 700; }
+h3 { font-size: .82em; color: var(--muted); margin: 0 0 .3em; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+
+ul, ol { margin: 0 0 .55em; padding-left: 1.25em; }
+li { margin: .16em 0; }
+li strong, li b { color: var(--primary-dark); }
+p { margin: 0 0 .5em; }
+
+a { color: var(--primary); }
+
+table { width: 100%; border-collapse: collapse; font-size: .68em; }
+th { background: var(--primary); color: #fff; padding: 9px 14px; text-align: left; font-weight: 600; }
+td { padding: 8px 14px; border-bottom: 1px solid #e2e8f0; vertical-align: top; }
+tr:nth-child(even) td { background: #f8fafc; }
+
+img { display: block; margin: .25em auto; max-width: 100%; max-height: 340px; }
+
+code { background: var(--soft); border-radius: 4px; padding: 1px 6px; font-size: .82em; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+pre { background: #0f172a; color: #e2e8f0; border-radius: 10px; padding: 16px 22px; font-size: .56em; line-height: 1.5; }
+pre code { background: transparent; color: inherit; padding: 0; }
+
+.hljs-comment, .hljs-quote { color: #94a3b8; font-style: italic; }
+.hljs-keyword, .hljs-selector-tag, .hljs-built_in, .hljs-type { color: #93c5fd; }
+.hljs-string, .hljs-attr, .hljs-regexp { color: #86efac; }
+.hljs-number, .hljs-literal, .hljs-symbol { color: #fbbf24; }
+.hljs-title, .hljs-section, .hljs-name { color: #f0abfc; }
+.hljs-variable, .hljs-template-variable { color: #fca5a5; }
+.hljs-meta { color: #cbd5e1; }
+
+.columns { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+.cols3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px; align-items: start; }
+
+section.section {
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 55%, #1d4ed8 100%);
+  color: #fff; justify-content: center; text-align: center;
+}
+section.section h1 { color: #fff; font-size: 2.1em; border: none; }
+section.section h2 { color: rgba(255,255,255,.85); font-weight: 400; font-size: 1.1em; }
+section.section::after { content: ''; }
+
+section.title {
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 55%, #1d4ed8 100%);
+  color: #fff; justify-content: center; text-align: center;
+}
+section.title h1 { color: #fff; font-size: 2.5em; border: none; }
+section.title h2 { color: rgba(255,255,255,.9); font-weight: 400; }
+section.title p { color: rgba(255,255,255,.8); }
+section.title ul, section.title ol, section.section ul, section.section ol { display: inline-block; text-align: left; }
+section.title code, section.section code { background: rgba(255,255,255,.16); color: #fff; }
+
+section.title .meta { margin-top: 1.4em; font-size: .8em; color: rgba(255,255,255,.7); letter-spacing: .06em; text-transform: uppercase; }
+
+.callout { display: block; border-left: 5px solid var(--accent); background: #eff6ff; border-radius: 6px; padding: 14px 20px; margin: .5em 0; }
+.callout.warn { border-left-color: var(--amber); background: #fffbeb; }
+.callout.good { border-left-color: var(--teal); background: #ecfdf5; }
+.callout.bad { border-left-color: var(--rose); background: #fef2f2; }
+
+.muted { color: var(--muted); font-size: .8em; }
+.small { font-size: .8em; }
+.badge { display: inline-block; background: var(--soft); border-radius: 999px; padding: 4px 14px; margin: 3px; font-size: .74em; font-weight: 600; color: var(--primary-dark); }
+</style>
+---
+
+<!-- _class: title -->
+
+# Лекция 8
+## Построение дашбордов и обзор современных BI-систем
+
+<div class="meta">Инженерия данных · Магистратура ИТМО · Осень 2025</div>
 
 ---
 
-## Титульный слайд
+<!-- _class: section -->
 
-# Построение дашбордов и обзор современных BI-систем
+# План лекции
 
-**Курс:** Инжиниринг данных (продвинутый уровень)
-
-**Лекция 8 из 8**
-
-**Продолжительность:** 80 минут
+## 4 раздела · 80 минут
 
 ---
 
@@ -43,11 +136,14 @@ math: katex
 
 ---
 
-# Раздел 1: Основы визуализации данных и дашбордов
+<!-- _class: section -->
+
+# Раздел 1
+## Основы визуализации данных и дашбордов
 
 ---
 
-## 1.1 Зачем нужна визуализация?
+## Зачем нужна визуализация?
 
 ### От данных к решениям
 
@@ -58,7 +154,7 @@ math: katex
 
 ---
 
-## 1.2 Принципы эффективной визуализации
+## Принципы эффективной визуализации
 
 ### Три кита визуализации
 
@@ -66,11 +162,11 @@ math: katex
 - **Точность:** данные представлены без искажений
 - **Информативность:** показаны важные инсайты, а не шум
 
-**Правило:** если дашборд требует инструкции — он плох
+<span class="callout good">**Правило:** если дашборд требует инструкции — он плох</span>
 
 ---
 
-## 1.3 Принципы Эдварда Тафти
+## Принципы Эдварда Тафти
 
 ### Классика теории визуализации
 
@@ -81,7 +177,7 @@ math: katex
 
 ---
 
-## 1.4 Принципы Берта
+## Принципы Берта
 
 ### Правила восприятия
 
@@ -92,187 +188,75 @@ math: katex
 
 ---
 
-## 1.5 Типы визуализаций: Барчарты
+## Типы визуализаций: Барчарты
 
 ### Столбчатые и горизонтальные диаграммы
 
-```tikz
-\begin{tikzpicture}[scale=0.8]
-  % Оси
-  \draw[->] (0,0) -- (0,5) node[above] {Sales};
-  \draw[->] (0,0) -- (7,0) node[right] {Month};
-  
-  % Столбцы
-  \fill[blue!60] (0.5,0) rectangle (1.5,3) node[pos=.5] {};
-  \fill[blue!60] (2,0) rectangle (3,3.8) node[pos=.5] {};
-  \fill[blue!60] (3.5,0) rectangle (4.5,2.5) node[pos=.5] {};
-  \fill[blue!60] (5,0) rectangle (6,4.2) node[pos=.5] {};
-  
-  % Подписи
-  \node at (1,-0.3) {Jan};
-  \node at (2.5,-0.3) {Feb};
-  \node at (4,-0.3) {Mar};
-  \node at (5.5,-0.3) {Apr};
-\end{tikzpicture}
-```
+![](Лекция8_figs/tikz_01.png)
 
-**Когда использовать:** сравнение категорий, временные ряды (короткие периоды)
+<span class="callout">**Когда использовать:** сравнение категорий, временные ряды (короткие периоды)</span>
 
 ---
 
-## 1.6 Типы визуализаций: Линейные графики
+## Типы визуализаций: Линейные графики
 
 ### Тренды и динамика
 
-```tikz
-\begin{tikzpicture}[scale=0.8]
-  % Оси
-  \draw[->] (0,0) -- (0,4) node[above] {Revenue};
-  \draw[->] (0,0) -- (7,0) node[right] {Time};
-  
-  % Линия тренда
-  \draw[blue, thick] (0.5,1) -- (1.5,1.5) -- (2.5,1.3) -- (3.5,2) -- (4.5,2.5) -- (5.5,2.8) -- (6.5,3.2);
-  
-  % Точки данных
-  \foreach \x/\y in {0.5/1, 1.5/1.5, 2.5/1.3, 3.5/2, 4.5/2.5, 5.5/2.8, 6.5/3.2}
-    \fill[blue] (\x,\y) circle (2pt);
-    
-  % Сетка
-  \draw[gray!30, dashed] (0,1) -- (7,1);
-  \draw[gray!30, dashed] (0,2) -- (7,2);
-  \draw[gray!30, dashed] (0,3) -- (7,3);
-\end{tikzpicture}
-```
+![](Лекция8_figs/tikz_02.png)
 
-**Когда использовать:** временные ряды, тренды, непрерывные данные
+<span class="callout">**Когда использовать:** временные ряды, тренды, непрерывные данные</span>
 
 ---
 
-## 1.7 Типы визуализаций: Тепловые карты
+## Типы визуализаций: Тепловые карты
 
 ### Корреляции и плотность
 
-```mermaid
-%%{init: {'theme':'base'}}%%
-graph TD
-    A["Тепловая карта"] --> B["Матрица корреляций"]
-    A --> C["Географическое распределение"]
-    A --> D["Временные паттерны"]
-    
-    B --> B1["Признаки ML-моделей"]
-    C --> C1["Плотность населения"]
-    D --> D1["Активность по часам/дням"]
-    
-    style A fill:#e1f5ff
-    style B fill:#ffe1e1
-    style C fill:#e1ffe1
-    style D fill:#fff5e1
-```
+![](Лекция8_figs/mermaid_01.svg)
 
-**Когда использовать:** многомерные данные, паттерны в матрицах
+<span class="callout">**Когда использовать:** многомерные данные, паттерны в матрицах</span>
 
 ---
 
-## 1.8 Типы визуализаций: Scatter plots
+## Типы визуализаций: Scatter plots
 
 ### Взаимосвязи переменных
 
-```tikz
-\begin{tikzpicture}[scale=0.7]
-  % Оси
-  \draw[->] (0,0) -- (0,5) node[above] {Price};
-  \draw[->] (0,0) -- (6,0) node[right] {Square};
-  
-  % Точки данных с трендом
-  \foreach \x/\y in {0.5/1, 1/1.5, 1.5/1.8, 2/2.2, 2.5/2.5, 3/2.8, 3.5/3.1, 4/3.5, 4.5/3.8, 5/4.2, 5.5/4.5}
-    \fill[blue!70] (\x,\y) circle (3pt);
-  
-  % Линия тренда
-  \draw[red, thick, dashed] (0.3,0.8) -- (5.7,4.7);
-  
-  \node[red] at (5,5) {$R^2 = 0.92$};
-\end{tikzpicture}
-```
+![](Лекция8_figs/tikz_03.png)
 
-**Когда использовать:** корреляции, выбросы, кластеры
+<span class="callout">**Когда использовать:** корреляции, выбросы, кластеры</span>
 
 ---
 
-## 1.9 Типы визуализаций: Геовизуализация
+## Типы визуализаций: Геовизуализация
 
 ### Пространственные данные
 
-```mermaid
-graph LR
-    A["Геовизуализация"] --> B["Точечные карты"]
-    A --> C["Хороплет-карты"]
-    A --> D["Потоковые карты"]
-    
-    B --> B1["Локации магазинов"]
-    C --> C1["Плотность по регионам"]
-    D --> D1["Миграция пользователей"]
-    
-    style A fill:#e1f5ff
-    style B fill:#ffe1e1
-    style C fill:#e1ffe1
-    style D fill:#fff5e1
-```
+![](Лекция8_figs/mermaid_02.svg)
 
-**Инструменты:** Mapbox, Leaflet, Kepler.gl, Deck.gl
+<span class="callout">**Инструменты:** Mapbox, Leaflet, Kepler.gl, Deck.gl</span>
 
 ---
 
-## 1.10 Дизайн дашбордов: Структура
+## Дизайн дашбордов: Структура
 
 ### Иерархия информации
 
-```mermaid
-graph TD
-    A["Дашборд"] --> B["Заголовок + KPI"]
-    A --> C["Основные графики"]
-    A --> D["Детализация"]
-    A --> E["Фильтры и контролы"]
-    
-    B --> B1["Самые важные метрики"]
-    C --> C1["Тренды и сравнения"]
-    D --> D1["Drill-down по клику"]
-    E --> E1["Интерактивность"]
-    
-    style A fill:#e1f5ff
-    style B fill:#ffe1e1
-    style C fill:#e1ffe1
-    style D fill:#fff5e1
-    style E fill:#f5e1ff
-```
+![](Лекция8_figs/mermaid_03.svg)
 
 ---
 
-## 1.11 Дизайн дашбордов: F-паттерн
+## Дизайн дашбордов: F-паттерн
 
 ### Как пользователь читает экран
 
-```tikz
-\begin{tikzpicture}[scale=0.9]
-  % Экран дашборда
-  \draw[thick] (0,0) rectangle (8,6);
-  
-  % F-паттерн чтения
-  \draw[->, red, ultra thick] (0.5,5.5) -- (7.5,5.5) node[right] {1. Horizont};
-  \draw[->, red, ultra thick] (0.5,5.3) -- (0.5,0.5) node[below] {2. Vertical};
-  \draw[->, red, ultra thick] (0.7,3.5) -- (5,3.5) node[right] {3. Horizont};
-  
-  % Зоны важности
-  \fill[blue!20] (0.3,5) rectangle (3,5.8) node[pos=.5] {KPI};
-  \fill[green!20] (0.3,3) rectangle (4,4.8) node[pos=.5] {Main Plot};
-  \fill[yellow!20] (4.2,3) rectangle (7.7,4.8) node[pos=.5] {Details};
-\end{tikzpicture}
-```
+![](Лекция8_figs/tikz_04.png)
 
-**Правило:** самое важное — в верхний левый угол
+<span class="callout good">**Правило:** самое важное — в верхний левый угол</span>
 
 ---
 
-## 1.12 Дизайн дашбордов: Интерактивность
+## Дизайн дашбордов: Интерактивность
 
 ### Уровни взаимодействия
 
@@ -283,28 +267,17 @@ graph TD
 
 ---
 
-## 1.13 Дизайн дашбордов: Мобильная адаптация
+## Дизайн дашбордов: Мобильная адаптация
 
 ### Responsive дизайн
 
-```mermaid
-graph LR
-    A["Desktop"] --> B["Широкие графики"]
-    A --> C["Много деталей"]
-    
-    D["Mobile"] --> E["Вертикальная прокрутка"]
-    D --> F["Упрощенные визуализации"]
-    D --> G["Крупные элементы"]
-    
-    style A fill:#e1f5ff
-    style D fill:#ffe1e1
-```
+![](Лекция8_figs/mermaid_04.svg)
 
-**Тренд:** mobile-first подход в современных BI
+<span class="callout">**Тренд:** mobile-first подход в современных BI</span>
 
 ---
 
-## 1.14 Метрики успеха дашбордов
+## Метрики успеха дашбордов
 
 ### Как оценить эффективность
 
@@ -315,25 +288,13 @@ graph LR
 
 ---
 
-## 1.15 Интеграция в бизнес-процессы
+## Интеграция в бизнес-процессы
 
 ### От аналитики к действиям
 
-```mermaid
-graph TD
-    A["Дашборд"] --> B["Выявление проблемы"]
-    B --> C["Анализ причин"]
-    C --> D["Принятие решения"]
-    D --> E["Действие"]
-    E --> F["Мониторинг результата"]
-    F --> A
-    
-    style A fill:#e1f5ff
-    style D fill:#ffe1e1
-    style E fill:#e1ffe1
-```
+![](Лекция8_figs/mermaid_05.svg)
 
-**Пример:** дашборд оттока → анализ сегментов → кампания удержания → отслеживание эффекта
+<span class="callout">**Пример:** дашборд оттока → анализ сегментов → кампания удержания → отслеживание эффекта</span>
 
 ---
 
@@ -341,7 +302,7 @@ graph TD
 
 ### Проверьте себя
 
-**Вопрос:** Какой тип визуализации лучше всего подходит для отображения корреляции между двумя числовыми переменными?
+<span class="callout warn">**Вопрос:** Какой тип визуализации лучше всего подходит для отображения корреляции между двумя числовыми переменными?</span>
 
 A) Барчарт  
 B) Линейный график  
@@ -354,19 +315,26 @@ D) Тепловая карта
 
 ### Основы визуализации
 
+<div class="callout good">
+
 - Визуализация — мост между данными и решениями
 - Принципы: ясность, точность, информативность
 - Выбор типа графика зависит от задачи
 - Дизайн дашборда следует психологии восприятия
 - Успех измеряется скоростью получения инсайтов
 
----
-
-# Раздел 2: Современные BI-системы и их возможности
+</div>
 
 ---
 
-## 2.1 Что такое BI-система?
+<!-- _class: section -->
+
+# Раздел 2
+## Современные BI-системы и их возможности
+
+---
+
+## Что такое BI-система?
 
 ### Business Intelligence платформа
 
@@ -377,35 +345,15 @@ D) Тепловая карта
 
 ---
 
-## 2.2 Архитектура типичной BI-системы
+## Архитектура типичной BI-системы
 
 ### Слои платформы
 
-```mermaid
-graph TD
-    A["Источники данных"] --> B["Слой подключения"]
-    B --> C["Слой трансформации"]
-    C --> D["Слой семантики"]
-    D --> E["Слой визуализации"]
-    E --> F["Слой дистрибуции"]
-    
-    A1["SQL DB"] --> A
-    A2["NoSQL"] --> A
-    A3["API"] --> A
-    A4["Файлы"] --> A
-    
-    F --> F1["Web-дашборды"]
-    F --> F2["Email-рассылки"]
-    F --> F3["Мобильные приложения"]
-    
-    style A fill:#e1f5ff
-    style D fill:#ffe1e1
-    style E fill:#e1ffe1
-```
+![](Лекция8_figs/mermaid_06.svg)
 
 ---
 
-## 2.3 Обзор платформ: Tableau
+## Обзор платформ: Tableau
 
 ### Лидер визуализации
 
@@ -417,7 +365,7 @@ graph TD
 
 ---
 
-## 2.4 Обзор платформ: Power BI
+## Обзор платформ: Power BI
 
 ### Microsoft экосистема
 
@@ -429,7 +377,7 @@ graph TD
 
 ---
 
-## 2.5 Обзор платформ: Looker (Google)
+## Обзор платформ: Looker (Google)
 
 ### Код-ориентированный подход
 
@@ -441,7 +389,7 @@ graph TD
 
 ---
 
-## 2.6 Обзор платформ: Qlik Sense
+## Обзор платформ: Qlik Sense
 
 ### Ассоциативный движок
 
@@ -453,7 +401,7 @@ graph TD
 
 ---
 
-## 2.7 Обзор платформ: Metabase
+## Обзор платформ: Metabase
 
 ### Open-source решение
 
@@ -465,30 +413,15 @@ graph TD
 
 ---
 
-## 2.8 Сравнение платформ
+## Сравнение платформ
 
 ### Матрица выбора
 
-```mermaid
-graph TD
-    A["Критерии выбора"] --> B["Простота использования"]
-    A --> C["Функциональность"]
-    A --> D["Цена"]
-    A --> E["Масштабируемость"]
-    A --> F["Экосистема"]
-    
-    B --> B1["Power BI, Metabase"]
-    C --> C1["Tableau, Qlik"]
-    D --> D1["Metabase, Power BI"]
-    E --> E1["Looker, Qlik"]
-    F --> F1["Power BI, Looker"]
-    
-    style A fill:#e1f5ff
-```
+![](Лекция8_figs/mermaid_07.svg)
 
 ---
 
-## 2.9 Self-service BI
+## Self-service BI
 
 ### Демократизация данных
 
@@ -499,53 +432,27 @@ graph TD
 
 ---
 
-## 2.10 Облачные vs локальные решения
+## Облачные vs локальные решения
 
 ### Deployment модели
 
-```mermaid
-graph LR
-    A["On-premise"] --> A1["Полный контроль"]
-    A --> A2["Высокие затраты на инфраструктуру"]
-    A --> A3["Ответственность за обновления"]
-    
-    B["Cloud"] --> B1["Быстрое развертывание"]
-    B --> B2["Оплата по подписке"]
-    B --> B3["Автоматические обновления"]
-    B --> B4["Зависимость от вендора"]
-    
-    style A fill:#ffe1e1
-    style B fill:#e1ffe1
-```
+![](Лекция8_figs/mermaid_08.svg)
 
-**Тренд:** миграция в облако (70% новых внедрений)
+<span class="callout">**Тренд:** миграция в облако (70% новых внедрений)</span>
 
 ---
 
-## 2.11 Интеграция с хранилищами данных
+## Интеграция с хранилищами данных
 
 ### Подключения
 
-```mermaid
-graph TD
-    A["BI-система"] --> B["SQL хранилища"]
-    A --> C["NoSQL"]
-    A --> D["Data Lakes"]
-    A --> E["API"]
-    
-    B --> B1["PostgreSQL, MySQL, SQL Server"]
-    C --> C1["MongoDB, Cassandra"]
-    D --> D1["S3 + Athena, BigQuery"]
-    E --> E1["REST, GraphQL"]
-    
-    style A fill:#e1f5ff
-```
+![](Лекция8_figs/mermaid_09.svg)
 
-**Лучшая практика:** прямое подключение к DWH, а не к OLTP-базам
+<span class="callout good">**Лучшая практика:** прямое подключение к DWH, а не к OLTP-базам</span>
 
 ---
 
-## 2.12 Автоматическая генерация инсайтов
+## Автоматическая генерация инсайтов
 
 ### AI в BI
 
@@ -554,11 +461,11 @@ graph TD
 - **Automated insights:** поиск скрытых трендов в данных
 - **NLP-запросы:** "Покажи продажи за прошлый квартал" → график
 
-**Пример:** ThoughtSpot, Einstein Analytics (Salesforce)
+<span class="callout">**Пример:** ThoughtSpot, Einstein Analytics (Salesforce)</span>
 
 ---
 
-## 2.13 Масштабируемость BI-систем
+## Масштабируемость BI-систем
 
 ### Обработка больших данных
 
@@ -569,20 +476,11 @@ graph TD
 
 ---
 
-## 2.14 Embedded Analytics
+## Embedded Analytics
 
 ### Интеграция в приложения
 
-```mermaid
-graph LR
-    A["Ваше приложение"] --> B["Embedded BI SDK"]
-    B --> C["Дашборды в iframe"]
-    B --> D["API для визуализаций"]
-    B --> E["White-label решения"]
-    
-    style A fill:#e1f5ff
-    style B fill:#ffe1e1
-```
+![](Лекция8_figs/mermaid_10.svg)
 
 **Примеры:** Looker Embedded, Power BI Embedded, Tableau Embedded
 
@@ -594,7 +492,7 @@ graph LR
 
 ### Проверьте себя
 
-**Вопрос:** Какая BI-платформа использует LookML для определения семантического слоя?
+<span class="callout warn">**Вопрос:** Какая BI-платформа использует LookML для определения семантического слоя?</span>
 
 A) Tableau  
 B) Power BI  
@@ -607,43 +505,36 @@ D) Qlik Sense
 
 ### Современные BI-системы
 
+<div class="callout good">
+
 - BI-системы превращают данные в визуальные инсайты
 - Выбор платформы зависит от требований и экосистемы
 - Self-service BI демократизирует аналитику
 - Облачные решения доминируют в новых внедрениях
 - AI усиливает возможности поиска инсайтов
 
----
-
-# Раздел 3: Построение и оптимизация дашбордов
+</div>
 
 ---
 
-## 3.1 Подготовка данных для визуализации
+<!-- _class: section -->
+
+# Раздел 3
+## Построение и оптимизация дашбордов
+
+---
+
+## Подготовка данных для визуализации
 
 ### ETL перед BI
 
-```mermaid
-graph LR
-    A["Источники"] --> B["Извлечение"]
-    B --> C["Трансформация"]
-    C --> D["Загрузка в DWH"]
-    D --> E["BI-система"]
-    
-    C --> C1["Агрегация"]
-    C --> C2["Фильтрация"]
-    C --> C3["Обогащение"]
-    
-    style A fill:#e1f5ff
-    style C fill:#ffe1e1
-    style E fill:#e1ffe1
-```
+![](Лекция8_figs/mermaid_11.svg)
 
-**Правило:** "мусор на входе → мусор на выходе"
+<span class="callout good">**Правило:** "мусор на входе → мусор на выходе"</span>
 
 ---
 
-## 3.2 Агрегация данных
+## Агрегация данных
 
 ### Предрасчет для производительности
 
@@ -654,30 +545,17 @@ graph LR
 
 ---
 
-## 3.3 Кэширование
+## Кэширование
 
 ### Слои кэша в BI
 
-```mermaid
-graph TD
-    A["Пользователь"] --> B["Кэш браузера"]
-    B --> C["Кэш BI-сервера"]
-    C --> D["Кэш базы данных"]
-    D --> E["Источник данных"]
-    
-    B --> B1["Статические элементы"]
-    C --> C1["Результаты запросов"]
-    D --> D1["Индексы, query cache"]
-    
-    style A fill:#e1f5ff
-    style C fill:#ffe1e1
-```
+![](Лекция8_figs/mermaid_12.svg)
 
-**Настройка:** TTL (time to live) для разных типов данных
+<span class="callout">**Настройка:** TTL (time to live) для разных типов данных</span>
 
 ---
 
-## 3.4 Интерактивные элементы: Фильтры
+## Интерактивные элементы: Фильтры
 
 ### Управление контекстом
 
@@ -688,56 +566,27 @@ graph TD
 
 ---
 
-## 3.5 Интерактивные элементы: Drill-down
+## Интерактивные элементы: Drill-down
 
 ### Навигация по уровням детализации
 
-```mermaid
-graph TD
-    A["Мир"] --> B["Страна"]
-    B --> C["Регион"]
-    C --> D["Город"]
-    D --> E["Магазин"]
-    
-    A1["Год"] --> B1["Квартал"]
-    B1 --> C1["Месяц"]
-    C1 --> D1["День"]
-    
-    style A fill:#e1f5ff
-    style A1 fill:#ffe1e1
-```
+![](Лекция8_figs/mermaid_13.svg)
 
-**Реализация:** drill-down кнопки, breadcrumbs для возврата
+<span class="callout">**Реализация:** drill-down кнопки, breadcrumbs для возврата</span>
 
 ---
 
-## 3.6 Интерактивные элементы: Параметры
+## Интерактивные элементы: Параметры
 
 ### Динамическое изменение метрик
 
-```tikz
-\begin{tikzpicture}[scale=0.8]
-  % Переключатель метрики
-  \draw[thick] (0,0) rectangle (6,1);
-  \node at (1,0.5) {Metric:};
-  \draw[fill=blue!30] (2.5,0.2) rectangle (3.5,0.8) node[pos=.5] {Revenue};
-  \draw (4,0.2) rectangle (5,0.8) node[pos=.5] {Cash};
-  
-  % График меняется
-  \draw[->, thick] (3,-0.5) -- (3,-1.5);
-  
-  % Результат
-  \draw[thick] (0,-2) rectangle (6,-5);
-  \draw[blue, ultra thick] (0.5,-4.5) -- (1.5,-3.5) -- (2.5,-3.8) -- (3.5,-2.8) -- (4.5,-2.5) -- (5.5,-2.2);
-  \node at (3,-2.3) {Plot Revenue};
-\end{tikzpicture}
-```
+![](Лекция8_figs/tikz_05.png)
 
-**Use case:** один дашборд для разных метрик
+<span class="callout">**Use case:** один дашборд для разных метрик</span>
 
 ---
 
-## 3.7 Кросс-хайлайтинг
+## Кросс-хайлайтинг
 
 ### Связь между графиками
 
@@ -748,24 +597,11 @@ graph TD
 
 ---
 
-## 3.8 Real-time дашборды
+## Real-time дашборды
 
 ### Потоковые данные
 
-```mermaid
-graph LR
-    A["Kafka/Kinesis"] --> B["Stream Processing"]
-    B --> C["In-memory DB"]
-    C --> D["BI-система"]
-    D --> E["Auto-refresh"]
-    
-    B --> B1["Windowing"]
-    B --> B2["Aggregation"]
-    
-    style A fill:#e1f5ff
-    style C fill:#ffe1e1
-    style E fill:#e1ffe1
-```
+![](Лекция8_figs/mermaid_14.svg)
 
 **Технологии:** Grafana + InfluxDB, Tableau + Hyper Live
 
@@ -773,29 +609,17 @@ graph LR
 
 ---
 
-## 3.9 Безопасность в BI: Row-level security
+## Безопасность в BI: Row-level security
 
 ### Ограничение доступа к данным
 
-```mermaid
-graph TD
-    A["Пользователь"] --> B["Аутентификация"]
-    B --> C["Роль пользователя"]
-    C --> D["Фильтр данных"]
-    D --> E["Только разрешенные строки"]
-    
-    C --> C1["Менеджер → свой регион"]
-    C --> C2["Директор → вся компания"]
-    
-    style A fill:#e1f5ff
-    style D fill:#ffe1e1
-```
+![](Лекция8_figs/mermaid_15.svg)
 
-**Реализация:** через политики в DWH или в самой BI-системе
+<span class="callout">**Реализация:** через политики в DWH или в самой BI-системе</span>
 
 ---
 
-## 3.10 Безопасность: Управление доступом
+## Безопасность: Управление доступом
 
 ### Кто что может видеть
 
@@ -806,7 +630,7 @@ graph TD
 
 ---
 
-## 3.11 Оптимизация производительности: Индексация
+## Оптимизация производительности: Индексация
 
 ### Ускорение запросов
 
@@ -824,7 +648,7 @@ CREATE INDEX idx_region ON sales(region);
 
 ---
 
-## 3.12 Оптимизация: Материализованные views
+## Оптимизация: Материализованные views
 
 ### Предрасчет агрегатов
 
@@ -842,26 +666,15 @@ GROUP BY 1, 2;
 REFRESH MATERIALIZED VIEW daily_sales;
 ```
 
-**Когда использовать:** сложные агрегации, редко меняющиеся данные
+<span class="callout">**Когда использовать:** сложные агрегации, редко меняющиеся данные</span>
 
 ---
 
-## 3.13 Оптимизация: Партиционирование
+## Оптимизация: Партиционирование
 
 ### Разделение больших таблиц
 
-```mermaid
-graph TD
-    A["Таблица orders"] --> B["Партиция 2023-Q1"]
-    A --> C["Партиция 2023-Q2"]
-    A --> D["Партиция 2023-Q3"]
-    A --> E["Партиция 2023-Q4"]
-    
-    F["Запрос за Q3"] --> D
-    
-    style A fill:#e1f5ff
-    style D fill:#e1ffe1
-```
+![](Лекция8_figs/mermaid_16.svg)
 
 **Эффект:** запросы читают только нужные партиции
 
@@ -869,7 +682,7 @@ graph TD
 
 ---
 
-## 3.14 Оптимизация: Кэширование запросов
+## Оптимизация: Кэширование запросов
 
 ### Повторное использование результатов
 
@@ -878,11 +691,11 @@ graph TD
 - **Invalidation:** сброс при обновлении данных
 - **Warm-up:** предзагрузка популярных дашбордов
 
-**Эффект:** 10x-100x ускорение для повторных запросов
+<span class="callout">**Эффект:** 10x-100x ускорение для повторных запросов</span>
 
 ---
 
-## 3.15 Тестирование дашбордов
+## Тестирование дашбордов
 
 ### Проверка корректности
 
@@ -893,28 +706,13 @@ graph TD
 
 ---
 
-## 3.16 A/B-тестирование дашбордов
+## A/B-тестирование дашбордов
 
 ### Экспериментальный подход
 
-```mermaid
-graph LR
-    A["Пользователи"] --> B["Группа A"]
-    A --> C["Группа B"]
-    
-    B --> B1["Старый дизайн"]
-    C --> C1["Новый дизайн"]
-    
-    B1 --> D["Метрики"]
-    C1 --> D
-    
-    D --> E["Выбор победителя"]
-    
-    style A fill:#e1f5ff
-    style E fill:#e1ffe1
-```
+![](Лекция8_figs/mermaid_17.svg)
 
-**Метрики:** время до инсайта, частота использования, удовлетворенность
+<span class="callout">**Метрики:** время до инсайта, частота использования, удовлетворенность</span>
 
 ---
 
@@ -922,7 +720,7 @@ graph LR
 
 ### Проверьте себя
 
-**Вопрос:** Какая техника оптимизации предполагает предварительный расчет агрегатов и их хранение?
+<span class="callout warn">**Вопрос:** Какая техника оптимизации предполагает предварительный расчет агрегатов и их хранение?</span>
 
 A) Индексация  
 B) Партиционирование  
@@ -935,42 +733,36 @@ D) Кэширование запросов
 
 ### Построение и оптимизация
 
+<div class="callout good">
+
 - Качество данных критично для дашбордов
 - Интерактивность повышает вовлеченность пользователей
 - Производительность достигается через кэширование и предрасчет
 - Безопасность обеспечивается на уровне данных и доступа
 - Тестирование гарантирует корректность и надежность
 
----
-
-# Раздел 4: Расширенные темы в BI
+</div>
 
 ---
 
-## 4.1 Embedded Analytics
+<!-- _class: section -->
+
+# Раздел 4
+## Расширенные темы в BI
+
+---
+
+## Embedded Analytics
 
 ### Аналитика внутри продукта
 
-```mermaid
-graph TD
-    A["SaaS-приложение"] --> B["Embedded BI SDK"]
-    B --> C["Дашборды для клиентов"]
-    B --> D["White-label брендирование"]
-    B --> E["Multi-tenancy"]
-    
-    C --> C1["Каждый клиент видит свои данные"]
-    D --> D1["Логотип и цвета клиента"]
-    E --> E1["Изоляция данных"]
-    
-    style A fill:#e1f5ff
-    style B fill:#ffe1e1
-```
+![](Лекция8_figs/mermaid_18.svg)
 
-**Примеры:** Shopify Analytics, Stripe Dashboard
+<span class="callout">**Примеры:** Shopify Analytics, Stripe Dashboard</span>
 
 ---
 
-## 4.2 Машинное обучение в BI
+## Машинное обучение в BI
 
 ### Предиктивная аналитика
 
@@ -979,41 +771,21 @@ graph TD
 - **Anomaly detection:** выявление мошенничества, сбоев
 - **Рекомендации:** next best action для пользователя
 
-**Интеграция:** AutoML в Power BI, Einstein Discovery в Salesforce
+<span class="callout">**Интеграция:** AutoML в Power BI, Einstein Discovery в Salesforce</span>
 
 ---
 
-## 4.3 Anomaly Detection в дашбордах
+## Anomaly Detection в дашбордах
 
 ### Автоматическое выявление аномалий
 
-```tikz
-\begin{tikzpicture}[scale=0.8]
-  % Временной ряд
-  \draw[->] (0,0) -- (0,4) node[above] {Metric};
-  \draw[->] (0,0) -- (8,0) node[right] {Time};
-  
-  % Нормальные данные
-  \draw[blue, thick] (0.5,2) -- (1,2.1) -- (1.5,1.9) -- (2,2.2) -- (2.5,2) -- (3,2.1);
-  
-  % Аномалия
-  \draw[blue, thick] (3,2.1) -- (3.5,3.5);
-  \fill[red] (3.5,3.5) circle (4pt) node[above right] {Anomaly!};
-  
-  % Возврат к норме
-  \draw[blue, thick] (3.5,3.5) -- (4,2.3) -- (4.5,2.1) -- (5,2) -- (5.5,2.2) -- (6,2.1);
-  
-  % Доверительный интервал
-  \draw[gray, dashed] (0.5,2.5) -- (7,2.5);
-  \draw[gray, dashed] (0.5,1.5) -- (7,1.5);
-\end{tikzpicture}
-```
+![](Лекция8_figs/tikz_06.png)
 
-**Алгоритмы:** Z-score, Isolation Forest, Prophet (Facebook)
+<span class="callout">**Алгоритмы:** Z-score, Isolation Forest, Prophet (Facebook)</span>
 
 ---
 
-## 4.4 Социальное и коллаборативное BI
+## Социальное и коллаборативное BI
 
 ### Совместная работа над данными
 
@@ -1022,27 +794,15 @@ graph TD
 - **Шаринг:** отправка дашборда коллегам
 - **Версионирование:** история изменений дашборда
 
-**Инструменты:** Slack-интеграции, Tableau Pulse
+<span class="callout">**Инструменты:** Slack-интеграции, Tableau Pulse</span>
 
 ---
 
-## 4.5 Headless BI
+## Headless BI
 
 ### API-driven визуализация
 
-```mermaid
-graph LR
-    A["Backend BI-системы"] --> B["REST/GraphQL API"]
-    B --> C["Кастомный фронтенд"]
-    
-    C --> C1["React + D3.js"]
-    C --> C2["Vue + Chart.js"]
-    C --> C3["Мобильное приложение"]
-    
-    style A fill:#e1f5ff
-    style B fill:#ffe1e1
-    style C fill:#e1ffe1
-```
+![](Лекция8_figs/mermaid_19.svg)
 
 **Преимущества:** полный контроль над UX, интеграция в уникальный дизайн
 
@@ -1050,7 +810,7 @@ graph LR
 
 ---
 
-## 4.6 Augmented Analytics
+## Augmented Analytics
 
 ### BI усиленный AI
 
@@ -1059,28 +819,15 @@ graph LR
 - **Smart data prep:** автоматическая очистка и трансформация
 - **Conversational analytics:** чат-бот для запросов к данным
 
-**Платформы:** ThoughtSpot, Salesforce Einstein
+<span class="callout">**Платформы:** ThoughtSpot, Salesforce Einstein</span>
 
 ---
 
-## 4.7 Тренды: Reverse ETL
+## Тренды: Reverse ETL
 
 ### Данные из DWH обратно в операционные системы
 
-```mermaid
-graph LR
-    A["DWH"] --> B["Reverse ETL"]
-    B --> C["CRM"]
-    B --> D["Marketing automation"]
-    B --> E["Customer support"]
-    
-    A --> A1["ML-модели, сегменты"]
-    C --> C1["Обогащение лидов"]
-    D --> D1["Персонализация кампаний"]
-    
-    style A fill:#e1f5ff
-    style B fill:#ffe1e1
-```
+![](Лекция8_figs/mermaid_20.svg)
 
 **Инструменты:** Census, Hightouch
 
@@ -1088,7 +835,7 @@ graph LR
 
 ---
 
-## 4.8 Тренды: Metrics Layer
+## Тренды: Metrics Layer
 
 ### Единый слой метрик
 
@@ -1099,32 +846,15 @@ graph LR
 
 ---
 
-## 4.9 Выбор BI-системы: Критерии
+## Выбор BI-системы: Критерии
 
 ### Матрица принятия решения
 
-```mermaid
-graph TD
-    A["Критерии"] --> B["Функциональность"]
-    A --> C["Простота использования"]
-    A --> D["Интеграции"]
-    A --> E["Цена"]
-    A --> F["Поддержка"]
-    A --> G["Масштабируемость"]
-    
-    B --> B1["Типы визуализаций"]
-    B --> B2["AI/ML возможности"]
-    
-    C --> C1["Self-service для бизнеса"]
-    
-    D --> D1["Коннекторы к вашим данным"]
-    
-    style A fill:#e1f5ff
-```
+![](Лекция8_figs/mermaid_21.svg)
 
 ---
 
-## 4.10 Кейсы внедрения: E-commerce
+## Кейсы внедрения: E-commerce
 
 ### Дашборды для интернет-магазина
 
@@ -1138,7 +868,7 @@ graph TD
 
 ---
 
-## 4.11 Кейсы внедрения: Финтех
+## Кейсы внедрения: Финтех
 
 ### Аналитика для финансовых сервисов
 
@@ -1152,7 +882,7 @@ graph TD
 
 ---
 
-## 4.12 Кейсы внедрения: IoT
+## Кейсы внедрения: IoT
 
 ### Дашборды для умных устройств
 
@@ -1165,7 +895,7 @@ graph TD
 
 ---
 
-## 4.13 Будущее BI
+## Будущее BI
 
 ### Куда движется индустрия
 
@@ -1181,7 +911,7 @@ graph TD
 
 ### Проверьте себя
 
-**Вопрос:** Что такое Reverse ETL?
+<span class="callout warn">**Вопрос:** Что такое Reverse ETL?</span>
 
 A) Обратный процесс извлечения данных  
 B) Загрузка данных из DWH в операционные системы  
@@ -1194,15 +924,22 @@ D) Восстановление данных после сбоя
 
 ### Расширенные темы
 
+<div class="callout good">
+
 - Embedded analytics интегрирует BI в продукты
 - ML усиливает возможности поиска инсайтов
 - Коллаборация делает аналитику командной работой
 - Headless BI дает гибкость в UI/UX
 - Будущее — AI-driven, real-time, embedded
 
+</div>
+
 ---
 
-# Итоговое резюме лекции
+<!-- _class: section -->
+
+# Заключение
+## Итоговое резюме лекции
 
 ---
 
@@ -1222,23 +959,25 @@ D) Восстановление данных после сбоя
 
 ### Чего избегать
 
-❌ **Слишком много информации на одном экране**  
-✅ Разбейте на несколько дашбордов
-
-❌ **3D-графики для количественных данных**  
-✅ Используйте 2D-визуализации
-
-❌ **Радужные цветовые схемы**  
-✅ Используйте 2-3 основных цвета
-
-❌ **Отсутствие контекста (нет сравнения с прошлым периодом)**  
-✅ Добавьте YoY, MoM метрики
-
-❌ **Неоптимизированные запросы**  
-✅ Используйте агрегаты и кэш
+| ❌ Ошибка | ✅ Как правильно |
+|:----------|:-----------------|
+| Слишком много информации на одном экране | Разбейте на несколько дашбордов |
+| 3D-графики для количественных данных | Используйте 2D-визуализации |
+| Радужные цветовые схемы | Используйте 2–3 основных цвета |
+| Нет сравнения с прошлым периодом | Добавьте YoY, MoM-метрики |
+| Неоптимизированные запросы | Используйте агрегаты и кэш |
 
 ---
+
+<!-- _class: title -->
 
 # Спасибо за внимание!
 
 ## Вопросы?
+
+**Материалы курса**
+- Схемы: папка `Лекция8_figs/`
+- Исходники диаграмм: «Лекция 8 — источники диаграмм.md»
+- Презентации всех лекций — в репозитории курса
+
+<div class="meta">Спасибо за семестр!</div>

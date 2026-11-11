@@ -3,47 +3,148 @@ marp: true
 theme: default
 size: 16:9
 paginate: true
+header: 'Лекция 3 · Продвинутая очистка и валидация данных'
+footer: 'ИТМО · Магистратура «Инженерия данных» · Осень 2025'
 math: katex
-title: "Лекция 3: Продвинутая очистка и валидация данных"
-author: "Инжиниринг данных (продвинутый уровень)"
-footer: "Продвинутая очистка и валидация данных — Лекция 3"
 ---
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+
+:root {
+  --primary: #1d4ed8;
+  --primary-dark: #1e3a8a;
+  --accent: #0ea5e9;
+  --ink: #0f172a;
+  --muted: #64748b;
+  --bg: #ffffff;
+  --soft: #f1f5f9;
+  --teal: #0d9488;
+  --amber: #d97706;
+  --rose: #e11d48;
+}
+
+section {
+  font-family: 'Inter', 'Noto Sans', 'Segoe UI', system-ui, sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+  font-size: 27px;
+  line-height: 1.35;
+  padding: 72px 68px 40px;
+}
+
+h1 { font-size: 1.5em; color: var(--primary); margin: 0 0 .35em; font-weight: 800; letter-spacing: -.01em; }
+h2 { font-size: 1.18em; color: var(--ink); margin: 0 0 .55em; font-weight: 700; }
+h3 { font-size: .82em; color: var(--muted); margin: 0 0 .3em; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+
+ul, ol { margin: 0 0 .55em; padding-left: 1.25em; }
+li { margin: .16em 0; }
+li strong, li b { color: var(--primary-dark); }
+p { margin: 0 0 .5em; }
+
+a { color: var(--primary); }
+
+table { width: 100%; border-collapse: collapse; font-size: .74em; }
+th { background: var(--primary); color: #fff; padding: 9px 14px; text-align: left; font-weight: 600; }
+td { padding: 8px 14px; border-bottom: 1px solid #e2e8f0; vertical-align: top; }
+tr:nth-child(even) td { background: #f8fafc; }
+
+img { display: block; margin: .25em auto; max-width: 100%; max-height: 370px; }
+
+code { background: var(--soft); border-radius: 4px; padding: 1px 6px; font-size: .82em; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+pre { background: #0f172a; color: #e2e8f0; border-radius: 10px; padding: 16px 22px; font-size: .62em; line-height: 1.5; }
+pre code { background: transparent; color: inherit; padding: 0; }
+
+/* подсветка кода: тёмная палитра под фон pre */
+.hljs-comment, .hljs-quote { color: #94a3b8; font-style: italic; }
+.hljs-keyword, .hljs-selector-tag, .hljs-built_in, .hljs-type { color: #93c5fd; }
+.hljs-string, .hljs-attr, .hljs-regexp { color: #86efac; }
+.hljs-number, .hljs-literal, .hljs-symbol { color: #fbbf24; }
+.hljs-title, .hljs-section, .hljs-name { color: #f0abfc; }
+.hljs-variable, .hljs-template-variable { color: #fca5a5; }
+.hljs-meta { color: #cbd5e1; }
+
+.columns { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+.cols3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px; align-items: start; }
+
+section.section {
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 55%, #1d4ed8 100%);
+  color: #fff; justify-content: center; text-align: center;
+}
+section.section h1 { color: #fff; font-size: 2.1em; border: none; }
+section.section h2 { color: rgba(255,255,255,.85); font-weight: 400; font-size: 1.1em; }
+section.section::after { content: ''; }
+
+section.title {
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 55%, #1d4ed8 100%);
+  color: #fff; justify-content: center; text-align: center;
+}
+section.title h1 { color: #fff; font-size: 2.5em; border: none; }
+section.title h2 { color: rgba(255,255,255,.9); font-weight: 400; }
+section.title p { color: rgba(255,255,255,.8); }
+section.title ul, section.title ol, section.section ul, section.section ol { display: inline-block; text-align: left; }
+section.title code, section.section code { background: rgba(255,255,255,.16); color: #fff; }
+
+section.title .meta { margin-top: 1.4em; font-size: .8em; color: rgba(255,255,255,.7); letter-spacing: .06em; text-transform: uppercase; }
+
+.callout { display: block; border-left: 5px solid var(--accent); background: #eff6ff; border-radius: 6px; padding: 14px 20px; margin: .5em 0; }
+.callout.warn { border-left-color: var(--amber); background: #fffbeb; }
+.callout.good { border-left-color: var(--teal); background: #ecfdf5; }
+.callout.bad { border-left-color: var(--rose); background: #fef2f2; }
+
+.muted { color: var(--muted); font-size: .8em; }
+.small { font-size: .8em; }
+.badge { display: inline-block; background: var(--soft); border-radius: 999px; padding: 4px 14px; margin: 3px; font-size: .74em; font-weight: 600; color: var(--primary-dark); }
+</style>
 
 <!--
 ОБЩИЕ ЗАМЕТКИ К ПРЕЗЕНТАЦИИ
-- Хронометраж: ~105 минут (80 мин × 1.33)
+- Хронометраж: ~105 минут
 - Баланс: теория ↔ код. Код-слайды помечены «→ семинар», полные листинги — в файле Практикум_Лекция3.md
-- Mermaid рендерится в Marp и Obsidian нативно
-- Tikz-блоки — это исходный код диаграмм; рендер отдаётся Kroki (endpoint /tikz/{png|svg}, см. https://kroki.io). Каждый блок — самодостаточный standalone-документ
+- Схемы вставлены картинками: Mermaid → SVG, TikZ → PNG (папка Лекция3_figs/).
+  Исходники всех диаграмм — в файле «Лекция 3 — источники диаграмм.md»
+- Математика рендерится KaTeX (math: katex)
 -->
 
-<!-- _class: lead -->
+<!-- _class: title -->
 
-# Продвинутая очистка и валидация данных
+# Лекция 3
+## Продвинутая очистка и валидация данных
 
-**Лекция 3**
+<div class="meta">Инженерия данных · Магистратура ИТМО · Осень 2025</div>
 
-Инжиниринг данных (продвинутый уровень)
+---
+
+<!-- _class: section -->
+
+# План лекции
+
+## 4 раздела + кейс · 105 минут
 
 ---
 
 ## План лекции
 
-- Автоматизация процессов очистки
-- Статистические методы выявления аномалий
-- Библиотеки для валидации данных
-- Профилирование данных
-- Сквозной практический кейс
+### Структура занятия
 
-**Продолжительность:** ~105 минут
+1. **Автоматизация процессов очистки** — 25 мин
+2. **Статистические методы выявления аномалий** — 25 мин
+3. **Библиотеки для валидации данных** — 20 мин
+4. **Профилирование данных** — 18 мин
+5. **Сквозной практический кейс** — 10 мин
 
-**Формат:** теория + код (код детально разбирается на семинаре)
+<br/>
+
+<div class="callout good">
+<b>Формат:</b> теория + код; каждый раздел заканчивается <b>резюме</b> и <b>вопросами для самопроверки</b>.
+Полные листинги разбираются на семинаре.
+</div>
 
 ---
 
 ## Цели лекции
 
-После лекции вы сможете:
+### После лекции вы сможете
 
 - **Обосновать**, почему автоматизация очистки критична для масштаба
 - **Выбрать** метод детектирования аномалий под тип данных
@@ -59,37 +160,14 @@ footer: "Продвинутая очистка и валидация данны�
 
 Ошибка дешевле всего исправляется **в точке возникновения**.
 
-```tikz
-\documentclass[tikz]{standalone}
-\usepackage{pgfplots}
-\pgfplotsset{compat=1.18}
-\begin{document}
-\begin{tikzpicture}
-\begin{axis}[
-    width=11cm, height=6cm,
-    xlabel={Этап жизненного цикла},
-    ylabel={Стоимость исправления ошибки},
-    ymin=0, ymax=120,
-    symbolic x coords={Источник, Трансформация, Хранилище, Отчёт},
-    xtick=data,
-    ybar, bar width=1.4cm,
-    nodes near coords, nodes near coords align={vertical},
-    ymajorgrids=true
-]
-\addplot[fill=red!40, draw=red!80!black] coordinates {
-    (Источник,1) (Трансформация,10) (Хранилище,50) (Отчёт,100)
-};
-\end{axis}
-\end{tikzpicture}
-\end{document}
-```
+![h:340](Лекция3_figs/tikz_01.png)
 
-**Правило 1-10-100:** стоимость растёт на порядок с каждым этапом.
+<span class="callout warn"><b>Правило 1-10-100:</b> стоимость исправления растёт на порядок с каждым этапом жизненного цикла.</span>
 
 
 ---
 
-<!-- _class: lead -->
+<!-- _class: section -->
 
 # Раздел 1
 ## Автоматизация процессов очистки
@@ -106,25 +184,13 @@ footer: "Продвинутая очистка и валидация данны�
 - **Скорость** — часы работы вместо минут
 - **Ошибки** — человеческий фактор
 
-> Ключевое: ручная очистка **не детерминирована** и **не воспроизводима**.
+<span class="callout good">Ключевое: ручная очистка **не детерминирована** и **не воспроизводима**.</span>
 
 ---
 
 ## Таксономия «грязных» данных
 
-```mermaid
-graph TD
-    D[Грязные данные] --> M[Пропуски Missing]
-    D --> E[Ошибочные значения]
-    D --> Dup[Дубликаты]
-    D --> I[Несогласованность форматов]
-    D --> S[Устаревшие данные]
-    D --> R[Нарушение целостности]
-    E --> E1[Выход за диапазон]
-    E --> E2[Некорректный формат]
-    R --> R1[FK без родителя]
-    R --> R2[Циклические связи]
-```
+![](Лекция3_figs/mermaid_01.svg)
 
 **Ценность таксономии:** единый язык для описания проблем и выбора правил.
 
@@ -144,16 +210,7 @@ graph TD
 
 ## Императивный vs декларативный
 
-```mermaid
-graph TB
-    subgraph Императивный
-        A1[Шаг 1: обрезать] --> A2[Шаг 2: в нижний регистр] --> A3[Шаг 3: проверить]
-    end
-    subgraph Декларативный
-        B1[Правила: trim, lowercase, email] --> B2[Движок применяет сам]
-    end
-    A3 -.->|ценой сопровождения| B2
-```
+![](Лекция3_figs/mermaid_02.svg)
 
 |                   | Императивный   | Декларативный         |
 | ----------------- | -------------- | --------------------- |
@@ -198,23 +255,13 @@ cleaning_rules = {
 clean(clean(x)) == clean(x)   # идемпотентность
 ```
 
-> Без этого очистку невозможно ни тестировать, ни откатывать.
+<span class="callout">Без этого очистку невозможно ни тестировать, ни откатывать.</span>
 
 ---
 
 ## Архитектура системы очистки
 
-```mermaid
-graph LR
-    A[Raw Data] --> B[Profiler]
-    B --> C[Rule Engine]
-    C --> D[Validator]
-    D --> E{Quality Check}
-    E -->|Pass| F[Clean Data]
-    E -->|Fail| G[Quarantine]
-    G --> H[Manual Review]
-    H --> C
-```
+![](Лекция3_figs/mermaid_03.svg)
 
 **Компоненты:** профилирование → правила → валидация → проверка → карантин.
 
@@ -257,15 +304,7 @@ cleaned_df = (
 
 ## Инкрементальная очистка
 
-```mermaid
-graph TB
-    A[New Data Batch] --> B{Changed?}
-    B -->|Yes| C[Apply Rules]
-    B -->|No| D[Skip]
-    C --> E[Merge with Clean]
-    D --> E
-    E --> F[Updated Dataset]
-```
+![](Лекция3_figs/mermaid_04.svg)
 
 - Обработка только изменений
 - Снижение вычислительных затрат
@@ -275,12 +314,7 @@ graph TB
 
 ## Batch vs Streaming: теория выбора
 
-```mermaid
-graph TD
-    Q{Латентность критична?} -->|Да| S[Streaming]
-    Q -->|Нет| B[Batch]
-    Q -->|Отчасти| M[Micro-batch]
-```
+![w:420](Лекция3_figs/mermaid_05.svg)
 
 | Критерий | Batch | Streaming |
 |---|---|---|
@@ -328,7 +362,7 @@ graph TD
 
 ---
 
-<!-- _class: lead -->
+<!-- _class: section -->
 
 # Раздел 2
 ## Статистические методы выявления аномалий
@@ -347,13 +381,13 @@ graph TD
 | **Дрейф** (drift)      | системное изменение распределения | мониторинг  |
 | **Ошибка** (error)     | технический сбой сбора            | исправление |
 
-> Это **разные задачи с разными методами** — не синонимы.
+<span class="callout">Это **разные задачи с разными методами** — не синонимы.</span>
 
 ---
 
 ## Робастность: почему Z-Score ломается
 
-**Breakdown point** — доля «испорченных» наблюдений, которую оценка выдерживает.
+### Breakdown point — доля «испорченных» наблюдений, которую оценка выдерживает
 
 | Оценка | Breakdown point |
 |---|---|
@@ -362,25 +396,7 @@ graph TD
 | Медиана $\tilde{x}$ | 50% |
 | MAD | 50% |
 
-```tikz
-\documentclass[tikz]{standalone}
-\usepackage{pgfplots}
-\pgfplotsset{compat=1.18}
-\begin{document}
-\begin{tikzpicture}
-\begin{axis}[
-    width=11cm, height=6cm,
-    xlabel={Величина выброса $x_{out}$},
-    ylabel={Оценка центра},
-    grid=major, legend pos=north west
-]
-\addplot[blue, thick] coordinates {(0,50)(1,50)(2,50)(3,53)(4,65)(5,90)};
-\addplot[red, thick] coordinates {(0,50)(1,50)(2,50)(3,50)(4,50)(5,50)};
-\legend{Среднее, Медиана}
-\end{axis}
-\end{tikzpicture}
-\end{document}
-```
+![w:350](Лекция3_figs/tikz_02.png)
 
 **Вывод:** среднее «уезжает» от одного выброса, медиана — нет.
 
@@ -424,24 +440,7 @@ def modified_z_score(data):
 
 ## Нормальное распределение и пороги
 
-```tikz
-\documentclass[tikz]{standalone}
-\usepackage{pgfplots}
-\pgfplotsset{compat=1.18}
-\begin{document}
-\begin{tikzpicture}
-\begin{axis}[
-    width=11cm, height=6cm,
-    xlabel={$x$}, ylabel={Плотность},
-    grid=major, samples=200
-]
-\addplot[blue, thick, domain=-4:4] {1/sqrt(2*pi)*exp(-x^2/2)};
-\addplot[red!30, domain=-4:-3] {1/sqrt(2*pi)*exp(-x^2/2)} \closedcycle;
-\addplot[red!30, domain=3:4] {1/sqrt(2*pi)*exp(-x^2/2)} \closedcycle;
-\end{axis}
-\end{tikzpicture}
-\end{document}
-```
+![](Лекция3_figs/tikz_03.png)
 
 **Интерпретация:** закрашенные хвосты за $\pm 3\sigma$ — зона аномалий.
 
@@ -469,27 +468,7 @@ outliers = data[(data < Q1 - 1.5*IQR) | (data > Q3 + 1.5*IQR)]
 
 ## Box Plot
 
-```tikz
-\documentclass[tikz]{standalone}
-\usepackage{pgfplots}
-\pgfplotsset{compat=1.18}
-\begin{document}
-\begin{tikzpicture}
-\begin{axis}[
-    width=9cm, height=8cm,
-    boxplot/draw direction=y,
-    ylabel={Значения},
-    xtick={1}, xticklabels={Данные}
-]
-\addplot+[boxplot prepared={
-    lower whisker=10, lower quartile=20, median=30,
-    upper quartile=40, upper whisker=50,
-}] coordinates {};
-\addplot[only marks, mark=*, red] coordinates {(1,5)(1,60)(1,65)};
-\end{axis}
-\end{tikzpicture}
-\end{document}
-```
+![](Лекция3_figs/tikz_04.png)
 
 **Красные точки:** выбросы за пределами усов ($\pm 1.5\,IQR$).
 
@@ -498,19 +477,7 @@ outliers = data[(data < Q1 - 1.5*IQR) | (data > Q3 + 1.5*IQR)]
 
 ## Таксономия методов детекции
 
-```mermaid
-graph TD
-    A[Методы аномалий] --> B[Статистические]
-    A --> C[Дистанционные]
-    A --> D[Плотностные]
-    A --> E[Модельные]
-    A --> F[Ансамблевые]
-    B --> B1[Z-Score, IQR]
-    C --> C1[k-NN, Махаланобис]
-    D --> D1[DBSCAN, LOF]
-    E --> E1[Isolation Forest, One-Class SVM]
-    F --> F1[Голосование, усреднение]
-```
+![](Лекция3_figs/mermaid_06.svg)
 
 **Единая рамка:** помогает осознанно выбирать метод.
 
@@ -522,24 +489,7 @@ graph TD
 
 $$D_M(x) = \sqrt{(x-\mu)^T \Sigma^{-1} (x-\mu)}$$
 
-```tikz
-\documentclass[tikz]{standalone}
-\usepackage{pgfplots}
-\pgfplotsset{compat=1.18}
-\begin{document}
-\begin{tikzpicture}
-\begin{axis}[
-    width=8cm, height=8cm,
-    xlabel={Признак 1}, ylabel={Признак 2},
-    grid=major, axis equal
-]
-\addplot[blue, dashed, thick, domain=0:360, samples=100] ({3*cos(x)}, {1.5*sin(x)});
-\addplot[only marks, mark=*, blue!60] coordinates {(0,0)(1,0.5)(-1,-0.5)(0.5,-0.8)(-0.3,0.9)};
-\addplot[only marks, mark=*, red] coordinates {(4,2)};
-\end{axis}
-\end{tikzpicture}
-\end{document}
-```
+![h:300](Лекция3_figs/tikz_05.png)
 
 **Эллипс** — линия равного расстояния; красная точка — аномалия.
 
@@ -568,25 +518,7 @@ outliers = data[labels == -1]
 
 ## DBSCAN: визуализация
 
-```tikz
-\documentclass[tikz]{standalone}
-\usepackage{pgfplots}
-\pgfplotsset{compat=1.18}
-\begin{document}
-\begin{tikzpicture}
-\begin{axis}[
-    width=9cm, height=9cm,
-    xlabel={Признак 1}, ylabel={Признак 2},
-    grid=major
-]
-\addplot[only marks, mark=*, blue] coordinates {(1,1)(1.5,1.2)(0.8,1.5)(1.2,0.9)(1.4,1.6)};
-\addplot[only marks, mark=*, green!50!black] coordinates {(4,4)(4.5,3.8)(3.9,4.2)(4.3,4.5)(4.6,4.1)};
-\addplot[only marks, mark=*, red] coordinates {(3,1.5)(1,4)};
-\legend{Кластер 1, Кластер 2, Аномалии}
-\end{axis}
-\end{tikzpicture}
-\end{document}
-```
+![](Лекция3_figs/tikz_06.png)
 
 **Проклятие размерности:** плотность теряет смысл в высоких измерениях.
 
@@ -608,7 +540,7 @@ predictions = iso_forest.fit_predict(data)
 outliers = data[predictions == -1]
 ```
 
-> Аномалий **мало и они отдельные** → случайный разрез отделяет их быстрее.
+<span class="callout">Аномалий **мало и они отдельные** → случайный разрез отделяет их быстрее.</span>
 
 ---
 
@@ -650,22 +582,11 @@ outliers = data[(data > upper) | (data < lower)]
 
 ## Ансамблевые методы
 
-```mermaid
-graph LR
-    A[Data] --> B[Z-Score]
-    A --> C[IQR]
-    A --> D[Isolation Forest]
-    A --> E[One-Class SVM]
-    B --> F[Voting]
-    C --> F
-    D --> F
-    E --> F
-    F --> G[Final Anomalies]
-```
+![](Лекция3_figs/mermaid_07.svg)
 
 **Стратегии:** голосование, усреднение скоров, взвешивание.
 
-> Комбинируем **аномальные скоры**, а не `VotingClassifier` (то для supervised).
+<span class="callout">Комбинируем **аномальные скоры**, а не `VotingClassifier` (то для supervised).</span>
 
 ---
 
@@ -675,38 +596,14 @@ graph LR
 - **Imbalance:** аномалий мало → accuracy бесполезна
 - **Без ground truth:** экспертиза, бэк-тест, согласие методов
 
-```tikz
-\documentclass[tikz]{standalone}
-\usepackage{pgfplots}
-\pgfplotsset{compat=1.18}
-\begin{document}
-\begin{tikzpicture}
-\begin{axis}[
-    width=8cm, height=8cm,
-    xlabel={False Positive Rate}, ylabel={True Positive Rate},
-    xmin=0,xmax=1,ymin=0,ymax=1, grid=major, legend pos=south east
-]
-\addplot[blue, thick] coordinates {(0,0)(0.1,0.6)(0.3,0.85)(0.6,0.97)(1,1)};
-\addplot[gray, dashed] coordinates {(0,0)(1,1)};
-\legend{Детектор, Случайность}
-\end{axis}
-\end{tikzpicture}
-\end{document}
-```
+![](Лекция3_figs/tikz_07.png)
 
 
 ---
 
 ## Дерево выбора метода
 
-```mermaid
-graph TD
-    S{Тип данных?} -->|Одномерные, нормальные| Z[Z-Score]
-    S -->|Одномерные, с выбросами| IQR[IQR / MAD]
-    S -->|Многомерные, плотность| DB[DBSCAN]
-    S -->|Многомерные, масштаб| IF[Isolation Forest]
-    S -->|Временные ряды| AR[ARIMA / скользящие]
-```
+![](Лекция3_figs/mermaid_08.svg)
 
 ---
 
@@ -734,7 +631,7 @@ graph TD
 
 ---
 
-<!-- _class: lead -->
+<!-- _class: section -->
 
 # Раздел 3
 ## Библиотеки для валидации данных
@@ -757,11 +654,7 @@ graph TD
 
 ## Валидация vs верификация
 
-```mermaid
-graph TB
-    V[Валидация] --> S[Схема, типы, диапазоны]
-    Ve[Верификация] --> B[Бизнес-правила, смысл]
-```
+![](Лекция3_figs/mermaid_09.svg)
 
 | | Валидация | Верификация |
 |---|---|---|
@@ -773,13 +666,7 @@ graph TB
 
 ## Уровни проверок
 
-```mermaid
-graph TD
-    A[1. Схема: типы, nullable] --> B[2. Домен: диапазоны, множества]
-    B --> C[3. Межполевые: согласованность]
-    C --> D[4. Статистические: распределения]
-    D --> E[5. Межсистемные: сверка источников]
-```
+![](Лекция3_figs/mermaid_10.svg)
 
 **Дешевле ловить на нижних уровнях** (shift-left).
 
@@ -787,17 +674,7 @@ graph TD
 
 ## Data Contracts и schema evolution
 
-```mermaid
-sequenceDiagram
-    participant P as Producer
-    participant R as Schema Registry
-    participant C as Consumer
-    P->>R: Регистрация схемы v2
-    R->>R: Проверка совместимости
-    R-->>C: OK (backward-compatible)
-    P->>P: Публикация в топик
-    C->>C: Чтение без сбоев
-```
+![](Лекция3_figs/mermaid_11.svg)
 
 **Контракт** — соглашение о форме данных; **эволюция** — управляемое изменение схемы.
 
@@ -837,18 +714,7 @@ validator.expect_column_values_to_match_regex(
 
 ## Great Expectations: архитектура
 
-```mermaid
-graph TB
-    A[Data Source] --> B[Batch Request]
-    B --> C[Validator]
-    C --> D[Expectation Suite]
-    D --> E[Validation Results]
-    E --> F{Success?}
-    F -->|Yes| G[Data Docs]
-    F -->|No| H[Alert]
-    G --> I[Pipeline Continue]
-    H --> J[Pipeline Stop]
-```
+![](Лекция3_figs/mermaid_12.svg)
 
 **Workflow:** источник → валидатор → ожидания → результаты.
 
@@ -1003,19 +869,7 @@ extract >> transform >> validate_task >> load
 
 ## Стратегия валидации
 
-```mermaid
-graph TB
-    A[Raw Data] --> B[Schema Validation]
-    B --> C{Valid?}
-    C -->|No| D[Reject/Quarantine]
-    C -->|Yes| E[Business Rules]
-    E --> F{Valid?}
-    F -->|No| D
-    F -->|Yes| G[Statistical Checks]
-    G --> H{Valid?}
-    H -->|No| I[Alert + Continue]
-    H -->|Yes| J[Clean Data]
-```
+![](Лекция3_figs/mermaid_13.svg)
 
 **Уровни:** схема → бизнес-правила → статистика.
 
@@ -1046,7 +900,7 @@ graph TB
 
 ---
 
-<!-- _class: lead -->
+<!-- _class: section -->
 
 # Раздел 4
 ## Профилирование данных
@@ -1075,7 +929,7 @@ graph TB
 - **Consistency** — согласованность между источниками
 - **Timeliness** — актуальность данных
 
-> **Accuracy** часто недоступна: требует эталонной истины.
+<span class="callout">**Accuracy** часто недоступна: требует эталонной истины.</span>
 
 ---
 
@@ -1096,18 +950,7 @@ profile.to_file("report.html")
 
 ## Структура отчёта профиля
 
-```mermaid
-graph TB
-    A[Dataset Overview] --> B[Variables]
-    A --> C[Correlations]
-    A --> D[Missing Values]
-    A --> E[Sample]
-    B --> F[Categorical]
-    B --> G[Numerical]
-    C --> I[Pearson]
-    C --> J[Spearman]
-    C --> K[Phik]
-```
+![](Лекция3_figs/mermaid_14.svg)
 
 **Разделы:** обзор → переменные → корреляции → пропуски.
 
@@ -1168,25 +1011,7 @@ profile = df.select([
 
 ## Дашборд качества
 
-```tikz
-\documentclass[tikz]{standalone}
-\usepackage{pgfplots}
-\pgfplotsset{compat=1.18}
-\begin{document}
-\begin{tikzpicture}
-\begin{axis}[
-    ybar, width=11cm, height=6cm,
-    ylabel={Процент},
-    symbolic x coords={Completeness, Uniqueness, Validity, Consistency},
-    xtick=data, nodes near coords, ymin=0, ymax=100
-]
-\addplot coordinates {
-    (Completeness,95) (Uniqueness,88) (Validity,92) (Consistency,78)
-};
-\end{axis}
-\end{tikzpicture}
-\end{document}
-```
+![](Лекция3_figs/tikz_08.png)
 
 
 ---
@@ -1198,37 +1023,13 @@ profile = df.select([
 | **Data drift** | меняется $P(X)$ | переобучение, мониторинг |
 | **Concept drift** | меняется $P(Y|X)$ | пересмотр модели |
 
-```mermaid
-graph LR
-    A[Historical Profile] --> B[Current Profile]
-    B --> C{Drift?}
-    C -->|Yes| D[Alert + Investigate]
-    C -->|No| E[Continue]
-    D --> F[Retrain?]
-```
+![](Лекция3_figs/mermaid_15.svg)
 
 ---
 
 ## Статистические тесты дрейфа
 
-```tikz
-\documentclass[tikz]{standalone}
-\usepackage{pgfplots}
-\pgfplotsset{compat=1.18}
-\begin{document}
-\begin{tikzpicture}
-\begin{axis}[
-    width=11cm, height=6cm,
-    xlabel={$x$}, ylabel={Плотность},
-    grid=major, legend pos=north west
-]
-\addplot[blue, thick, domain=0:10, samples=100] {1/sqrt(2*pi)*exp(-(x-4)^2/2)};
-\addplot[red, thick, domain=0:10, samples=100] {1/sqrt(2*pi)*exp(-(x-7)^2/2)};
-\legend{Исторически, Сейчас}
-\end{axis}
-\end{tikzpicture}
-\end{document}
-```
+![](Лекция3_figs/tikz_09.png)
 
 - **Kolmogorov–Smirnov** — тест на сдвиг распределения
 - **PSI** (Population Stability Index) — сравнение бинов
@@ -1239,14 +1040,7 @@ graph LR
 
 ## Data Observability: 5 столпов
 
-```mermaid
-graph TD
-    O[Data Observability] --> F[Freshness — свежесть]
-    O --> V[Volume — объём]
-    O --> D[Distribution — распределение]
-    O --> S[Schema — схема]
-    O --> L[Lineage — происхождение]
-```
+![](Лекция3_figs/mermaid_16.svg)
 
 **Идея:** отслеживать здоровье данных, как здоровье систем.
 
@@ -1254,15 +1048,7 @@ graph TD
 
 ## Data Lineage
 
-```mermaid
-graph LR
-    A[Source DB] --> B[ETL Pipeline]
-    B --> C[Data Lake]
-    C --> D[Data Warehouse]
-    D --> E[Analytics]
-    style A fill:#9f9
-    style E fill:#99f
-```
+![](Лекция3_figs/mermaid_17.svg)
 
 **Инструменты:** Apache Atlas, Marquez, DataHub
 
@@ -1274,14 +1060,7 @@ graph LR
 
 ## Жизненный цикл качества данных
 
-```mermaid
-graph LR
-    A[Оценить] --> B[Определить правила]
-    B --> C[Внедрить]
-    C --> D[Мониторить]
-    D --> E[Улучшить]
-    E --> A
-```
+![](Лекция3_figs/mermaid_18.svg)
 
 **Качество данных — процесс, а не разовая акция.**
 
@@ -1310,7 +1089,7 @@ graph LR
 
 ---
 
-<!-- _class: lead -->
+<!-- _class: section -->
 
 # Практический кейс
 ## E-commerce платформа
@@ -1332,13 +1111,7 @@ graph LR
 
 ## Этапы решения
 
-```mermaid
-graph TB
-    A[1. Профилирование] --> B[2. Правила очистки]
-    B --> C[3. Детекция аномалий]
-    C --> D[4. Валидация GX]
-    D --> E[5. Автоматизация Airflow]
-```
+![](Лекция3_figs/mermaid_19.svg)
 
 **Находки профилирования:** 15% дубликатов, 8% пропусков в amount.
 
@@ -1395,26 +1168,11 @@ with DAG('transaction_cleaning', schedule_interval='@daily') as dag:
 
 ## Архитектура решения
 
-```mermaid
-graph TB
-    A[Data Sources] --> B[Extraction]
-    B --> C[Profiling]
-    C --> D[Cleaning Rules]
-    D --> E[Anomaly Detection]
-    E --> F[Validation]
-    F --> G{Quality Check}
-    G -->|Pass| H[Data Warehouse]
-    G -->|Fail| I[Quarantine]
-    I --> J[Manual Review]
-    H --> K[Analytics]
-    L[Monitoring] -.-> C
-    L -.-> E
-    L -.-> F
-```
+![](Лекция3_figs/mermaid_20.svg)
 
 ---
 
-<!-- _class: lead -->
+<!-- _class: section -->
 
 # Итоги и связь с курсом
 
@@ -1442,7 +1200,7 @@ graph TB
 - **Профилирование** — основа понимания и мониторинга
 - **Интеграция** в пайплайны обязательна
 
-> **Качество данных = качество решений**
+<span class="callout">**Качество данных = качество решений**</span>
 
 ---
 
@@ -1485,10 +1243,18 @@ graph TB
 
 ---
 
-<!-- _class: lead -->
+<!-- _class: title -->
 
 # Спасибо за внимание!
 
-**Материалы:** код-листинги → файл `Практикум_Лекция3.md`
-**Вопросы:** Slack #data-engineering-course
-**Office Hours:** Вторник, 16:00–18:00
+## Следующая лекция: сложная предобработка и трансформация данных
+
+**Материалы**
+- Код-листинги → файл `Практикум_Лекция3.md`
+- Схемы и источники диаграмм — рядом с презентацией
+
+**Вопросы**
+- Slack: `#data-engineering-course`
+- Office Hours: вторник, 16:00–18:00
+
+<div class="meta">Вопросы и материалы — в репозитории курса</div>

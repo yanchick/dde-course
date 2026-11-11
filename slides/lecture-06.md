@@ -3,22 +3,141 @@ marp: true
 theme: default
 size: 16:9
 paginate: true
+header: 'Лекция 6 · ETL/ELT пайплайны и оркестрация'
+footer: 'ИТМО · Магистратура «Инженерия данных» · Осень 2025'
 math: katex
 ---
-# Лекция 6: ETL/ELT пайплайны и оркестрация
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+
+:root {
+  --primary: #1d4ed8;
+  --primary-dark: #1e3a8a;
+  --accent: #0ea5e9;
+  --ink: #0f172a;
+  --muted: #64748b;
+  --bg: #ffffff;
+  --soft: #f1f5f9;
+  --teal: #0d9488;
+  --amber: #d97706;
+  --rose: #e11d48;
+}
+
+section {
+  font-family: 'Inter', 'Noto Sans', 'Segoe UI', system-ui, sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+  font-size: 27px;
+  line-height: 1.35;
+  padding: 72px 68px 40px;
+}
+
+h1 { font-size: 1.5em; color: var(--primary); margin: 0 0 .35em; font-weight: 800; letter-spacing: -.01em; }
+h2 { font-size: 1.18em; color: var(--ink); margin: 0 0 .55em; font-weight: 700; }
+h3 { font-size: .82em; color: var(--muted); margin: 0 0 .3em; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+
+ul, ol { margin: 0 0 .55em; padding-left: 1.25em; }
+li { margin: .16em 0; }
+li strong, li b { color: var(--primary-dark); }
+p { margin: 0 0 .5em; }
+
+a { color: var(--primary); }
+
+table { width: 100%; border-collapse: collapse; font-size: .72em; }
+th { background: var(--primary); color: #fff; padding: 9px 14px; text-align: left; font-weight: 600; }
+td { padding: 8px 14px; border-bottom: 1px solid #e2e8f0; vertical-align: top; }
+tr:nth-child(even) td { background: #f8fafc; }
+
+img { display: block; margin: .25em auto; max-width: 100%; max-height: 400px; }
+
+code { background: var(--soft); border-radius: 4px; padding: 1px 6px; font-size: .82em; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+pre { background: #0f172a; color: #e2e8f0; border-radius: 10px; padding: 16px 22px; font-size: .6em; line-height: 1.5; }
+pre code { background: transparent; color: inherit; padding: 0; }
+
+.hljs-comment, .hljs-quote { color: #94a3b8; font-style: italic; }
+.hljs-keyword, .hljs-selector-tag, .hljs-built_in, .hljs-type { color: #93c5fd; }
+.hljs-string, .hljs-attr, .hljs-regexp { color: #86efac; }
+.hljs-number, .hljs-literal, .hljs-symbol { color: #fbbf24; }
+.hljs-title, .hljs-section, .hljs-name { color: #f0abfc; }
+.hljs-variable, .hljs-template-variable { color: #fca5a5; }
+.hljs-meta { color: #cbd5e1; }
+
+.columns { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+.cols3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px; align-items: start; }
+
+section.section {
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 55%, #1d4ed8 100%);
+  color: #fff; justify-content: center; text-align: center;
+}
+section.section h1 { color: #fff; font-size: 2.1em; border: none; }
+section.section h2 { color: rgba(255,255,255,.85); font-weight: 400; font-size: 1.1em; }
+section.section::after { content: ''; }
+
+section.title {
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 55%, #1d4ed8 100%);
+  color: #fff; justify-content: center; text-align: center;
+}
+section.title h1 { color: #fff; font-size: 2.5em; border: none; }
+section.title h2 { color: rgba(255,255,255,.9); font-weight: 400; }
+section.title p { color: rgba(255,255,255,.8); }
+section.title ul, section.title ol, section.section ul, section.section ol { display: inline-block; text-align: left; }
+section.title code, section.section code { background: rgba(255,255,255,.16); color: #fff; }
+
+section.title .meta { margin-top: 1.4em; font-size: .8em; color: rgba(255,255,255,.7); letter-spacing: .06em; text-transform: uppercase; }
+
+.callout { display: block; border-left: 5px solid var(--accent); background: #eff6ff; border-radius: 6px; padding: 14px 20px; margin: .5em 0; }
+.callout.warn { border-left-color: var(--amber); background: #fffbeb; }
+.callout.good { border-left-color: var(--teal); background: #ecfdf5; }
+.callout.bad { border-left-color: var(--rose); background: #fef2f2; }
+
+.muted { color: var(--muted); font-size: .8em; }
+.small { font-size: .8em; }
+.badge { display: inline-block; background: var(--soft); border-radius: 999px; padding: 4px 14px; margin: 3px; font-size: .74em; font-weight: 600; color: var(--primary-dark); }
+</style>
+
+<!-- _class: title -->
+
+# Лекция 6
+## ETL/ELT пайплайны и оркестрация
+
+<div class="meta">Инженерия данных · Магистратура ИТМО · Осень 2025</div>
 
 ---
 
-## Слайд 1: План лекции
+<!-- _class: section -->
 
-- Теория: Apache Airflow и оркестрация
-- Практика: надежные пайплайны
-- Мониторинг и логирование
-- Обработка ошибок
+# План лекции
+
+## 4 блока · 80 минут
 
 ---
 
-## Слайд 2: Что такое оркестрация?
+## План лекции
+
+### Структура занятия
+
+1. **Apache Airflow и оркестрация** — 20 мин
+2. **Надежные пайплайны** — 20 мин
+3. **Мониторинг и логирование** — 20 мин
+4. **Обработка ошибок и восстановление** — 20 мин
+
+<br/>
+
+<div class="callout good">
+<b>Формат:</b> теория + код; после каждого блока — <b>проверка понимания</b>.
+</div>
+
+---
+
+<!-- _class: section -->
+
+# Раздел 1
+## Apache Airflow и оркестрация
+
+---
+
+## Что такое оркестрация?
 
 - Управление последовательностью задач
 - Автоматизация запусков по расписанию
@@ -27,7 +146,7 @@ math: katex
 
 ---
 
-## Слайд 3: Почему без оркестрации нельзя?
+## Почему без оркестрации нельзя?
 
 - Ручные запуски - источник ошибок
 - Сложность отслеживания зависимостей
@@ -36,7 +155,7 @@ math: katex
 
 ---
 
-## Слайд 4: Классическая проблема
+## Классическая проблема
 
 - 50+ источников данных
 - 200+ ежедневных задач
@@ -45,7 +164,7 @@ math: katex
 
 ---
 
-## Слайд 5: Apache Airflow - что это?
+## Apache Airflow - что это?
 
 - Платформа для оркестрации workflows
 - Python-код как основа пайплайнов
@@ -54,20 +173,13 @@ math: katex
 
 ---
 
-## Слайд 6: Архитектура Airflow
+## Архитектура Airflow
 
-```mermaid
-graph TD
-    A[Scheduler] --> B[Executor]
-    C[Web Server] --> D[Metadata DB]
-    B --> E[Workers]
-    E --> D
-    D --> A
-```
+![](Лекция6_figs/mermaid_01.svg)
 
 ---
 
-## Слайд 7: Основные компоненты
+## Основные компоненты
 
 - DAG: Directed Acyclic Graph
 - Operator: выполняемая задача
@@ -76,7 +188,7 @@ graph TD
 
 ---
 
-## Слайд 8: DAG на практике
+## DAG на практике
 
 ```python
 from airflow import DAG
@@ -92,7 +204,7 @@ dag = DAG(
 
 ---
 
-## Слайд 9: Типы операторов
+## Типы операторов
 
 - PythonOperator: любой Python-код
 - BashOperator: shell-команды
@@ -101,18 +213,13 @@ dag = DAG(
 
 ---
 
-## Слайд 10: Пример DAG
+## Пример DAG
 
-```mermaid
-graph LR
-    A[Extract] --> B[Transform]
-    B --> C[Load]
-    C --> D[Validate]
-```
+![](Лекция6_figs/mermaid_02.svg)
 
 ---
 
-## Слайд 11: Запуск и триггеры
+## Запуск и триггеры
 
 - По расписанию (cron-выражения)
 - По событию (sensor)
@@ -121,7 +228,7 @@ graph LR
 
 ---
 
-## Слайд 12: Cron-выражения
+## Cron-выражения
 
 - `0 8 * * *` - каждый день в 8:00
 - `0 */2 * * *` - каждые 2 часа
@@ -130,7 +237,7 @@ graph LR
 
 ---
 
-## Слайд 13: Параметризация DAG
+## Параметризация DAG
 
 - Variables для конфигурации
 - Templates для динамических значений
@@ -139,7 +246,7 @@ graph LR
 
 ---
 
-## Слайд 14: Templates пример
+## Templates пример
 
 ```python
 sql_query = """
@@ -150,7 +257,7 @@ WHERE date = '{{ ds }}'
 
 ---
 
-## Слайд 15: XCom - обмен данными
+## XCom - обмен данными
 
 - Task A сохраняет результат
 - Task B получает значение
@@ -159,7 +266,7 @@ WHERE date = '{{ ds }}'
 
 ---
 
-## Слайд 16: XCom код
+## XCom код
 
 ```python
 # В task1
@@ -171,7 +278,7 @@ value = task_instance.xcom_pull(task_ids='task1')
 
 ---
 
-## Слайд 17: Масштабирование Airflow
+## Масштабирование Airflow
 
 - SequentialExecutor: для разработки
 - LocalExecutor: много ядер
@@ -180,19 +287,13 @@ value = task_instance.xcom_pull(task_ids='task1')
 
 ---
 
-## Слайд 18: CeleryExecutor архитектура
+## CeleryExecutor архитектура
 
-```mermaid
-graph TD
-    A[Scheduler] --> B[Queue]
-    B --> C[Worker 1]
-    B --> D[Worker 2]
-    B --> E[Worker N]
-```
+![](Лекция6_figs/mermaid_03.svg)
 
 ---
 
-## Слайд 19: Проблема масштабирования
+## Проблема масштабирования
 
 - 1000+ задач в час
 - 50GB оперативной памяти
@@ -201,7 +302,7 @@ graph TD
 
 ---
 
-## Слайд 20: Мониторинг DAG-ов
+## Мониторинг DAG-ов
 
 - UI в Airflow
 - Email-уведомления
@@ -210,7 +311,7 @@ graph TD
 
 ---
 
-## Слайд 21: Отладка DAG-ов
+## Отладка DAG-ов
 
 - Graph view в UI
 - Task logs
@@ -219,7 +320,9 @@ graph TD
 
 ---
 
-## Слайд 22: Проверка понимания #1
+## Проверка понимания 1
+
+### Обсудите в парах
 
 - Что такое DAG?
 - Какие бывают trigger-ы?
@@ -228,16 +331,16 @@ graph TD
 
 ---
 
-## Слайд 23: Теория: надежные пайплайны
+<!-- _class: section -->
 
-- Идемпотентность
-- Атомарность
-- Инкрементальная обработка
-- Обработка ошибок
+# Раздел 2
+## Надежные пайплайны
+
+<!-- ~20 мин -->
 
 ---
 
-## Слайд 24: Идемпотентность
+## Идемпотентность
 
 - Повторный запуск без эффекта
 - Проверка существования данных
@@ -246,7 +349,7 @@ graph TD
 
 ---
 
-## Слайд 25: Идемпотентный пример
+## Идемпотентный пример
 
 ```sql
 INSERT INTO daily_stats (date, revenue)
@@ -259,7 +362,7 @@ SET revenue = EXCLUDED.revenue
 
 ---
 
-## Слайд 26: Атомарность
+## Атомарность
 
 - Все или ничего
 - Транзакции в БД
@@ -268,7 +371,7 @@ SET revenue = EXCLUDED.revenue
 
 ---
 
-## Слайд 27: Инкрементальная обработка
+## Инкрементальная обработка
 
 - Чтение только новых данных
 - Чекпоинты и курсоры
@@ -277,7 +380,7 @@ SET revenue = EXCLUDED.revenue
 
 ---
 
-## Слайд 28: Чекпоинт пример
+## Чекпоинт пример
 
 ```python
 def get_last_processed_id():
@@ -289,7 +392,7 @@ def save_checkpoint(max_id):
 
 ---
 
-## Sлайд 29: Паттерны проектирования
+## Паттерны проектирования
 
 - Task-перезапуски
 - Retry логика
@@ -298,7 +401,7 @@ def save_checkpoint(max_id):
 
 ---
 
-## Слайд 30: Retry конфигурация
+## Retry конфигурация
 
 ```python
 task = PythonOperator(
@@ -312,21 +415,13 @@ task = PythonOperator(
 
 ---
 
-## Слайд 31: Структура надежного DAG
+## Структура надежного DAG
 
-```mermaid
-graph TD
-    A[Start] --> B{Data exists?}
-    B -->|Yes| C[Process]
-    B -->|No| D[Skip]
-    C --> E{Success?}
-    E -->|Yes| F[Save checkpoint]
-    E -->|No| G[Retry]
-```
+![](Лекция6_figs/mermaid_04.svg)
 
 ---
 
-## Слайд 32: Тестирование пайплайнов
+## Тестирование пайплайнов
 
 - Unit тесты задач
 - Integration тесты DAG
@@ -335,7 +430,7 @@ graph TD
 
 ---
 
-## Слайд 33: Unit тест пример
+## Unit тест пример
 
 ```python
 def test_transform_data():
@@ -346,7 +441,9 @@ def test_transform_data():
 
 ---
 
-## Слайд 34: Проверка понимания #2
+## Проверка понимания 2
+
+### Обсудите в парах
 
 - Что такое идемпотентность?
 - Как реализовать checkpoint?
@@ -355,16 +452,16 @@ def test_transform_data():
 
 ---
 
-## Слайд 35: Теория: мониторинг
+<!-- _class: section -->
 
-- Метрики производительности
-- Бизнес-метрики
-- Инструменты мониторинга
-- Алерты и дашборды
+# Раздел 3
+## Мониторинг и логирование
+
+<!-- ~20 мин -->
 
 ---
 
-## Слайд 36: Ключевые метрики
+## Ключевые метрики
 
 - Время выполнения задач
 - Количество успешных/проваленных
@@ -373,18 +470,13 @@ def test_transform_data():
 
 ---
 
-## Слайд 37: Prometheus + Grafana
+## Prometheus + Grafana
 
-```mermaid
-graph LR
-    A[Airflow] --> B[Prometheus]
-    B --> C[Grafana]
-    C --> D[Alerts]
-```
+![](Лекция6_figs/mermaid_05.svg)
 
 ---
 
-## Слайд 38: Custom метрики
+## Custom метрики
 
 ```python
 from airflow.metrics import Stats
@@ -395,7 +487,7 @@ Stats.timing('processing_time', duration)
 
 ---
 
-## Слайд 39: Структурированное логирование
+## Структурированное логирование
 
 - JSON формат логов
 - Correlation ID
@@ -404,7 +496,7 @@ Stats.timing('processing_time', duration)
 
 ---
 
-## Слайд 40: Пример структурированного лога
+## Пример структурированного лога
 
 ```json
 {
@@ -418,7 +510,7 @@ Stats.timing('processing_time', duration)
 
 ---
 
-## Слайд 41: Алерты
+## Алерты
 
 - Email уведомления
 - Slack Webhooks
@@ -427,7 +519,7 @@ Stats.timing('processing_time', duration)
 
 ---
 
-## Слайд 42: Дашборд пример
+## Дашборд пример
 
 - Gantt chart задач
 - Статистика за последние 24ч
@@ -436,7 +528,9 @@ Stats.timing('processing_time', duration)
 
 ---
 
-## Слайд 43: Проверка понимания #3
+## Проверка понимания 3
+
+### Обсудите в парах
 
 - Какие метрики отслеживать?
 - Что такое structured logging?
@@ -445,16 +539,16 @@ Stats.timing('processing_time', duration)
 
 ---
 
-## Слайд 44: Теория: обработка ошибок
+<!-- _class: section -->
 
-- Стратегии обработки
-- Graceful degradation
-- Восстановление после сбоев
-- Dead letter queues
+# Раздел 4
+## Обработка ошибок и восстановление
+
+<!-- ~20 мин -->
 
 ---
 
-## Слайд 45: Типы ошибок
+## Типы ошибок
 
 - Временные сетевые ошибки
 - Ошибки валидации данных
@@ -463,7 +557,7 @@ Stats.timing('processing_time', duration)
 
 ---
 
-## Слайд 46: Retry стратегии
+## Retry стратегии
 
 - Экспоненциальная задержка
 - Максимальное количество попыток
@@ -472,7 +566,7 @@ Stats.timing('processing_time', duration)
 
 ---
 
-## Слайд 47: Exponential backoff
+## Exponential backoff
 
 ```python
 delay = base_delay * (2 ** attempt)
@@ -481,7 +575,7 @@ time.sleep(min(delay, max_delay))
 
 ---
 
-## Слайд 48: Graceful degradation
+## Graceful degradation
 
 - Отключение не критичных функций
 - Использование кеша
@@ -490,19 +584,13 @@ time.sleep(min(delay, max_delay))
 
 ---
 
-## Слайд 49: Dead letter queue
+## Dead letter queue
 
-```mermaid
-graph LR
-    A[Task] --> B{Success?}
-    B -->|Yes| C[Continue]
-    B -->|No| D[DLQ]
-    D --> E[Manual review]
-```
+![](Лекция6_figs/mermaid_06.svg)
 
 ---
 
-## Слайд 50: Восстановление после сбоев
+## Восстановление после сбоев
 
 - Identification проблемы
 - Data replay
@@ -511,7 +599,7 @@ graph LR
 
 ---
 
-## Слайд 51: Автоматическое восстановление
+## Автоматическое восстановление
 
 - Self-healing scripts
 - Health checks
@@ -520,30 +608,22 @@ graph LR
 
 ---
 
-## Слайд 52: Практический кейс
+<!-- _class: section -->
 
-- E-commerce платформа
-- 5 источников данных
-- 12 задач в DAG
-- SLA: 2 часа
+# Практический кейс
+## E-commerce платформа
 
----
-
-## Слайд 53: Архитектура кейса
-
-```mermaid
-graph TD
-    A[Orders API] --> G[Extract]
-    B[Inventory DB] --> G
-    C[User Events] --> G
-    G --> H[Transform]
-    H --> I[Load DWH]
-    I --> J[Validate]
-```
+<!-- ~10 мин -->
 
 ---
 
-## Слайд 54: Реализация DAG
+## Архитектура кейса
+
+![](Лекция6_figs/mermaid_07.svg)
+
+---
+
+## Реализация DAG
 
 ```python
 default_args = {
@@ -557,7 +637,7 @@ default_args = {
 
 ---
 
-## Слайд 55: Тесты для кейса
+## Тесты для кейса
 
 - Проверка idempotency
 - Mock API responses
@@ -566,7 +646,7 @@ default_args = {
 
 ---
 
-## Слайд 56: Мониторинг кейса
+## Мониторинг кейса
 
 - Gantt chart
 - Data quality checks
@@ -575,7 +655,9 @@ default_args = {
 
 ---
 
-## Слайд 57: Проверка понимания #4
+## Проверка понимания 4
+
+### Обсудите в парах
 
 - Как восстановить после сбоя?
 - Что такое DLQ?
@@ -584,16 +666,20 @@ default_args = {
 
 ---
 
-## Слайд 58: Резюме лекции
+## Резюме лекции
+
+<div class="callout good">
 
 - Airflow - основной инструмент оркестрации
 - Надежность через идемпотентность
 - Мониторинг критичен для SLA
 - Ошибки - это норма, планируй заранее
 
+</div>
+
 ---
 
-## Слайд 59: Связи с лекцией 7
+## Связи с лекцией 7
 
 - Пайплайны используют разные хранилища
 - Monitoring влияет на выбор СУБД
@@ -602,7 +688,7 @@ default_args = {
 
 ---
 
-## Слайд 60: Ссылки и литература
+## Ссылки и литература
 
 - Apache Airflow Documentation
 - "Data Pipelines with Python" - H. Weber
@@ -612,7 +698,7 @@ default_args = {
 
 ---
 
-## Слайд 61: Домашнее задание
+## Домашнее задание
 
 **Part 1:** Реализуйте DAG с 5 задачами  
 **Part 2:** Добавьте idempotency для всех задач  
@@ -621,9 +707,27 @@ default_args = {
 
 ---
 
-## Слайд 62: Детали домашки
+## Детали домашки
 
 - Используйте public dataset
 - SLA: 30 минут
 - Покройте unit тестами
 - Сделайте презентацию решения
+
+---
+
+<!-- _class: title -->
+
+# Спасибо за внимание!
+
+## Следующая лекция: современные хранилища данных
+
+**Материалы**
+- Схемы: папка `Лекция6_figs/`
+- Исходники диаграмм: «Лекция 6 — источники диаграмм.md»
+
+**Подготовка**
+- Docker и docker-compose
+- Основы SQL
+
+<div class="meta">Вопросы и материалы — в репозитории курса</div>

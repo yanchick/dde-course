@@ -3,33 +3,128 @@ marp: true
 theme: default
 size: 16:9
 paginate: true
+header: 'Лекция 5 · Системы разметки и аннотации данных'
+footer: 'ИТМО · Магистратура «Инженерия данных» · Осень 2025'
 math: katex
-title: "Лекция 5: Системы разметки и аннотации данных"
-author: "Инжиниринг данных (продвинутый уровень)"
-footer: "Системы разметки и аннотации данных — Лекция 5"
 ---
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+
+:root {
+  --primary: #1d4ed8;
+  --primary-dark: #1e3a8a;
+  --accent: #0ea5e9;
+  --ink: #0f172a;
+  --muted: #64748b;
+  --bg: #ffffff;
+  --soft: #f1f5f9;
+  --teal: #0d9488;
+  --amber: #d97706;
+  --rose: #e11d48;
+}
+
+section {
+  font-family: 'Inter', 'Noto Sans', 'Segoe UI', system-ui, sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+  font-size: 22px;
+  line-height: 1.3;
+  padding: 72px 56px 40px;
+}
+
+h1 { font-size: 1.5em; color: var(--primary); margin: 0 0 .35em; font-weight: 800; letter-spacing: -.01em; }
+h2 { font-size: 1.18em; color: var(--ink); margin: 0 0 .55em; font-weight: 700; }
+h3 { font-size: .82em; color: var(--muted); margin: 0 0 .3em; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+
+ul, ol { margin: 0 0 .55em; padding-left: 1.25em; }
+li { margin: .1em 0; }
+li strong, li b { color: var(--primary-dark); }
+p { margin: 0 0 .5em; }
+
+a { color: var(--primary); }
+
+table { width: 100%; border-collapse: collapse; font-size: .66em; }
+th { background: var(--primary); color: #fff; padding: 9px 14px; text-align: left; font-weight: 600; }
+td { padding: 8px 14px; border-bottom: 1px solid #e2e8f0; vertical-align: top; }
+tr:nth-child(even) td { background: #f8fafc; }
+
+img { display: block; margin: .25em auto; max-width: 100%; max-height: 380px; }
+
+code { background: var(--soft); border-radius: 4px; padding: 1px 6px; font-size: .82em; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+pre { background: #0f172a; color: #e2e8f0; border-radius: 10px; padding: 14px 20px; font-size: .52em; line-height: 1.4; }
+pre code { background: transparent; color: inherit; padding: 0; }
+
+/* подсветка кода: тёмная палитра под фон pre */
+.hljs-comment, .hljs-quote { color: #94a3b8; font-style: italic; }
+.hljs-keyword, .hljs-selector-tag, .hljs-built_in, .hljs-type { color: #93c5fd; }
+.hljs-string, .hljs-attr, .hljs-regexp { color: #86efac; }
+.hljs-number, .hljs-literal, .hljs-symbol { color: #fbbf24; }
+.hljs-title, .hljs-section, .hljs-name { color: #f0abfc; }
+.hljs-variable, .hljs-template-variable { color: #fca5a5; }
+.hljs-meta { color: #cbd5e1; }
+
+.columns { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+.cols3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px; align-items: start; }
+
+section.section {
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 55%, #1d4ed8 100%);
+  color: #fff; justify-content: center; text-align: center;
+}
+section.section h1 { color: #fff; font-size: 2.1em; border: none; }
+section.section h2 { color: rgba(255,255,255,.85); font-weight: 400; font-size: 1.1em; }
+section.section::after { content: ''; }
+
+section.title {
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 55%, #1d4ed8 100%);
+  color: #fff; justify-content: center; text-align: center;
+}
+section.title h1 { color: #fff; font-size: 2.5em; border: none; }
+section.title h2 { color: rgba(255,255,255,.9); font-weight: 400; }
+section.title p { color: rgba(255,255,255,.8); }
+section.title ul, section.title ol, section.section ul, section.section ol { display: inline-block; text-align: left; }
+section.title code, section.section code { background: rgba(255,255,255,.16); color: #fff; }
+
+section.title .meta { margin-top: 1.4em; font-size: .8em; color: rgba(255,255,255,.7); letter-spacing: .06em; text-transform: uppercase; }
+
+.callout { display: block; border-left: 5px solid var(--accent); background: #eff6ff; border-radius: 6px; padding: 14px 20px; margin: .5em 0; }
+.callout.warn { border-left-color: var(--amber); background: #fffbeb; }
+.callout.good { border-left-color: var(--teal); background: #ecfdf5; }
+.callout.bad { border-left-color: var(--rose); background: #fef2f2; }
+
+.muted { color: var(--muted); font-size: .8em; }
+.small { font-size: .8em; }
+.badge { display: inline-block; background: var(--soft); border-radius: 999px; padding: 4px 14px; margin: 3px; font-size: .74em; font-weight: 600; color: var(--primary-dark); }
+</style>
 
 <!--
 ОБЩИЕ ЗАМЕТКИ К ПРЕЗЕНТАЦИИ
 - Хронометраж: ~95 минут. Введение — 10, Блок 1 (платформы) — 20, Блок 2 (активное обучение) — 20,
   Блок 3 (качество) — 20, Блок 4 (автоматизация) — 15, кейсы + итоги — 10
 - Баланс: теория ↔ код. Полные листинги разбираются на семинаре, на слайдах — только суть API
-- TikZ-блоки — самодостаточные standalone-документы (\documentclass[tikz]{standalone});
-  рендер отдаётся Kroki (endpoint /tikz/{svg|png}, см. https://kroki.io) или локальным LaTeX
-- Mermaid в этой колоде НЕ используется: он не рендерится в Marp. Все схемы переведены в TikZ
+- Схемы — PNG из папки Лекция5_figs/ (pdflatex + pdftocairo, 200 dpi);
+  исходники всех схем — в файле «Лекция 5 — источники диаграмм.md»
+- Mermaid в этой колоде не используется — все схемы переведены в TikZ
 - Математика рендерится KaTeX (math: katex)
-- Блоки `> Ключевое:` — главные выводы, которые нужно проговорить
+- Главные выводы оформлены плашками `.callout`
 - Слайды с пометкой «доп.» — материал сверх исходной колоды (расширение темы)
 - Числа на иллюстративных графиках — синтетические, для демонстрации формы кривой, не результат эксперимента
 -->
 
-<!-- _class: lead -->
+<!-- _class: title -->
 
-# Системы разметки и аннотации данных
+# Лекция 5
+## Системы разметки и аннотации данных
 
-**Лекция 5**
+<div class="meta">Инженерия данных · Магистратура ИТМО · Осень 2025</div>
 
-Инжиниринг данных (продвинутый уровень)
+---
+
+<!-- _class: section -->
+
+# План лекции
+
+## 4 раздела · 95 минут
 
 ---
 
@@ -52,40 +147,9 @@ footer: "Системы разметки и аннотации данных — 
 
 ## Карта лекции
 
-```tikz
-\documentclass[tikz]{standalone}
-\usepackage[T2A]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage[russian]{babel}
-\usetikzlibrary{arrows.meta, positioning, shapes.geometric, matrix, calc}
-\begin{document}
-\begin{tikzpicture}[font=\small,
-    data/.style={rectangle, rounded corners, draw, minimum height=1.1cm, minimum width=2.5cm, align=center, fill=blue!10},
-    block/.style={rectangle, rounded corners, draw, minimum height=1.1cm, minimum width=3.1cm, align=center},
-    arr/.style={->, thick}]
-    \node[data] (raw) at (0,0) {Сырые\\данные};
-    \node[block, fill=orange!25] (p1) at (4.0,0) {Блок 1\\Платформы};
-    \node[block, fill=green!20] (p2) at (8.0,0) {Блок 2\\Активное обучение};
-    \node[block, fill=cyan!20] (p3) at (12.0,0) {Блок 3\\Контроль качества};
-    \node[block, fill=violet!20] (p4) at (16.0,0) {Блок 4\\Автоматизация};
+![](Лекция5_figs/tikz_01.png)
 
-    \node[data, fill=green!15, minimum width=4.2cm] (ds) at (10,-3.2) {Версионируемый датасет\\+ метаданные + метрики качества};
-    \node[data, fill=blue!15, minimum width=3.4cm] (ml) at (15.5,-3.2) {Модель ML};
-    \node[data, fill=red!12, minimum width=3.4cm] (drift) at (15.5,-5.4) {Дрифт данных\\→ новые примеры};
-
-    \draw[arr] (raw) -- (p1);
-    \draw[arr] (p1) -- (p2);
-    \draw[arr] (p2) -- (p3);
-    \draw[arr] (p3) -- (p4);
-    \draw[arr] (p4.south) -- ++(0,-0.7) -| (ds.east);
-    \draw[arr] (ds) -- (ml);
-    \draw[arr] (ml) -- (drift);
-    \draw[arr, dashed] (drift.west) -| (9.2,-5.4) -- (9.2,-4.0) node[pos=0.5, left, align=right, font=\scriptsize] {доразметка\\\& переобучение};
-\end{tikzpicture}
-\end{document}
-```
-
-> Ключевое: разметка — не «одноразовая акция перед обучением», а **замкнутый контур**, который живёт столько же, сколько модель в продакшене.
+<span class="callout good">Ключевое: разметка — не «одноразовая акция перед обучением», а **замкнутый контур**, который живёт столько же, сколько модель в продакшене.</span>
 
 ---
 
@@ -102,7 +166,7 @@ footer: "Системы разметки и аннотации данных — 
 
 ---
 
-<!-- _class: lead -->
+<!-- _class: section -->
 
 # Блок 0
 ## Зачем нужна разметка
@@ -127,52 +191,9 @@ footer: "Системы разметки и аннотации данных — 
 
 ## Типы задач разметки
 
-```tikz
-\documentclass[tikz]{standalone}
-\usepackage[T2A]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage[russian]{babel}
-\usetikzlibrary{arrows.meta, positioning, shapes.geometric, matrix, calc}
-\begin{document}
-\begin{tikzpicture}[font=\scriptsize,
-    root/.style={rectangle, rounded corners, draw, thick, fill=gray!15, align=center, minimum height=0.9cm, minimum width=3.4cm},
-    dom/.style={rectangle, rounded corners, draw, fill=blue!12, align=center, minimum height=0.8cm, minimum width=2.9cm},
-    leaf/.style={rectangle, draw, fill=white, align=left, minimum height=0.62cm, text width=3.15cm},
-    arr/.style={->, semithick}]
-    \node[root] (r) at (7.2,0) {Тип носителя\\→ тип задачи};
-    \node[dom] (t) at (1.9,-1.6) {Текст};
-    \node[dom] (v) at (5.4,-1.6) {Изображение\\/видео};
-    \node[dom] (a) at (8.9,-1.6) {Аудио};
-    \node[dom] (s) at (12.4,-1.6) {Таблицы и\\временные ряды};
+![](Лекция5_figs/tikz_02.png)
 
-    \node[leaf] (t1) at (0.5,-3.0) {классификация документа};
-    \node[leaf] (t2) at (0.5,-3.75) {NER (BIO-теги)};
-    \node[leaf] (t3) at (0.5,-4.5) {отношения, coref};
-    \node[leaf] (t4) at (0.5,-5.25) {перевод, QA, preference};
-
-    \node[leaf] (v1) at (4.0,-3.0) {класс / multi-label};
-    \node[leaf] (v2) at (4.0,-3.75) {bounding box};
-    \node[leaf] (v3) at (4.0,-4.5) {полигоны, маски};
-    \node[leaf] (v4) at (4.0,-5.25) {keypoints, треки};
-
-    \node[leaf] (a1) at (7.5,-3.0) {транскрипт};
-    \node[leaf] (a2) at (7.5,-3.75) {диаризация};
-    \node[leaf] (a3) at (7.5,-4.5) {события и метки времени};
-    \node[leaf] (a4) at (7.5,-5.25) {эмоция, качество};
-
-    \node[leaf] (s1) at (11.0,-3.0) {метка на строку};
-    \node[leaf] (s2) at (11.0,-3.75) {аномалии, change points};
-    \node[leaf] (s3) at (11.0,-4.5) {прогноз на горизонте};
-    \node[leaf] (s4) at (11.0,-5.25) {причинно-следственные связи};
-
-    \draw[arr] (r) -- (t); \draw[arr] (r) -- (v); \draw[arr] (r) -- (a); \draw[arr] (r) -- (s);
-    \foreach \d/\f in {t/t1,t/t2,t/t3,t/t4,v/v1,v/v2,v/v3,v/v4,a/a1,a/a2,a/a3,a/a4,s/s1,s/s2,s/s3,s/s4}
-        \draw[arr, gray] (\d.south) -- (\f.north);
-\end{tikzpicture}
-\end{document}
-```
-
-> Ключевое: **дорогие** задачи — те, где один объект требует много решений (маски, треки, отношения). Дешёвые — одна метка на объект. Это определяет и бюджет, и стратегию.
+<span class="callout good">Ключевое: **дорогие** задачи — там, где один объект требует много решений (маски, треки). Дешёвые — одна метка на объект.</span>
 
 ---
 
@@ -206,50 +227,15 @@ $$
 - $c_{\text{rework}} = p_{\text{err}} \cdot c_{\text{annot}}$ — переделка после QA
 - Скрытые статьи: онбординг, калибровка, споры, тулинг, простой
 
-> Ключевое: в смете «на разметку» обычно забывают **QA и переделку**. Без них цифра занижается в 1,5–2 раза.
+<span class="callout good">Ключевое: в смете «на разметку» обычно забывают **QA и переделку**. Без них цифра занижается в 1,5–2 раза.</span>
 
 ---
 
 ## Видимая и скрытая часть проекта
 
-```tikz
-\documentclass[tikz]{standalone}
-\usepackage[T2A]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage[russian]{babel}
-\usetikzlibrary{arrows.meta, positioning, shapes.geometric, matrix, calc}
-\begin{document}
-\begin{tikzpicture}[font=\small]
-    % вода
-    \fill[blue!8] (-5.4,0) rectangle (8.6,3.4);
-    \draw[blue!40, thick] (-5.4,0) -- (8.6,0);
-    \node[blue!50!black, font=\scriptsize, anchor=west] at (-5.3,3.15) {ВИДНО ЗАКАЗЧИКУ};
+![](Лекция5_figs/tikz_03.png)
 
-    \node[rectangle, rounded corners, draw, thick, fill=orange!25, align=center, minimum width=4.6cm, minimum height=1.3cm]
-        (ui) at (-1.4,1.6) {\textbf{Интерфейс и платформа}\\клик по метке};
-    \node[font=\scriptsize, align=center, text width=3.2cm] at (4.6,1.6) {~};
-    \fill[blue!8, opacity=0.0] (0,0) rectangle (0,0);
-
-    \draw[blue!40, thick, dashed] (-5.4,0) -- (8.6,0);
-    \node[blue!50!black, font=\scriptsize, anchor=west] at (-5.3,-0.35) {НЕ ВИДНО: 70–85\% усилий};
-
-    \node[rectangle, rounded corners, draw, fill=blue!12, align=center, minimum width=2.9cm, minimum height=0.95cm] (g) at (-4.0,-3.2) {Инструкции\\и калибровка};
-    \node[rectangle, rounded corners, draw, fill=blue!12, align=center, minimum width=2.9cm, minimum height=0.95cm] (h) at (-0.8,-3.2) {Найм, обучение,\\удержание};
-    \node[rectangle, rounded corners, draw, fill=blue!12, align=center, minimum width=2.9cm, minimum height=0.95cm] (q) at (2.4,-3.2) {QA: эталоны,\\согласие, аудит};
-    \node[rectangle, rounded corners, draw, fill=blue!12, align=center, minimum width=2.9cm, minimum height=0.95cm] (ag) at (5.6,-3.2) {Агрегация\\и версионирование};
-    \node[rectangle, rounded corners, draw, fill=green!15, align=center, minimum width=2.9cm, minimum height=0.95cm] (d) at (0.8,-4.9) {Датасет, которому\\можно верить};
-
-    \draw[->, thick] (ui) -- (g.north);
-    \draw[->, thick] (ui) -- (h.north);
-    \draw[->, thick] (ui) -- (q.north);
-    \draw[->, thick] (ui) -- (ag.north);
-    \draw[->, thick] (g) -- (d); \draw[->, thick] (h) -- (d);
-    \draw[->, thick] (q) -- (d); \draw[->, thick] (ag) -- (d);
-\end{tikzpicture}
-\end{document}
-```
-
-> Ключевое: платформа — это **10% проблемы**. Остальное — процесс, люди и контроль качества.
+<span class="callout good">Ключевое: платформа — это **10% проблемы**. Остальное — процесс, люди и контроль качества.</span>
 
 ---
 
@@ -262,7 +248,7 @@ $$
 - **Утечки**: разметчик видит тест-сет; одна и та же сущность в train и test
 - **Хрупкость процесса**: ушёл ведущий разметчик — ушло знание
 
-> Ключевое: почти все проблемы разметки — **не про инструмент, а про неопределённость задачи**. Побеждает тот, кто управляет неопределённостью, а не тот, кто купил платформу.
+<span class="callout good">Ключевое: почти все проблемы разметки — **не про инструмент, а про неопределённость задачи**. Побеждает тот, кто управляет неопределённостью, а не тот, кто купил платформу.</span>
 
 ---
 
@@ -274,7 +260,7 @@ $$
 
 ---
 
-<!-- _class: lead -->
+<!-- _class: section -->
 
 # Блок 1
 ## Платформы для разметки
@@ -296,17 +282,23 @@ $$
 | ML-бэкенд | предразметка, активное обучение | подклеить модель с порогом |
 | Развёртывание | on-prem / облако / GDPR | развернуть там, где можно данные |
 
-> Ключевое: критерий выбора — **не список фич, а время до первого валидного датасета** на вашей задаче.
+<span class="callout good">Ключевое: критерий выбора — **не список фич, а время до первого валидного датасета** на вашей задаче.</span>
 
 ---
 
 ## Label Studio
+
+<div class="columns">
+<div>
 
 - Open-source (Apache 2.0), self-hosted, есть облачная версия
 - Один конфиг-файл (XML-подобный `label_config`) описывает интерфейс
 - Мультимодальность: текст, изображения, аудио, видео, HTML, PDF, временные ряды
 - REST API + Python SDK; webhooks на события разметки
 - ML-backend: предразметка, активное обучение, авто-приём предсказаний
+
+</div>
+<div>
 
 ```python
 from label_studio_sdk import Client
@@ -327,7 +319,10 @@ project = ls.start_project(
 )
 ```
 
-> Практика: начинайте с `label_config` в git — интерфейс разметки тоже версионируется.
+</div>
+</div>
+
+<span class="callout warn">Практика: начинайте с `label_config` в git — интерфейс разметки тоже версионируется.</span>
 
 ---
 
@@ -345,7 +340,7 @@ prodigy ner.teach news_ner ./model ./data/news.jsonl \
         --label PER,ORG,LOC --unsegmented
 ```
 
-> Ключевое: Prodigy продаёт не интерфейс, а **рецепт «модель в цикле»**. Если у вас NLP и Python-команда — это самый короткий путь.
+<span class="callout good">Ключевое: Prodigy продаёт не интерфейс, а **рецепт «модель в цикле»**. Если у вас NLP и Python-команда — это самый короткий путь.</span>
 
 ---
 
@@ -372,7 +367,7 @@ prodigy ner.teach news_ner ./model ./data/news.jsonl \
 - Pay-per-use: платите за размеченный объект, а не за место
 - Ground Truth Plus — полностью управляемая команда разметки
 
-> Ключевое: покупая Ground Truth, вы покупаете **не софт, а операционный процесс**. Это правильный выбор, когда команды разметки нет и не планируется.
+<span class="callout good">Ключевое: покупая Ground Truth, вы покупаете **не софт, а операционный процесс**. Это правильный выбор, когда команды разметки нет и не планируется.</span>
 
 ---
 
@@ -392,41 +387,7 @@ prodigy ner.teach news_ner ./model ./data/news.jsonl \
 
 ## Дерево выбора платформы
 
-```tikz
-\documentclass[tikz]{standalone}
-\usepackage[T2A]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage[russian]{babel}
-\usetikzlibrary{arrows.meta, positioning, shapes.geometric, matrix, calc}
-\begin{document}
-\begin{tikzpicture}[font=\scriptsize,
-    q/.style={diamond, draw, aspect=2.2, fill=yellow!20, align=center, inner sep=1pt},
-    a/.style={rectangle, rounded corners, draw, align=center, minimum height=0.85cm, minimum width=2.7cm},
-    arr/.style={->, semithick}]
-    \node[q] (q1) at (0,0) {Данные можно\\выносить в облако?};
-    \node[q] (q2) at (-3.6,-1.9) {Есть команда\\и Python-стек?};
-    \node[q] (q3) at (3.6,-1.9) {Нужен процесс\\«под ключ»?};
-
-    \node[a, fill=green!15] (ls) at (-6.2,-3.7) {Label Studio\\self-hosted};
-    \node[a, fill=orange!20] (pr) at (-2.0,-3.7) {Prodigy\\(NLP)};
-    \node[a, fill=cyan!20] (lb) at (2.0,-3.7) {Labelbox\\CV / enterprise};
-    \node[a, fill=violet!20] (gt) at (6.2,-3.7) {SageMaker\\Ground Truth};
-
-    \node[font=\scriptsize, fill=white, inner sep=1pt] at (-1.9,-0.85) {нет};
-    \node[font=\scriptsize, fill=white, inner sep=1pt] at (1.9,-0.85) {да};
-    \node[font=\scriptsize, fill=white, inner sep=1pt] at (-4.9,-2.75) {да};
-    \node[font=\scriptsize, fill=white, inner sep=1pt] at (2.3,-2.75) {да};
-    \node[font=\scriptsize, fill=white, inner sep=1pt] at (4.9,-2.75) {нет};
-
-    \draw[arr] (q1) -- (q2);
-    \draw[arr] (q1) -- (q3);
-    \draw[arr] (q2) -- (ls);
-    \draw[arr] (q2) -- (pr);
-    \draw[arr] (q3) -- (lb);
-    \draw[arr] (q3) -- (gt);
-\end{tikzpicture}
-\end{document}
-```
+![](Лекция5_figs/tikz_04.png)
 
 - Бюджет ограничен → OSS (Label Studio, CVAT, Doccano) + свои руки
 - Много CV и большая команда → Labelbox / Supervisely / CVAT
@@ -463,10 +424,9 @@ prodigy ner.teach news_ner ./model ./data/news.jsonl \
 | Tracking | бокс + ID между кадрами | очень высокая |
 
 - Полигон из 40 точек стоит в 5–10 раз дороже бокса — выбирайте минимально достаточный формат
-- Для видео размечают **каждый $k$-й кадр**, промежуточные — интерполяцией (и это надо валидировать)
-- Инструменты: CVAT, Labelme, Supervisely, Roboflow
+- В видео размечают **каждый $k$-й кадр**, остальное — интерполяцией (её надо валидировать)
 
-> Ключевое: формат разметки должен совпадать с **форматом выхода модели**. Лишняя точность масок не улучшит детектор боксов.
+<span class="callout good">Ключевое: формат разметки должен совпадать с **выходом модели**: лишняя точность масок не улучшит детектор боксов.</span>
 
 ---
 
@@ -484,47 +444,15 @@ prodigy ner.teach news_ner ./model ./data/news.jsonl \
  "speaker": "SPK_2", "text": "перезагрузите роутер", "event": null}
 ```
 
-> Ключевое: договоритесь о **допуске на границу** (например, ±100 мс) и запишите его в инструкцию — иначе согласие никогда не сойдётся.
+<span class="callout good">Ключевое: договоритесь о **допуске на границу** (например, ±100 мс) и запишите его в инструкцию — иначе согласие никогда не сойдётся.</span>
 
 ---
 
 ## Пайплайн разметки в общем виде
 
-```tikz
-\documentclass[tikz]{standalone}
-\usepackage[T2A]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage[russian]{babel}
-\usetikzlibrary{arrows.meta, positioning, shapes.geometric, matrix, calc}
-\begin{document}
-\begin{tikzpicture}[font=\small,
-    b/.style={rectangle, rounded corners, draw, align=center, minimum height=1.0cm, minimum width=2.5cm},
-    arr/.style={->, thick}]
-    \node[b, fill=blue!10] (raw) at (0,0) {Сырые\\данные};
-    \node[b, fill=gray!12] (pre) at (3.4,0) {Предобработка\\и дедупликация};
-    \node[b, fill=orange!20] (pl) at (6.9,0) {Предразметка\\моделью};
-    \node[b, fill=yellow!25] (h) at (10.4,0) {Ручная\\разметка};
-    \node[b, fill=cyan!20] (qa) at (13.9,0) {QA:\\эталоны, согласие};
-    \node[b, fill=green!18] (ds) at (17.4,0) {Датасет\\+ метаданные};
+![](Лекция5_figs/tikz_05.png)
 
-    \node[b, fill=red!10, minimum width=3.0cm] (rej) at (13.9,-2.6) {Возврат на\\переразметку};
-    \node[b, fill=violet!15, minimum width=3.0cm] (ml) at (17.4,-2.6) {Обучение\\модели};
-
-    \draw[arr] (raw) -- (pre);
-    \draw[arr] (pre) -- (pl);
-    \draw[arr] (pl) -- (h);
-    \draw[arr] (h) -- (qa);
-    \draw[arr] (qa) -- node[above, font=\scriptsize] {pass} (ds);
-    \draw[arr] (qa) -- node[right, font=\scriptsize] {fail} (rej);
-    \draw[arr] (rej) -- (h);
-    \draw[arr] (ds) -- (ml);
-    \draw[arr, dashed] (ml.west) -| (6.9,-3.9) -- (pl.south);
-    \node[font=\scriptsize, align=center] at (10.4,-3.55) {следующая итерация: предразметка лучше};
-\end{tikzpicture}
-\end{document}
-```
-
-> Ключевое: на второй итерации меняется только одно звено — **качество предразметки**. Остальной процесс должен быть неизменным, иначе вы не измерите улучшение.
+<span class="callout good">Ключевое: на второй итерации меняется только одно звено — **качество предразметки**. Остальной процесс должен быть неизменным, иначе вы не измерите улучшение.</span>
 
 ---
 
@@ -544,7 +472,7 @@ prodigy ner.teach news_ner ./model ./data/news.jsonl \
 - Мониторинг: скорость, согласие, доля `unknown`
 - Еженедельная калибровка: разбор спорных случаев → правка инструкции
 
-> Ключевое: инструкция — **живой документ**. Если за месяц она не изменилась, вы либо не смотрите на ошибки, либо задача тривиальна.
+<span class="callout good">Ключевое: инструкция — **живой документ**. Если за месяц она не изменилась, вы либо не смотрите на ошибки, либо задача тривиальна.</span>
 
 ---
 
@@ -592,7 +520,7 @@ project.create_predictions([{
 exported = project.export_tasks(export_type="JSON")
 ```
 
-> Практика: храните `label_config.xml`, инструкцию и скрипт загрузки **в одном репозитории** с версией датасета.
+<span class="callout warn">Практика: храните `label_config.xml`, инструкцию и скрипт загрузки **в одном репозитории** с версией датасета.</span>
 
 ---
 
@@ -614,372 +542,269 @@ exported = project.export_tasks(export_type="JSON")
 
 ---
 
-<!-- _class: lead -->
+<!-- _class: section -->
 
 # Блок 2
-
 ## Активное обучение и weak supervision
 
 <!-- ~20 мин -->
 
 ---
 
-## Постановка задачи активного обучения
+## Основная идея активного обучения
 
-- Пул $U$ без меток и небольшой размеченный $L$; оракул даёт метку за деньги и время
-- Бюджет $B$ — максимум запросов к оракулу: не «сколько хотим», а «сколько можем»
-- Нужно выбрать $S\subseteq U$, $|S|\le B$, при котором модель получится лучшей
+- Модель сама выбирает, **какие примеры размечать следующими**
+- Цель — максимум прироста качества на единицу бюджета, а не максимум данных
+- Работает, когда: данных много, разметка дорогая, классов немного
+- Не работает, когда: данных мало, шум в фичах, классы сильно разбалансированы без стратификации
 
 $$
-\min_{S\subseteq U,\ |S|\le B}\ \mathbb{E}\big[\mathcal{L}(f_{L\cup S})\big]
+\max_{\mathcal{L}} \; \mathbb{E}_{(x,y)\sim \mathcal{D}}\big[\text{quality}(f_{\mathcal{L}\cup\{(x,y)\}})\big]
+\quad \text{при} \quad |\mathcal{L}| \le B
 $$
 
-- Задача **комбинаторная**: перебор $\binom{|U|}{B}$ невозможен → жадный выбор по скору
-- AL — это **optimal experimental design**: ищем, какое измерение даст максимум информации
-- Качество выбранных примеров важнее их количества
+- $\mathcal{L}$ — размеченное множество, $B$ — бюджет разметки
+- На практике задачу решают **жадно**: на каждом шаге выбираем батч $Q$ из пула $\mathcal{U}$
 
-> Ключевое: AL меняет не модель, а **порядок**, в котором данные попадают в обучение.
+<span class="callout good">Ключевое: активное обучение меняет не модель, а **порядок поступления данных**. Это самый дешёвый способ сэкономить на разметке.</span>
 
 ---
 
 ## Цикл активного обучения
 
-```tikz
-\documentclass[tikz]{standalone}
-\usepackage[T2A]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage[russian]{babel}
-\usetikzlibrary{arrows.meta, positioning, matrix}
-\begin{document}
-\begin{tikzpicture}[font=\scriptsize,
-    box/.style={rectangle, rounded corners, draw, align=center, minimum height=0.95cm, minimum width=2.7cm},
-    arr/.style={->, semithick}]
-    \node[box, fill=blue!10] (pool) at (0,2.8) {Начальный пул\\$L_0$, $U$};
-    \node[box, fill=green!12] (train) at (4.0,2.8) {Обучение\\$f$ на $L$};
-    \node[box, fill=green!12] (score) at (8.0,2.8) {Скоринг пула $U$\\$s(x)$};
-    \node[box, fill=orange!20] (pick) at (8.0,0) {Выбор $k$\\примеров};
-    \node[box, fill=orange!20] (label) at (4.0,0) {Разметка\\оракулом};
-    \node[box, fill=blue!10] (add) at (0,0) {Пополнение\\$L \leftarrow L\cup S$};
-    \node[box, draw=red!60, fill=red!8, minimum width=3.2cm] (stop) at (8.0,-2.4) {Стоп: бюджет /\\плато метрики};
+![](Лекция5_figs/tikz_06.png)
 
-    \draw[arr] (pool) -- (train);
-    \draw[arr] (train) -- (score);
-    \draw[arr] (score) -- (pick);
-    \draw[arr] (pick) -- (label);
-    \draw[arr] (label) -- (add);
-    \draw[arr] (add) -- (pool);
-    \draw[arr, dashed] (pick.south) -- (stop.north);
-\end{tikzpicture}
-\end{document}
-```
-
-- **Батч, а не по одному**: переобучение на каждый пример слишком дорого; $k$ = 32–256
-- **Критерий остановки** задаётся заранее: бюджет, плато метрики, доля `unknown`
-- **Холодный старт**: с нуля меток скор бессмыслен — нужен seed-набор 100–500 примеров
+<span class="callout good">Ключевое: активное обучение — это **цикл**, а не функция. Ценность появляется, когда цикл автоматизирован и запускается без ручной сборки.</span>
 
 ---
 
-## Uncertainty sampling: три способа
+## Uncertainty sampling: три классических правила
 
-<!-- доп. -->
+Для одного объекта $x$ с предсказанием $p(y\mid x)$:
 
-| Стратегия | Формула | Идея |
-|:----------|:--------|:-----|
-| Least confidence | $1-\max_y p(y\mid x)$ | берём там, где модель не уверена |
-| Margin | $p_1-p_2$ | минимальный отрыв двух лучших классов |
-| Entropy | $-\sum_y p(y\mid x)\log p(y\mid x)$ | максимум неопределённости |
-
-- $\hat{y}=\arg\max_y p(y\mid x)$ — базовый предикт, всё остальное лишь надстройка над ним
-- Margin устойчивее LC на многоклассовых задачах, entropy — самый «мягкий» скор
-- Дёшево: одна модель, один проход по пулу, без эмбеддингов
-- **Калибровка**: softmax завышает уверенность, и на «уверенных» ошибках AL выберет не то — проверяйте ECE и temperature scaling
-
----
-
-## Diversity sampling
-
-- Проблема: uncertainty тянет **одно и то же** — 200 почти одинаковых пограничных примеров
-- **Кластеризация**: разбить $U$ на кластеры и брать по одному представителю из каждого
-- **Core-set (k-center)**: выбрать $S$, минимизирующее максимальное расстояние от $U$ до $S$
-- **BADGE**: эмбеддинги × уверенность, затем k-means++ по ним
-- При малом $L$ **покрытие пространства** важнее локальной неопределённости
-
-```tikz
-\documentclass[tikz]{standalone}
-\usepackage[T2A]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage[russian]{babel}
-\usetikzlibrary{arrows.meta, positioning, matrix}
-\begin{document}
-\begin{tikzpicture}[font=\scriptsize]
-    % A. uncertainty
-    \draw[gray!60] (0,0) rectangle (4.6,4.0);
-    \draw[dashed, thick, gray] (0.4,3.8) -- (4.2,0.2);
-    \foreach \p in {(0.7,3.3),(1.0,3.5),(0.8,2.5),(1.4,3.1),(0.5,1.9),(1.2,1.8),(0.9,1.2)}
-        \fill[blue!70] \p circle (2.2pt);
-    \foreach \p in {(3.4,1.0),(3.9,1.6),(3.0,0.6),(3.5,2.2),(4.1,0.7),(2.7,1.2),(3.2,1.8),(3.7,2.8)}
-        \fill[red!75] \p circle (2.2pt);
-    \foreach \p in {(1.2,3.0),(2.1,2.1),(3.0,1.2)}{
-        \draw[thick, orange!90!black] \p circle (5pt);
-        \fill[orange!90!black] \p circle (2.2pt);
-    }
-    \node[align=center] at (2.3,4.38) {A. Uncertainty: у границы};
-
-    % B. diversity / core-set
-    \draw[gray!60] (6.0,0) rectangle (10.6,4.0);
-    \foreach \c/\rx/\ry in {(7.0,3.2)/0.62/0.42,(9.7,3.2)/0.58/0.45,(7.2,0.9)/0.55/0.38,(9.8,1.0)/0.60/0.40}
-        \draw[dashed, gray] \c ellipse [x radius=\rx, y radius=\ry];
-    \foreach \c in {(7.0,3.2),(9.7,3.2),(7.2,0.9),(9.8,1.0)}{
-        \draw[thick, orange!90!black] \c circle (5pt);
-        \fill[green!55!black] \c circle (2.2pt);
-    }
-    \foreach \p in {(6.6,3.5),(7.4,2.9),(9.4,3.5),(10.0,3.0),(6.8,0.6),(7.6,1.2),(10.2,0.7),(9.4,1.2),(8.3,2.0),(8.5,1.0),(8.6,3.0)}
-        \fill[blue!60] \p circle (1.8pt);
-    \node[align=center] at (8.3,4.38) {B. Diversity / core-set};
-\end{tikzpicture}
-\end{document}
-```
-
-> Ключевое: uncertainty и diversity — не альтернативы, а **два слагаемых** одного скора: неопределённость × новизна.
-
----
-
-## Query-by-Committee и BALD
-
-<!-- доп. -->
-
-- **Комитет** — $k$ моделей: бэггинг, разные сиды, разные архитектуры
-- **Vote entropy**: $-\sum_c \frac{V_c}{k}\log\frac{V_c}{k}$ — насколько комитет не согласен
-- **BALD** отбирает примеры с максимумом *эпистемической* неопределённости
+**Least confidence** — берём там, где модель менее уверена в лучшем классе:
 
 $$
-\mathbb{I}[y;\theta\mid x]=H[y\mid x]-\mathbb{E}_{p(\theta\mid D)}\,H[y\mid x,\theta]
+x^* = \arg\max_{x} \Big(1 - \max_{y} p(y\mid x)\Big)
 $$
 
-- Первое слагаемое — вся неопределённость, второе — «неустранимый шум»; разность снимается меткой
-- На практике: MC-dropout или ансамбль из 5–10 моделей
-
-> Ключевое: BALD не любит шумные объекты — он ищет **незнание модели**, а не сложность примера.
-
----
-
-## Сравнение стратегий
-
-| Стратегия | Сильная сторона | Слабая | Когда брать |
-|:----------|:----------------|:-------|:------------|
-| Uncertainty | дёшево, одна модель | дубликаты, зависит от калибровки | старт, много классов |
-| Margin | устойчивее LC | нужны вероятности классов | 3–20 классов |
-| Entropy | гладкий скор | тянет шумные примеры | анализ, baseline |
-| Core-set / BADGE | покрытие пространства | дороже, нужны эмбеддинги | мало меток, CV |
-| QBC / BALD | явно измеряет незнание | $k$ моделей, дорого | есть бюджет на ансамбль |
-| Random | честный baseline | не использует модель | всегда как контроль |
-
-- Гибрид «uncertainty × diversity» обычно лучше любой чистой стратегии
-- Сравнивать только на **одинаковом бюджете** и с одинаковым seed-набором
-
----
-
-## Сколько меток экономит AL
-
-```tikz
-\documentclass[tikz]{standalone}
-\usepackage[T2A]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage[russian]{babel}
-\usepackage{pgfplots}
-\pgfplotsset{compat=1.15}
-\usetikzlibrary{arrows.meta, positioning, matrix}
-\begin{document}
-\begin{tikzpicture}
-\begin{axis}[
-    width=11.4cm, height=6.2cm,
-    xlabel={число размеченных примеров},
-    ylabel={F1},
-    xmin=0, xmax=100, ymin=0.60, ymax=0.93,
-    grid=both, grid style={gray!25},
-    legend pos=south east, legend style={font=\scriptsize},
-    tick label style={font=\scriptsize}, label style={font=\scriptsize}]
-    \addplot[blue, thick, domain=0:100, samples=120] {0.62+0.28*(1-exp(-x/22))};
-    \addlegendentry{случайная выборка}
-    \addplot[red, thick, domain=0:100, samples=120] {0.62+0.28*(1-exp(-x/7))};
-    \addlegendentry{активное обучение}
-    \addplot[only marks, mark=*, blue, mark size=2.2pt] coordinates {(42.8,0.86)};
-    \addplot[only marks, mark=*, red, mark size=2.2pt] coordinates {(13.6,0.86)};
-    \draw[<->, thick] (axis cs:13.6,0.86) -- (axis cs:42.8,0.86)
-        node[midway, above, fill=white, inner sep=1pt, font=\scriptsize] {$\approx$3,1$\times$ меньше меток};
-\end{axis}
-\end{tikzpicture}
-\end{document}
-```
+**Margin sampling** — минимальная разница между топ-1 и топ-2:
 
 $$
-N_{\text{saved}}=N_{\text{rand}}-N_{\text{AL}}
+x^* = \arg\min_{x} \Big( p(y_1\mid x) - p(y_2\mid x) \Big)
 $$
 
-- На графике: до одного и того же F1 нужно ≈3× меньше меток
-- Экономия растёт с числом классов и падает с шумом оракула
-- **Числа синтетические** — показана форма кривой, а не результат эксперимента
+**Entropy** — максимальная неопределённость всего распределения:
 
-> Ключевое: AL экономит **метки**, но не обязательно **время** — добавляются обучение, скоринг и оркестрация.
+$$
+x^* = \arg\max_{x} H(y\mid x) = -\sum_{k} p(y_k\mid x)\log p(y_k\mid x)
+$$
 
----
-
-## Практика: батчи, холодный старт, дисбаланс
-
-<!-- доп. -->
-
-- Батч 32–256: меньше — дороже по переобучению, больше — теряется адаптивность
-- Seed-набор 100–500 примеров, стратифицированный по классам
-- Скор пересчитывать после батча, а не после каждого отдельного примера
-- Дисбаланс: uncertainty «съест» редкий класс → квота на класс внутри батча
-- Логировать всё: какой пример, какой скор, кто и когда разметил
-
-| Когда AL не работает | Почему |
-|:---------------------|:-------|
-| Шумный оракул | метка хуже сигнала, который она приносит |
-| Слабая модель | скор не отражает полезность примера |
-| Дубликаты | батч из 100 копий одного объекта |
-| Дрейф данных | скор устаревает быстрее, чем приходит метка |
+- Margin лучше работает при многих классах, entropy — универсальнее
+- Все три требуют **откалиброванных** вероятностей (см. слайд про калибровку)
 
 ---
 
-## Semi-supervised learning
+## Как выглядят три правила
 
-- **Self-training**: модель размечает уверенные примеры и добавляет их в обучение
-- **Co-training**: два независимых «взгляда» на данные учат друг друга
-- **Graph-based**: метки распространяются по графу сходства
-- **Generative / consistency**: SSL-регуляризация, аугментации, pseudo-label + EMA
-- Общее: используем **структуру** неразмеченных данных, а не мнение оракула
+![](Лекция5_figs/tikz_07.png)
 
-| Подход | Когда работает |
-|:-------|:---------------|
-| Self-training | много неразмеченных, калиброванная модель, мало классов |
-| Co-training | есть два действительно независимых представления |
-| Graph-based | данные образуют плотные кластеры сходства |
-| Generative / consistency | есть сильные аугментации или предобучение |
+- Слева LC и margin согласны, в центре margin точнее, справа максимум у entropy
 
 ---
 
-## Self-training: псевдо-разметка
+## Diversity sampling: покрытие, а не сомнение
+
+- Uncertainty игнорирует **дубликаты**: 200 почти одинаковых «сомнительных» объектов
+- Diversity выбирает **представителей** облака неразмеченных данных
+- Методы: k-means по эмбеддингам, k-center greedy, DBSCAN, иерархическая кластеризация, core-set
+
+$$
+\text{k-center greedy:}\quad x^* = \arg\max_{x \in \mathcal{U}} \; \min_{s \in \mathcal{L}} \; \| \phi(x) - \phi(s) \|_2
+$$
+
+- $\phi(x)$ — эмбеддинг (BERT, CLIP, ResNet, TF-IDF/SVD)
+- Жадно берём самый далёкий от уже размеченных — покрываем пространство
+- Дешёво по вычислениям, устойчиво к дисбалансу
+
+<span class="callout good">Ключевое: uncertainty отвечает «где модель ошибается», diversity — «чего модель ещё не видела». Нужны оба ответа.</span>
+
+---
+
+## Diversity на картинке
+
+![](Лекция5_figs/tikz_08.png)
+
+- Uncertainty «залипает» в одной неопределённой области
+- Diversity даёт три разных региона — больше информации на батч
+- Компромисс: **кластеризация → uncertainty внутри кластера** (BADGE, k-means + margin)
+
+---
+
+## Query-by-Committee и байесовские подходы
+
+**QBC**: ансамбль моделей $f_1,\dots,f_M$, обученных на разных подвыборках/инициализациях
+
+$$
+\text{vote entropy} = -\sum_{k} \frac{V(y_k)}{M}\log\frac{V(y_k)}{M},
+\qquad
+\text{KL} = \frac{1}{M}\sum_{m} D_{KL}\big(p_m \,\|\, \bar{p}\big)
+$$
+
+- Выбираем объект **максимального разногласия** комитета
+- Дороже: нужно $M$ моделей или MC-dropout
+
+**BALD** (Bayesian Active Learning by Disagreement) — взаимная информация:
+
+$$
+x^* = \arg\max_x \; H\big(y\mid x, \mathcal{L}\big) - \mathbb{E}_{p(\theta\mid \mathcal{L})}\big[H\big(y\mid x,\theta\big)\big]
+$$
+
+- Первое слагаемое — общая неопределённость, второе — «шум» модели
+- Максимум там, где модели **уверены по-разному**, а не там, где все растеряны
+
+---
+
+## Другие критерии: что ещё оптимизируют
+
+| Критерий | Идея | Цена |
+|:---------|:-----|:-----|
+| Expected Error Reduction | ожидаемое снижение ошибки после разметки | очень высокая |
+| Expected Model Change | ожидаемое изменение градиента/параметров | высокая |
+| Core-set / k-center | покрытие пространства эмбеддингов | низкая |
+| BADGE | k-means++ по градиентным эмбеддингам | средняя |
+| Cost-sensitive | максимум пользы на рубль, а не на объект | зависит от задачи |
+| Cold-start (warm-up) | первые $n_0$ — случайно/стратифицированно | обязательный приём |
+
+$$
+\text{Expected Model Change:}\quad x^* = \arg\max_x \mathbb{E}_{y}\big[\|\nabla_\theta \ell(x,y)\|\big]
+$$
+
+<span class="callout good">Ключевое: на старте модель **не умеет** оценивать свою неопределённость. Первые 50–200 объектов берите случайно — иначе получите смещённый датасет.</span>
+
+---
+
+## Сколько это экономит: learning curves
+
+![](Лекция5_figs/tikz_09.png)
+
+- Форма кривой универсальна: $\text{quality}(n) \approx q_{\max} - a e^{-n/\tau}$
+- Выигрыш активного обучения — сдвиг $\tau$, а не $q_{\max}$: **потолок задаёт разметка и признаки**
+- Кривые нужно строить на **своей** задаче: литературные цифры переносятся плохо
+
+---
+
+## Батчи, остановка и бюджетирование
+
+**Размер батча** — компромисс:
+
+- $|Q|=1$ — оптимально по информации, невыносимо по накладным расходам
+- $|Q|$ = 50–500 — практичный диапазон, но внутри батча нужна диверсификация
+- Большой батч «залипает» в одной области → чередуйте стратегии
+
+**Стоп-критерии:**
+
+- Модель достигла целевой метрики → дальше не тратим
+- Прирост за итерацию $< \varepsilon$ (например, $\Delta F1 < 0.002$)
+- Бюджет исчерпан по часам, а не по объектам
+- Согласие модели с человеком на свежих данных стабилизировалось
+
+**Распределение бюджета:** 60–70% — активное обучение, 15–20% — эталоны и QA, 15% — пилот и инструкции.
+
+<span class="callout good">Ключевое: «сколько ещё размечать» — это **решение о остановке**, и принимать его надо по кривой, а не по ощущению.</span>
+
+---
+
+## Semi-supervised learning: используем неразмеченное
+
+| Подход | Идея | Пример |
+|:-------|:-----|:-------|
+| Self-training | свои же предсказания как метки | `SelfTrainingClassifier` |
+| Co-training | два «взгляда» на данные учат друг друга | текст + метаданные |
+| Consistency | предсказание не должно меняться от аугментации | FixMatch, UDA |
+| Graph-based | метки распространяются по графу близости | label propagation |
+| Generative | модель данных + метки | VAE, смеси |
+
+- Ключевое допущение: **кластеры согласованы с классами** (cluster assumption)
+- Ошибки псевдометок усиливаются итеративно → нужен порог и валидация
+
+---
+
+## Self-training: цикл
+
+![](Лекция5_figs/tikz_10.png)
+
+<span class="callout good">Ключевое: псевдометки — **не бесплатная разметка**, а регуляризация. Если модель ошибается систематически, self-training закрепляет ошибку.</span>
+
+---
+
+## Псевдоразметка в коде
 
 ```python
 from sklearn.semi_supervised import SelfTrainingClassifier
-from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
 
-base = LogisticRegression(max_iter=1000)
-model = SelfTrainingClassifier(
-    base,
-    threshold=0.95,        # порог уверенности для псевдо-метки
-    criterion="threshold",
-    k_best=50,             # сколько добавлять за итерацию
-    max_iter=10,
-    verbose=True,
-)
-model.fit(X, y)            # y: -1 = объект без метки
-pseudo = model.transduction_   # итоговые метки
+# y = -1 для объектов без метки
+base = RandomForestClassifier(n_estimators=300, class_weight="balanced")
+st = SelfTrainingClassifier(base, threshold=0.9, max_iter=10, verbose=True)
+
+st.fit(X_combined, y_combined)   # y_combined: классы и -1
+
+# что именно «дометнулось» — видно по атрибуту
+pseudo_mask = st.transduction_ != -1
+print(f"псевдометок: {pseudo_mask.sum()} из {(y_combined == -1).sum()}")
 ```
 
-- **Confirmation bias**: модель закрепляет свои ошибки — порог и `k_best` обязательны
-- Псевдо-метки не равны настоящим: меньший вес, валидация только на ручной разметке
-- Следите за балансом классов в псевдо-наборе, иначе редкий класс исчезнет
+- Порог 0.9 на несбалансированных данных пропустит редкий класс → начинайте с 0.8 и смотрите per-class precision
+- Всегда держите **чистый** отложенный набор: псевдометки не должны попасть в оценку
 
 ---
 
-## Weak supervision: labeling functions
+## Weak supervision: разметка программами
 
-- **LF** — функция, которая по объекту выдаёт метку или `ABSTAIN`
-- Типы: keyword, regex/pattern, внешняя база знаний, предобученная модель, эвристика
-- **Точность vs покрытие**: узкая LF точна, широкая — покрывает, но шумит
+**Идея:** вместо ручных меток пишем **функции разметки** (labeling functions, LF) — эвристики, словари, регулярки, вызовы моделей — и объединяем их шумные голоса вероятностной моделью.
+
+- LF возвращает метку или `ABSTAIN` (воздержался)
+- Каждая LF **несовершенна**: у неё есть покрытие, точность, конфликты
+- Label model оценивает точности LF **без разметки** и выдаёт вероятностные метки
+- End model учится на этих вероятностных метках
 
 ```python
-from snorkel.labeling import labeling_function, PandasLFApplier
+from snorkel.labeling import labeling_function, ABSTAIN
+@labeling_function()
+def has_urgent_words(x):
+    words = {"срочно", "критично", "авария"}
+    return SPAM if words & set(x.text.lower().split()) else ABSTAIN
 
 @labeling_function()
-def lf_refund(x):
-    return REFUND if "верните деньги" in x.text.lower() else ABSTAIN
+def too_long(x):
+    return HAM if len(x.text.split()) > 120 else ABSTAIN
 ```
 
-- Одна LF — слабая; вместе они покрывают больше, а конфликты разрешает label model
-
-> Ключевое: LF пишут **быстро и грязно** — их шум исправляет label model, а не ручная отладка каждой функции.
+<span class="callout good">Ключевое: weak supervision сдвигает труд с «размечать объекты» на «писать и отлаживать правила». Это выгодно, когда правило живёт долго.</span>
 
 ---
 
-## Snorkel: пайплайн
+## Snorkel: от функций к вероятностным меткам
 
-```tikz
-\documentclass[tikz]{standalone}
-\usepackage[T2A]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage[russian]{babel}
-\usetikzlibrary{arrows.meta, positioning, matrix}
-\begin{document}
-\begin{tikzpicture}[font=\scriptsize,
-    box/.style={rectangle, rounded corners, draw, align=center, minimum height=1.0cm, minimum width=2.2cm},
-    src/.style={rectangle, draw, dashed, align=center, fill=gray!8, minimum height=0.6cm, minimum width=1.7cm},
-    arr/.style={->, semithick}]
-    \node[box, fill=blue!10] (raw) at (0,0) {Неразмеченные\\данные};
-    \node[box, fill=orange!18] (lf) at (3.4,0) {Набор LF\\матрица $L$};
-    \node[box, fill=green!15] (lm) at (6.8,0) {Label\\model};
-    \node[box, fill=green!15] (pr) at (10.0,0) {Вероятностные\\метки $\hat{y}$};
-    \node[box, fill=violet!15] (em) at (13.2,0) {End\\model};
+![](Лекция5_figs/tikz_11.png)
 
-    \node[src] (s1) at (1.3,2.0) {правила};
-    \node[src] (s2) at (3.4,2.0) {внешние БД};
-    \node[src] (s3) at (5.5,2.0) {предобученные\\модели};
-
-    \draw[arr] (raw) -- (lf);
-    \draw[arr] (lf) -- (lm);
-    \draw[arr] (lm) -- (pr);
-    \draw[arr] (pr) -- (em);
-    \draw[arr, dashed] (s1) -- (lf.north west);
-    \draw[arr, dashed] (s2) -- (lf.north);
-    \draw[arr, dashed] (s3) -- (lf.north east);
-\end{tikzpicture}
-\end{document}
-```
-
-- LF применяются к каждому объекту → матрица $L$ размера $n\times m$
-- Label model оценивает точность LF **без разметки** и выдаёт вероятности классов
-- End model учится на вероятностных метках или прямо на матрице $L$
+- Диагностика LF: **coverage**, **overlap**, **conflict**; LF хуже случайной лучше удалить
+- Классика: Snorkel (Ratner et al.), развитие — Snorkel Flow, weak supervision + LLM
 
 ---
 
-## Label model: как из шумных меток получить вероятность
+## Когда что применять
 
-<!-- доп. -->
+| Ситуация | Инструмент | Почему |
+|:---------|:-----------|:-------|
+| Много данных, дорогая разметка | active learning | экономия 40–60% бюджета |
+| Есть сильные правила/словари | weak supervision | правила дешевле людей |
+| Есть немного меток и много сырья | self-training | использует структуру данных |
+| Метки нужны быстро и «примерно» | предразметка LLM + выборочная проверка | скорость |
+| Высокая цена ошибки | только люди + QA | control |
 
-- **Генеративная модель**: у каждой LF есть скрытая точность $\alpha_j$ и склонность к классу
-- Обучение — по **согласию** между LF: кто часто спорит с большинством, тот шумный
-- Ключевое допущение: при известном истинном $y$ метки LF условно независимы
-
-$$
-\hat{y}_i=\arg\max_y\ P_\theta\big(y\mid L_i\big)
-$$
-
-```python
-from snorkel.labeling.model import LabelModel
-
-label_model = LabelModel(cardinality=2, verbose=True)
-label_model.fit(L_train, n_epochs=500, log_freq=100)
-probs = label_model.predict_proba(L)     # (n, 2)
-weak  = label_model.predict(L, tie_break_policy="abstain")
-```
-
-- Аккуратно с коррелированными LF: две копии одного правила ломают оценку
-
----
-
-## Чек-лист внедрения AL
-
-1. Есть ли поток неразмеченных данных, который **дешевле** случайной выборки?
-2. Задан ли seed-набор и стратификация по классам?
-3. Выбран ли скор под задачу: uncertainty, diversity или гибрид?
-4. Зафиксированы ли размер батча и критерий остановки **до** старта?
-5. Есть ли baseline «случайная выборка» на том же бюджете?
-6. Логируются ли запросы, скоры и версия модели на каждой итерации?
-
-> Ключевое: без baseline на том же бюджете вы не знаете, сэкономил ли AL хоть одну метку.
+<span class="callout good">Ключевое: подходы **комбинируются**. Типичный продакшн-рецепт: правила → предразметка моделью → активное обучение на остатке → QA.</span>
 
 ---
 
@@ -987,21 +812,22 @@ weak  = label_model.predict(L, tie_break_policy="abstain")
 
 **В каких случаях активное обучение может быть неэффективным?**
 
-Подсказка: подумайте про шумного оракула, стоимость переобучения на каждой итерации, дубликаты в пуле и про то, что AL оптимизирует уверенность модели, а не вашу бизнес-метрику.
+Обсудите: холодный старт, шумные признаки, разбалансированные классы, дрейф, задачи с дорогим inference.
 
 ---
 
 ## Резюме блока 2
 
-- AL выбирает, **что** размечать; weak supervision — **чем** заменить разметку
-- Uncertainty дёшева, diversity надёжнее, BALD теоретически чище
-- Экономия меток реальна, но её нужно мерить против random baseline
-- Self-training и labeling functions снижают стоимость, но добавляют свои ошибки
-- Внедрение начинается с логов и baseline, а не с выбора библиотеки
+- Активное обучение снижает затраты, меняя **порядок** поступления данных
+- Стратегии: uncertainty, diversity, QBC/BALD, cost-sensitive; на старте — случайная выборка
+- Экономию измеряют learning curve, а не обещаниями статьи
+- Semi-supervised использует неразмеченные данные, но усиливает систематические ошибки
+- Weak supervision превращает правила в вероятностные метки
+- Лучший результат — **комбинация** подходов, а не один «серебряный патрон»
 
 ---
 
-<!-- _class: lead -->
+<!-- _class: section -->
 
 # Блок 3
 ## Контроль качества и агрегация меток
@@ -1010,405 +836,331 @@ weak  = label_model.predict(L, tie_break_policy="abstain")
 
 ---
 
-## Цена шумных меток
+## Почему качество меток — это деньги
 
-<!-- доп. -->
-
-- **Модель учит ошибки**: шум в обучающем наборе становится частью функции, а не «шумом, который сгладится»
-- **Потолок качества**: даже идеальная модель не обгонит эталон, по которому её проверяют
-- **Скрытые расходы**: переделка, повторная разметка, разбор спорных случаев, простой пайплайна
-- **Потеря доверия**: после одного «странного» релиза команда перестаёт верить и метрикам, и датасету
+- Шум в метках **снижает потолок** любой модели: даже идеальный алгоритм учится на испорченных $y$
+- 5–10% случайного шума терпимо; **систематический** шум (смещение) не исправляется объёмом данных
+- Ошибки разметки попадают в тест-сет → метрики врут → решения принимаются неверно
+- Переделка датасета дороже, чем QA на входе: переразметка = полная стоимость + потерянное время
 
 $$
-\hat p_{\text{err}} = \frac{n_{\text{err}}}{n_{\text{gold}}}
+\text{quality}_{\text{system}} \le \text{quality}_{\text{labels}} \cdot \text{quality}_{\text{model}}
 $$
 
-- $n_{\text{err}}$ — расхождения с эталоном, $n_{\text{gold}}$ — размер эталонной подвыборки
-- Оценка даёт **нижнюю границу** шума: часть ошибок не видит даже эталон
-- Сравнивайте $\hat p_{\text{err}}$ между итерациями — важна динамика, а не абсолют
+- «Data cascades» (Sambasivan et al., CHI 2021): мелкие дефекты данных накапливаются и всплывают на поздних стадиях — там, где исправление дороже всего
 
-> Ключевое: шумные метки — это не «чуть хуже», а **жёсткий потолок** на качество всей системы.
+<span class="callout good">Ключевое: QA — не бюрократия, а **страховка от переделки**. Дешевле проверить 10%, чем переразмечать 100%.</span>
 
 ---
 
 ## Источники ошибок
 
-```tikz
-\documentclass[tikz]{standalone}
-\usepackage[T2A]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage[russian]{babel}
-\usetikzlibrary{arrows.meta, positioning, matrix}
-\begin{document}
-\begin{tikzpicture}[font=\scriptsize,
-    cause/.style={rectangle, rounded corners, draw, align=center, minimum height=0.9cm, minimum width=3.1cm, fill=orange!12},
-    arr/.style={->, semithick, gray!60!black}]
-    \useasboundingbox (-7.3,-3.95) rectangle (7.3,4.05);
-    \node[circle, draw, thick, fill=red!12, align=center, minimum size=2.7cm, inner sep=1pt] (n) at (0,0) {\textbf{Шум}\\\textbf{в метках}};
+![](Лекция5_figs/tikz_12.png)
 
-    \node[cause] (c1) at (-5.2,2.5) {невнимательность};
-    \node[cause] (c2) at (-5.2,0) {усталость и\\монотонность};
-    \node[cause] (c3) at (-5.2,-2.5) {недостаточное\\обучение};
-
-    \node[cause, fill=blue!12] (s1) at (5.2,2.5) {неоднозначные\\инструкции};
-    \node[cause, fill=blue!12] (s2) at (5.2,0) {сложность\\задачи};
-    \node[cause, fill=blue!12] (s3) at (5.2,-2.5) {плохой\\интерфейс};
-
-    \draw[rounded corners, dashed, gray] (-6.9,3.75) rectangle (-3.5,-3.55);
-    \draw[rounded corners, dashed, gray] (3.5,3.75) rectangle (6.9,-3.55);
-    \node[font=\scriptsize\bfseries, gray!55!black] at (-5.2,3.35) {ЧЕЛОВЕК};
-    \node[font=\scriptsize\bfseries, gray!55!black] at (5.2,3.35) {СИСТЕМА};
-
-    \foreach \c in {c1,c2,c3,s1,s2,s3} \draw[arr] (\c) -- (n);
-\end{tikzpicture}
-\end{document}
-```
-
-- Ошибки **человека** лечатся обучением, калибровкой и ритмом работы
-- Ошибки **системы** лечатся инструкцией, декомпозицией задачи и интерфейсом
-
-> Ключевое: прежде чем наказывать разметчика, проверьте, не создали ли вы условия, в которых ошибиться — нормально.
+- Человеческие ошибки **случайны** → лечатся агрегацией
+- Ошибки задачи и процесса **систематические** → не лечатся агрегацией, только переделкой инструкции
 
 ---
 
-## Систематические и случайные ошибки
+## Две разные вещи: надёжность и валидность
 
-| Тип | Как проявляется | Как обнаружить | Что делать |
-|:----|:----------------|:---------------|:-----------|
-| **Случайная** | метки «дрожат», согласие низкое, но без смещения | низкое $\kappa$ при высоком качестве каждого отдельного разметчика | больше примеров, чётче критерии, агрегация |
-| **Систематическая** | все дружно смещены в один класс | высокое согласие **и** низкая точность на эталоне | правка инструкции, переобучение команды |
-| **Коррелированная** | ошибка повторяется у группы (один шаблон, один наставник) | ошибки кластеризуются по людям и сменам | независимые проверки, ротация |
-| **Дрейф правил** | старые метки не согласуются с новыми | расхождение версий датасета во времени | версионирование инструкции + переразметка |
+| | Надёжность (reliability) | Валидность (validity) |
+|:--|:--|:--|
+| Вопрос | «согласны ли разметчики?» | «правильно ли мы измеряем?» |
+| Метрика | Cohen/Fleiss/Krippendorff | эталон, внешний критерий, связь с целевым исходом |
+| Бывает высокой при | единодушном заблуждении | — |
+| Проверка | двойная разметка | эксперт-эталон, аудит, связь с бизнес-метрикой |
 
-- Согласие измеряет **случайную** компоненту, эталон — **систематическую**: нужны оба инструмента
-- Высокое согласие при низкой точности — самый опасный случай: команда уверенно делает не то
+- 10 разметчиков могут **согласованно** ставить неверную метку
+- Высокое согласие — необходимое, но **не достаточное** условие
+- Поэтому нужны и согласие, и **золотой стандарт**
 
-> Ключевое: **согласие ≠ правильность**. Единственный способ поймать систематическую ошибку — эталон.
-
----
-
-## Метрики согласия: что выбрать
-
-| Метрика | Разметчиков | Шкала | Когда применять |
-|:--------|:------------|:------|:----------------|
-| **Cohen's $\kappa$** | ровно 2 | номинальная / порядковая | быстрая проверка пары, аудит |
-| **Fleiss' $\kappa$** | 3 и больше | номинальная | много разметчиков, равное число меток на объект |
-| **Krippendorff $\alpha$** | 2 и больше | любая | пропуски, разные шкалы, неравное число меток |
-| **Weighted $\kappa$** | 2 | порядковая | ошибка «на класс мимо» мягче, чем «на два» |
-| **ICC** | 2 и больше | интервальная | числовые оценки (1–5, MOS), не категории |
-
-- Все метрики сравнивают наблюдаемое согласие с **ожидаемым случайно** — отсюда «поправка на угадывание»
-- Номинальная шкала: порядок меток не важен (спам / не спам); порядковая: важен (плохо / нейтрально / хорошо)
-- Для непрерывных оценок $\kappa$ неприменим — берите ICC или корреляцию
-
-> Ключевое: метрику диктует **шкала и структура пропусков**, а не привычка команды.
+<span class="callout good">Ключевое: согласие измеряет консистентность, а не истину. Ошибка в инструкции даёт идеальный kappa и бесполезный датасет.</span>
 
 ---
 
-## Cohen's $\kappa$
+## Cohen's Kappa: согласие с поправкой на случай
 
 $$
-\kappa=\frac{p_o-p_e}{1-p_e}
+\kappa = \frac{p_o - p_e}{1 - p_e}
 $$
 
-```tikz
-\documentclass[tikz]{standalone}
-\usepackage[T2A]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage[russian]{babel}
-\usetikzlibrary{arrows.meta, positioning, matrix}
-\begin{document}
-\begin{tikzpicture}[font=\small,
-    cell/.style={draw, minimum width=1.45cm, minimum height=0.9cm, anchor=center},
-    hdr/.style={draw=none, font=\bfseries\small, minimum width=1.45cm, minimum height=0.8cm},
-    tot/.style={draw=none, fill=gray!12, minimum width=1.45cm, minimum height=0.9cm},
-    diag/.style={cell, draw=green!45!black, fill=green!18},
-    off/.style={cell, draw=red!55!black, fill=red!10}]
-    \matrix (m) [matrix of nodes, nodes={cell}, column sep=2pt, row sep=2pt] {
-        |[hdr]| & |[hdr]| \textbf{Спам} & |[hdr]| \textbf{Не спам} & |[hdr]| \textbf{$\Sigma$} \\
-        |[hdr]| \textbf{Спам} & |[diag]| 42 & |[off]| 6 & |[tot]| 48 \\
-        |[hdr]| \textbf{Не спам} & |[off]| 4 & |[diag]| 48 & |[tot]| 52 \\
-        |[hdr]| \textbf{$\Sigma$} & |[tot]| 46 & |[tot]| 54 & |[tot]| 100 \\
-    };
-    \node[font=\scriptsize, gray!55!black, rotate=90] at (-3.55,0) {Разметчик A};
-    \node[font=\scriptsize, gray!55!black] at (0,2.35) {Разметчик B};
+- $p_o$ — наблюдаемая доля совпадений
+- $p_e$ — ожидаемая доля совпадений **при случайном угадывании** с теми же маргинальными частотами
 
-    \node[anchor=west, align=left, font=\small] at ([xshift=7mm]m.east) {%
-        $p_o=\frac{42+48}{100}=0.90$\\[5pt]
-        $p_e=\frac{48\cdot 46+52\cdot 54}{100^2}=0.50$\\[5pt]
-        $\kappa=\frac{0.90-0.50}{1-0.50}\approx 0.80$};
-\end{tikzpicture}
-\end{document}
-```
+$$
+p_e = \sum_{k} p_{1k}\, p_{2k}
+$$
 
-- $p_o$ — доля совпадений по диагонали, $p_e$ — ожидаемое согласие при независимых метках
-- $\kappa=1$ — полное согласие, $\kappa=0$ — ровно случайный уровень, $\kappa<0$ — хуже случайного
-
-> Ключевое: $\kappa$ отвечает на вопрос «насколько мы согласованы **сверх случайного угадывания**», а не «какой процент совпал».
+- $\kappa = 1$ — полное согласие, $\kappa = 0$ — не лучше случая, $\kappa < 0$ — хуже случая
+- Только для **двух** разметчиков и номинальной шкалы (для порядковой — weighted kappa)
 
 ---
 
-## Интерпретация $\kappa$
+## Интерпретация (Landis & Koch, 1977)
 
-| $\kappa$ | Уровень (Landis & Koch) | Как читать |
-|:---------|:------------------------|:-----------|
-| $<0.00$ | Poor | хуже случайного — сломана инструкция или данные |
-| $0.00$–$0.20$ | Slight | почти нет сигнала, разметка не годится |
-| $0.21$–$0.40$ | Fair | есть сигнал, но шум слишком велик |
-| $0.41$–$0.60$ | Moderate | рабочий минимум для черновых экспериментов |
-| $0.61$–$0.80$ | Substantial | обычно достаточно для обучения |
-| $0.81$–$1.00$ | Almost perfect | эталонный уровень, дальше расти некуда |
+| Значение $\kappa$ | Интерпретация | Что делать |
+|:------------------|:--------------|:-----------|
+| < 0.00 | хуже случайного | инструкция не работает |
+| 0.00 – 0.20 | слабое | пересмотреть схему меток |
+| 0.21 – 0.40 | удовлетворительное | нужны калибровки |
+| 0.41 – 0.60 | умеренное | приемлемо для черновой разметки |
+| 0.61 – 0.80 | существенное | рабочий уровень |
+| 0.81 – 1.00 | почти полное | обычно цель для продакшена |
 
-- **Base-rate paradox**: при редком классе (2%) точность 0.98 может дать $\kappa\approx0.2$ — метрика «наказывает» за дисбаланс
-- $\kappa$ **не различает типы ошибок**: путаница «спам → не спам» и «не спам → спам» весит одинаково
-- $\kappa$ **зависит от числа категорий**: больше классов — ниже $\kappa$ при той же доле совпадений
-
-> Ключевое: порог «0.8» — не закон природы. Смотрите на $\kappa$ вместе с ценой ошибки и базовой частотой классов.
+- Порог зависит от задачи: для субъективных оценок (токсичность, эмоция) $\kappa \approx 0.6$ уже хорошо
+- Для формальных задач (есть ли подпись в документе) ждите $\ge 0.9$
+- Держите порог **в контракте с командой**: «$\kappa < 0.7$ → стоп и разбор инструкции»
 
 ---
 
-## Fleiss' $\kappa$ и Krippendorff $\alpha$
+## Ловушка kappa: зависимость от распространённости
 
-<!-- доп. -->
+![w:480](Лекция5_figs/tikz_13.png)
 
-**Fleiss' $\kappa$ — много разметчиков, номинальная шкала**
+- При редком классе (1% положительных) $p_e \approx 0.98$: даже 95% согласия даёт $\kappa \approx 0$
+- «Kappa paradox»: высокое согласие, низкий kappa — метрика наказывает за дисбаланс
+- Альтернативы: **Gwet's AC1**, **Krippendorff's $\alpha$**, **PABAK**, отдельный расчёт по классам (per-class $\kappa$)
+
+<span class="callout good">Ключевое: всегда смотрите на $p_o$ **и** $\kappa$ вместе, плюс на распределение классов. Одна цифра врёт.</span>
+
+---
+
+## Fleiss' Kappa: больше двух разметчиков
+
+Для $n$ объектов, $m$ разметчиков, $K$ категорий, $n_{ij}$ — сколько разметчиков дали объекту $i$ метку $j$:
 
 $$
-\bar P=\frac{1}{N}\sum_{i=1}^{N}\frac{1}{n(n-1)}\sum_{j=1}^{k} n_{ij}(n_{ij}-1),
+P_i = \frac{1}{m(m-1)}\sum_{j=1}^{K} n_{ij}(n_{ij}-1),
 \qquad
-\kappa_F=\frac{\bar P-\bar P_e}{1-\bar P_e}
+\bar{P} = \frac{1}{n}\sum_{i=1}^{n} P_i,
+\qquad
+P_e = \sum_{j=1}^{K} p_j^2
 $$
 
-**Krippendorff $\alpha$ — любая шкала, любые пропуски**
-
 $$
-\alpha=1-\frac{D_o}{D_e}
+\kappa_F = \frac{\bar{P} - P_e}{1 - P_e},
+\qquad p_j = \frac{1}{nm}\sum_{i=1}^{n} n_{ij}
 $$
 
-- $n_{ij}$ — сколько разметчиков дали объекту $i$ метку $j$, $n$ — число разметчиков
-- $D_o$ — наблюдаемое расхождение, $D_e$ — ожидаемое случайно; для номинальной шкалы $\alpha\approx\kappa_F$
-- Fleiss требует **фиксированное** $n$ на объект; Krippendorff допускает **пропуски** и разное число меток
-- Ориентиры Krippendorff: $\alpha\ge0.80$ — надёжно, $0.67$–$0.80$ — только для выводов, ниже — переделать
-
-> Ключевое: если в данных есть пропуски или больше одной шкалы — **Krippendorff $\alpha$**, остальное потребует предварительной чистки.
+- Не требует парных сравнений: считает сразу по всем
+- Требует **одинакового числа** разметчиков на каждом объекте — иначе нужен $\alpha$
+- Не различает «кто именно» ошибается — только общий уровень
 
 ---
 
-## Согласие для сложных структур
+## Krippendorff's Alpha: самый универсальный
 
-<!-- доп. -->
+$$
+\alpha = 1 - \frac{D_o}{D_e}
+$$
 
-- **Боксы**: согласие через IoU с порогом (0.5 / 0.75) и mAP-подобное сравнение — «совпало, если IoU выше порога»
-- **Span'ы**: token-level F1 для пересечения + допуск на границу (например, ±2 токена или ±100 мс)
-- **Порядок и ранжирование**: weighted $\kappa$ или коэффициент корреляции рангов, а не «точное совпадение»
+- $D_o$ — наблюдаемое расхождение, $D_e$ — ожидаемое при случайной перестановке меток
+- Работает при: любом числе разметчиков, **пропусках** (не все размечают всё), любых шкалах
+- Метрика расхождения задаётся под шкалу: номинальная, порядковая, интервальная, ratio
+- Для непрерывных меток (оценка качества 1–5) — $D_o$ как квадрат разности
 
-| Структура | Метрика согласия | Параметр, который надо зафиксировать |
-|:----------|:-----------------|:-------------------------------------|
-| Боксы | IoU-матрица + порог | порог 0.5 или 0.75 |
-| Маски | IoU / Dice по пикселям | минимальная площадь объекта |
-| Span'ы | token-level F1 | допуск на границы |
-| Ранжирование | weighted $\kappa$ / $\tau$ | веса соседних позиций |
+| Шкала | $D$ для пары значений |
+|:------|:----------------------|
+| Номинальная | $1$, если значения разные |
+| Порядковая | квадрат разности рангов |
+| Интервальная | $(v_1 - v_2)^2$ |
 
-> Ключевое: для структурных меток **порог совпадения — часть определения метрики**. Без него согласие не сравнимо между проектами.
+<span class="callout good">Ключевое: если в проекте есть пропуски или смешанные шкалы — берите $\alpha$, а не kappa.</span>
 
 ---
 
-## Расчёт метрик
+## Расчёт согласия в коде
 
 ```python
 import numpy as np
 from sklearn.metrics import cohen_kappa_score
 from statsmodels.stats.inter_rater import fleiss_kappa
+
+a1 = [0, 1, 2, 0, 1, 2, 0, 1, 2, 2]
+a2 = [0, 1, 2, 0, 2, 2, 0, 1, 1, 2]
+
+print("Cohen  :", round(cohen_kappa_score(a1, a2), 3))
+print("weighted:", round(cohen_kappa_score(a1, a2, weights="quadratic"), 3))
+
+# Fleiss: строки — объекты, столбцы — счётчики по категориям
+def to_counts(annots, k=3):
+    m = np.zeros((len(annots[0]), k), dtype=int)
+    for a in annots:
+        for i, v in enumerate(a):
+            m[i, v] += 1
+    return m
+
+print("Fleiss :", round(fleiss_kappa(to_counts([a1, a2])), 3))
+
+# альтернатива: pip install krippendorff  (работает с пропусками)
 import krippendorff
-
-a = np.array([1, 0, 1, 1, 0, 1, 0, 1])          # разметчик A
-b = np.array([1, 0, 1, 0, 0, 1, 1, 1])          # разметчик B
-print(cohen_kappa_score(a, b))                   # пара, номинальная
-
-counts = np.array([[45, 5], [5, 45]])            # объекты x классы
-print(fleiss_kappa(counts, method="fleiss"))     # несколько разметчиков
-
-M = np.vstack([a, b]).astype(float)              # разметчики x объекты
-print(krippendorff.alpha(M, level_of_measurement="nominal"))
+print("alpha  :", round(krippendorff.alpha(
+            reliability_data=np.array([a1, a2]), level_of_measurement="nominal"), 3))
 ```
 
-- Для порядковых шкал: `cohen_kappa_score(a, b, weights="quadratic")`
-- В `krippendorff` пропуски кодируются `np.nan` — не заменяйте их нулями или отдельным классом
-- Считайте метрику **до** агрегации: после majority vote согласия уже нет, есть только решение
+---
 
-> Ключевое: метрика согласия — это диагностика процесса, а не финальный KPI датасета.
+## Сколько объектов проверять: доверительный интервал
+
+![w:520](Лекция5_figs/tikz_14.png)
+
+$$
+\text{полуширина} = z_{1-\alpha/2}\sqrt{\frac{p(1-p)}{n}}
+$$
+
+- Хотите знать точность автоматической разметки $\pm 3$ п.п. → нужно **~400–1000** проверенных объектов
+- Планируйте долю двойной разметки от **ожидаемого** числа ошибок, а не от объёма данных
+- Оценивать качество по 50 объектам бессмысленно: интервал шире самого эффекта
 
 ---
 
-## Золотые стандарты и honeypots
+## Золотые стандарты и «ловушки»
 
-- **Золотой стандарт** — подвыборка, размеченная экспертами и выверенная консенсусом
-- **Honeypot** — объект с известным ответом, вброшенный в поток как обычная задача
-- Эталон должен быть **недоступен** разметчикам: утечка превращает проверку в формальность
-- Точность на эталоне считайте **регулярно**, а не один раз при приёмке
-- Honeypots ловят невнимательность и «клик без чтения», но не систематическое непонимание задачи
-- При изменении инструкции эталон **пересматривается** — иначе вы измеряете старые правила
+**Gold standard (эталон)**
 
-| Этап | Доля проверок | Что проверяем |
-|:-----|:--------------|:--------------|
-| Пилот | 20–30% | понимание инструкции, спорные случаи, время на объект |
-| Стабильный процесс | 5–10% | дрейф качества, усталость, новые типы объектов |
-| Спорные / новые классы | до 100% | калибровка и сбор примеров для инструкции |
+- 100–500 объектов, размеченных экспертами с консенсусом
+- Покрывает редкие и пограничные случаи
+- Обновляется при изменении инструкции → **версионируется**
+- Разметчику не показывается, что это эталон (иначе — имитация работы)
 
-> Ключевое: эталон — это **инструмент измерения**, и он тоже требует валидации: плохой эталон тихо портит весь QA.
+**Honeypots (контрольные вкрапления)**
 
----
+- 3–10% задач в очереди — эталонные объекты
+- Автоматический расчёт точности каждого разметчика
+- Триггеры: точность < порога, аномальная скорость, однообразие ответов
+- Обратная связь: разбор ошибок, при систематике — дообучение или отстранение
 
-## Диагностика проблем
-
-```tikz
-\documentclass[tikz]{standalone}
-\usepackage[T2A]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage[russian]{babel}
-\usetikzlibrary{arrows.meta, positioning, matrix}
-\begin{document}
-\begin{tikzpicture}[font=\scriptsize,
-    box/.style={rectangle, rounded corners, draw, align=center, minimum height=0.9cm, minimum width=3.0cm},
-    act/.style={rectangle, rounded corners, draw, align=center, minimum height=0.8cm, minimum width=3.0cm, fill=green!12},
-    arr/.style={->, semithick}]
-    \useasboundingbox (-7.8,-6.9) rectangle (7.4,0.85);
-    \node[box, fill=blue!12, minimum width=5.2cm] (mon) at (0,0) {Мониторинг метрик\\согласие · скорость · эталоны};
-    \node[box, fill=orange!18] (b1) at (-5.2,-2.2) {Низкое согласие};
-    \node[box, fill=orange!18] (b2) at (0,-2.2) {Низкая скорость};
-    \node[box, fill=orange!18] (b3) at (5.2,-2.2) {Систематические\\ошибки};
-
-    \node[act] (a1) at (-5.2,-3.9) {правка инструкций\\и примеров};
-    \node[act] (a2) at (0,-3.9) {упрощение\\интерфейса};
-    \node[act] (a3) at (5.2,-3.9) {дообучение\\и калибровка};
-
-    \node[box, fill=red!10, minimum width=4.6cm] (re) at (0,-5.7) {Повторная разметка\\пилотного батча};
-
-    \draw[arr] (mon) -- (b1); \draw[arr] (mon) -- (b2); \draw[arr] (mon) -- (b3);
-    \draw[arr] (b1) -- (a1); \draw[arr] (b2) -- (a2); \draw[arr] (b3) -- (a3);
-    \draw[arr] (a1.south) -- ++(0,-0.6) -| (re.west);
-    \draw[arr] (a2) -- (re.north);
-    \draw[arr] (a3.south) -- ++(0,-0.6) -| (re.east);
-    \draw[arr, dashed] (re.south) -- ++(0,-0.5) -- ++(-7.35,0) |- (mon.west);
-\end{tikzpicture}
-\end{document}
-```
-
-- Каждая ветвь ведёт к **своему** действию: не лечите низкую скорость правкой инструкции
-- После вмешательства обязателен **повторный замер** на том же батче — иначе неясно, помогло ли
-
-> Ключевое: метрики нужны не для отчёта, а чтобы **выбрать одно из трёх действий** и проверить, что оно сработало.
+<span class="callout good">Ключевое: эталон нужен не для наказания, а для **раннего обнаружения** того, что инструкция перестала работать.</span>
 
 ---
 
-## Агрегация: от многих меток к одной
+## Профиль разметчика: что смотреть
+
+| Метрика | Норма | Тревожный сигнал |
+|:--------|:------|:-----------------|
+| Точность на эталоне | $\ge 0.85$ | $< 0.7$ две недели подряд |
+| Скорость (объект/час) | в коридоре команды | в 3 раза выше медианы |
+| Доля `unknown` | 2–10% | > 30% (избегание решений) |
+| Согласие с консенсусом | $\kappa \ge 0.7$ | ниже остальных на 0.2 |
+| Распределение меток | близко к общему | одна метка > 80% |
+
+
+---
+
+## Разметчик: точность на эталоне
+
+![](Лекция5_figs/tikz_15.png)
+
+- Один «плохой» разметчик из пяти может испортить до 20% датасета
+- Смотрите на **тренд**, а не на неделю: падение точности обычно следует за сменой инструкции
+
+---
+
+## Агрегация: от голосов к метке
+
+**1. Простое большинство (majority vote)**
+
+- Робастно при $\ge 3$ независимых разметчиках и случайных ошибках
+- Не учитывает компетентность и сложность объекта
+- При чётном числе голосов нужен tie-break (случайный / эксперт)
+
+**2. Взвешенное голосование** — веса из точности на эталоне:
+
+$$
+\hat{y}_i = \arg\max_{k} \sum_{j \in \mathcal{A}_i} w_j \, \mathbf{1}[y_{ij} = k],
+\qquad w_j = \frac{\text{acc}_j}{\sum_{l} \text{acc}_l}
+$$
+
+**3. Вероятностные модели** — оценивают компетентность **и** сложность одновременно
+
+- **Dawid–Skene (1979)**: EM по матрицам ошибок разметчиков
+- **MACE** (Hovy et al., 2013): добавлена сложность объектов и спам-модель
+- **IRT-подходы**: способность разметчика × трудность объекта; общее ограничение — предположение о независимости разметчиков
+
+---
+
+## Dawid–Skene: модель и EM
+
+Пусть $y_i$ — истинная метка объекта $i$, $y_{ij}$ — ответ разметчика $j$,
+а $\pi_j^{(c,k)} = P(y_{ij}=k \mid y_i=c)$ — его матрица ошибок.
+
+**E-шаг** — posterior истинной метки:
+
+$$
+q_{ic} \;\propto\; p_c \prod_{j \in \mathcal{A}_i} \pi_j^{(c,\, y_{ij})}
+$$
+
+**M-шаг** — обновление параметров по мягким меткам:
+
+$$
+\pi_j^{(c,k)} = \frac{\sum_{i:\, y_{ij}=k} q_{ic}}{\sum_{i} q_{ic}},
+\qquad
+p_c = \frac{1}{n}\sum_{i} q_{ic}
+$$
+
+![w:360](Лекция5_figs/tikz_16.png)
+
+
+---
+
+## Взвешенное голосование: код
 
 ```python
-from collections import Counter
 import numpy as np
 
-def weighted_majority_vote(labels, weights):
-    """labels: (объекты x разметчики), weights: компетентность."""
-    out = []
-    for row in labels:
-        score = Counter()
-        for lab, w in zip(row, weights):
-            if lab is not None:              # пропуск не голосует
-                score[lab] += w
-        out.append(score.most_common(1)[0][0])
-    return np.array(out)
+def weighted_vote(annotations, weights, n_classes):
+    """annotations: (n_annotators, n_items); -1 = пропуск"""
+    n_items = annotations.shape[1]
+    scores = np.zeros((n_items, n_classes))
+    for j, w in enumerate(weights):
+        mask = annotations[j] >= 0
+        np.add.at(scores, (np.where(mask)[0], annotations[j][mask]), w)
+    return scores.argmax(axis=1), scores.max(axis=1) / scores.sum(axis=1)
+
+ann = np.array([[1, 1, 0, 1, 0],
+                [1, 0, 0, 1, -1],
+                [0, 1, 0, 1, 1]])
+w = np.array([0.94, 0.88, 0.72])
+
+labels, confidence = weighted_vote(ann, w, n_classes=2)
+print(labels, confidence.round(2))
 ```
 
-- **Majority vote** — частный случай с равными весами: прост, устойчив, но игнорирует качество разметчиков
-- При чётном числе голосов нужен **tie-break**: случайный выбор, эксперт или `unknown`
-- Веса берите из эталона или из согласия с большинством, но **не** из самооценки разметчика
-
-> Ключевое: агрегация — это модель доверия. Простое большинство предполагает, что все ошибаются одинаково, — обычно это неправда.
-
----
-
-## Dawid–Skene: модель компетентности
-
-<!-- доп. -->
-
-- **Генеративная модель**: у каждого разметчика своя матрица ошибок, истинная метка скрыта
-
-$$
-\pi_{jk}^{(r)}=P\big(\text{разметчик } r \text{ даёт } k \;\big|\; \text{истина } j\big)
-$$
-
-- **E-шаг**: posterior истины по текущим матрицам ошибок
-
-$$
-q_{ij}\ \propto\ \prod_{r}\ \pi_{j,\,y_{ir}}^{(r)}
-$$
-
-- **M-шаг**: обновление матриц ошибок по posterior
-
-$$
-\pi_{jk}^{(r)}=\frac{\sum_i q_{ij}\,\mathbb{1}[y_{ir}=k]}{\sum_i q_{ij}}
-$$
-
-- EM сходится к локальному оптимуму: инициализация majority vote, несколько стартов
-- **MACE** моделирует «спамящего» разметчика (почти постоянная метка), **GLAD** добавляет сложность объекта
-- Требует достаточно объектов на класс; при малом $N$ оценка компетентности неустойчива
-
-> Ключевое: Dawid–Skene отвечает на вопрос «кому верить», но сам нуждается в данных — на 50 объектах он бесполезен.
+- Возвращайте **и** метку, **и** уверенность: низкая уверенность → очередь на аудит
+- Пропуски (`-1`) не должны превращаться в голос за класс 0 — частая ошибка
 
 ---
 
 ## Обучение и мотивация разметчиков
 
-| Онбординг и калибровка | Мотивация и оплата |
-|:-----------------------|:-------------------|
-| Тестовое задание 20–30 объектов с разбором ошибок | Оплата за час, а не только за объект — иначе скорость важнее качества |
-| Первая неделя: 100% проверка, затем выборочная | Прозрачные критерии премии: качество на эталоне, а не объём |
-| Еженедельная калибровка: 30 минут на спорные случаи | Ротация однотипных задач — монотонность убивает внимание |
-| Наставник на 5–8 новичков, эскалация сложного | Признание экспертизы: лучшие пишут примеры в инструкцию |
-| Доступ к «золотым» примерам и разбору своих ошибок | Понятная карьерная ветка: разметчик → QA → владелец схемы |
+**Онбординг**
 
-- Плохая оплата привлекает случайных людей и ускоряет текучку — экономия на ставке возвращается переделкой
-- Ошибки разметчика чаще следствие **процесса**, а не личных качеств: сначала проверьте инструкцию и интерфейс
+- Инструкция + 20 разобранных примеров, включая пограничные
+- Тестовое задание: допуск к работе при точности $\ge 0.85$ на эталоне
+- Первая неделя — 100% проверка, затем 20%, затем 10%
 
-> Ключевое: качество разметки — функция **условий труда**, а не только старательности конкретного человека.
+**Непрерывное улучшение**
+
+- Еженедельная калибровка: 30 минут разбора спорных кейсов
+- Правка инструкции по итогам → новая версия → переразметка затронутых объектов
+- Ротация типов задач против выгорания
+
+**Мотивация**
+
+- Прозрачная оплата и понятная связь «качество ↔ бонус»
+- Видимый прогресс (личная статистика), но **не соревнование по скорости**
+- Признание экспертизы: лучшие разметчики становятся авторами инструкции
+
+<span class="callout good">Ключевое: разметчик — **эксперт по границам задачи**, а не исполнитель кликов. Кто это понял, получает датасеты лучше.</span>
 
 ---
 
-## Итеративное улучшение: PDCA
+## PDCA-цикл улучшения процесса
 
-```tikz
-\documentclass[tikz]{standalone}
-\usepackage[T2A]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage[russian]{babel}
-\usetikzlibrary{arrows.meta, positioning, matrix}
-\begin{document}
-\begin{tikzpicture}[font=\scriptsize,
-    lab/.style={align=center, text width=2.7cm, font=\scriptsize},
-    arr/.style={->, thick}]
-    \useasboundingbox (-4.7,-3.7) rectangle (4.7,3.35);
-    \draw[arr, blue!70!black]    (168:2.0) arc[start angle=168, end angle=104, radius=2.0];
-    \draw[arr, green!50!black]   ( 76:2.0) arc[start angle=76,  end angle=12,  radius=2.0];
-    \draw[arr, orange!80!black]  (-14:2.0) arc[start angle=-14, end angle=-78, radius=2.0];
-    \draw[arr, red!65!black]     (-104:2.0) arc[start angle=-104, end angle=-168, radius=2.0];
+![](Лекция5_figs/tikz_17.png)
 
-    \node[circle, draw, thick, fill=gray!10, align=center, minimum size=1.95cm, inner sep=1pt]
-        at (0,0) {\textbf{Рост}\\\textbf{качества}};
-
-    \node[lab] at (-3.1,2.45) {\textbf{Plan}\\инструкция и пилот};
-    \node[lab] at ( 3.1,2.45) {\textbf{Do}\\разметка};
-    \node[lab] at ( 3.1,-2.45) {\textbf{Check}\\согласие и эталоны};
-    \node[lab] at (-3.1,-2.45) {\textbf{Act}\\правка правил};
-\end{tikzpicture}
-\end{document}
-```
-
-- **Plan**: гипотеза «где теряем качество» + правка инструкции + пилот на 100–300 объектах
-- **Do**: разметка по новой версии правил, с логированием времени и спорных случаев
-- **Check**: согласие, точность на эталоне, скорость — сравнение с предыдущей итерацией
-- **Act**: закрепляем удачное в инструкцию и интерфейс, неудачное откатываем
-
-> Ключевое: одна итерация PDCA — это **одно изменение за раз**, иначе вы не узнаете, что именно помогло.
+<span class="callout good">Ключевое: улучшайте процесс **измеримо** — одна гипотеза, один пилот, одна метрика. Иначе калибровки превращаются в разговоры.</span>
 
 ---
 
@@ -1416,380 +1168,268 @@ $$
 
 **Как балансировать скорость разметки и её качество?**
 
-Подсказка: сравните стоимость часа разметчика со стоимостью переделки батча и ошибки модели в продакшене. Часто выгоднее платить за медленную и аккуратную разметку на пилоте и ускорять процесс за счёт интерфейса и предразметки, а не за счёт сокращения проверок.
+Что вы готовы отдать: объём, согласие или сроки? И как это измерить?
 
 ---
 
 ## Резюме блока 3
 
-- Шум в метках задаёт **потолок** качества модели и почти всегда скрыт в смете
-- Согласие ловит случайные ошибки, эталоны — систематические: нужны оба инструмента
-- Метрику выбирают по шкале и пропускам: Cohen, Fleiss, Krippendorff, weighted $\kappa$, ICC
-- Агрегация — это модель доверия: majority vote, веса, Dawid–Skene
-- Качество поддерживается процессом: honeypots, доли проверок, калибровка и цикл PDCA
+- Качество меток задаёт **потолок** качества системы
+- Согласие (kappa, alpha) измеряет надёжность, но не валидность
+- kappa чувствителен к распространённости класса — смотрите $p_o$ и распределение
+- Эталоны и honeypots дают раннее обнаружение проблем
+- Агрегация (majority → weighted → Dawid–Skene) повышает качество меток
+- Обучение и мотивация разметчиков — часть инженерного процесса
 
 ---
 
-<!-- _class: lead -->
+<!-- _class: section -->
 
 # Блок 4
-
 ## Автоматизация разметки и HITL
 
 <!-- ~15 мин -->
 
 ---
 
-## Три уровня автоматизации
+## Что автоматизируют в разметке
 
-| Уровень | Что даёт | Риск | Когда |
-|:--------|:---------|:-----|:------|
-| Правила и эвристики | дёшево, мгновенно, объяснимо | низкое покрытие, хрупкость | есть устойчивые паттерны |
-| Модель-предразметка | покрытие выше, учится на ваших метках | тиражирует свои ошибки | есть 1–2 тыс. размеченных объектов |
-| LLM few-shot | старт без обучения, гибкие классы | дрейф, цена токенов, нестабильность | мало данных, сложный текст |
+| Шаг | Автоматизация | Экономия |
+|:----|:--------------|:---------|
+| Дедупликация, отбор | эмбеддинги, MinHash | 5–20% объектов |
+| Предразметка | модель/LLM | 30–70% времени |
+| Маршрутизация | порог уверенности | фокус людей на сложном |
+| Проверка | правила валидации, cleanlab | 10–30% QA-часов |
+| Агрегация | Dawid–Skene и аналоги | убирает ручные споры |
+| Пополнение датасета | continuous annotation | постоянный прирост |
 
-- Уровни **не взаимоисключающие**: правила закрывают очевидное, модель — остальное, LLM — холодный старт
-- Автоматизация всегда возвращает **уверенность**, а решение «доверять или нет» принимает порог
+- Автоматизация **не убирает** человека — она меняет его роль с «создателя» на «арбитра»
+- KPI автоматизации всегда парный: **доля автоматики** и **точность автоматики**
 
-> Ключевое: автоматизация не убирает человека, а **перераспределяет** его внимание на трудные случаи.
-
----
-
-## Архитектура предразметки
-
-```tikz
-\documentclass[tikz]{standalone}
-\usepackage[T2A]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage[russian]{babel}
-\usetikzlibrary{arrows.meta, positioning, matrix, shapes.geometric}
-\begin{document}
-\begin{tikzpicture}[font=\scriptsize,
-    box/.style={rectangle, rounded corners, draw, align=center, minimum height=0.9cm, minimum width=2.3cm, fill=blue!8},
-    qa/.style={box, fill=orange!12},
-    model/.style={box, fill=green!10},
-    arr/.style={-{Stealth}, thick}]
-    \useasboundingbox (-8.6,-2.9) rectangle (10.9,4.1);
-
-    \node[box] (data) at (-7.2,0) {Новые\\данные};
-    \node[model] (model) at (-4.1,0) {Модель\\предразметки};
-    \node[diamond, draw, aspect=1.7, align=center, inner sep=1pt, fill=yellow!15] (tau) at (-0.7,0) {$c>\tau$?};
-
-    \node[box] (auto) at (3.1,1.5) {Авто-метка\\+ лог $c$};
-    \node[qa] (qa) at (6.4,1.5) {Выборочный\\QA};
-    \node[model] (ds) at (9.2,1.5) {Датасет\\v$k$};
-    \node[model] (retrain) at (6.4,3.3) {Дообучение\\модели};
-    \node[box] (manual) at (3.1,-1.7) {Очередь ручной\\разметки};
-
-    \draw[arr] (data) -- (model);
-    \draw[arr] (model) -- (tau);
-    \draw[arr] (tau) -- node[above] {да} (auto);
-    \draw[arr] (auto) -- (qa);
-    \draw[arr] (qa) -- (ds);
-    \draw[arr] (ds.north) |- (retrain.east);
-    \draw[dashed, arr] (retrain.west) to[out=180,in=90] node[midway, above, align=center] {обновление} (model.north);
-    \draw[arr] (tau) -- node[below] {нет} (manual);
-    \draw[arr] (manual.east) -| (qa.south);
-\end{tikzpicture}
-\end{document}
-```
-
-- Порог $\tau$ калибруется на пилоте: 100–300 объектов с эталоном, максимизируем precision авто-меток при приемлемом покрытии
-- Логируем $c$ для каждой авто-метки — по ним потом видно дрейф и зону, где модель ошибается
-- Датасет версионируется: $v_k$ — это вход следующего цикла, а не «финальный файл»
+<span class="callout good">Ключевое: автоматизация без измерения её точности — это просто ускоренное производство ошибок.</span>
 
 ---
 
-## Правила и эвристики
+## Маршрутизация по уверенности
+
+![](Лекция5_figs/tikz_18.png)
+
+- Пороги ставятся не «0.9 по умолчанию», а по **precision** авто-приёма на валидационной выборке
+- Три уровня лучше двух: «средний» поток обрабатывается быстрее, чем «сложный»
+- Пересматривайте пороги при смене модели и при дрейфе данных
+
+---
+
+## Ловушка: вероятности не откалиброваны
+
+![w:520](Лекция5_figs/tikz_19.png)
+
+$$
+\text{ECE} = \sum_{b=1}^{B} \frac{|S_b|}{n}\,\Big|\text{acc}(S_b) - \text{conf}(S_b)\Big|
+$$
+
+- Нейросети и LLM часто **переуверены**: $p=0.95$ при реальной точности 0.75
+- Порог 0.9 на такой модели пропустит ошибки в «авто»
+- Лечение: temperature scaling на отложенной выборке, затем пороги
+
+---
+
+## Программные правила: где они сильны
+
+<div class="columns">
+<div>
+
+- Регулярные выражения и словари — для форматов (ИНН, email, артикул, дата)
+- Пороговые правила — для числовых данных и метрик
+- Справочники и базы знаний — для нормативных сущностей
+- Логические комбинации — «если A и не B»
+- Внешние API — геокодирование, проверка контрагента
+
+</div>
+<div>
 
 ```python
 import re
 
-class AnnotationRules:
-    spam_words = ("viagra", "casino", "lottery")
-    url_re = re.compile(r"https?://\S+")
+class Rules:
+    def __init__(self):
+        self.spam = {"виагра", "казино", "выигрыш"}
+        self.patterns = {
+            "email": re.compile(r"\b[\w.+-]+@[\w-]+\.[\w.]+\b"),
+            "inn":   re.compile(r"\b\d{10,12}\b"),
+            "caps":  re.compile(r"\b[А-ЯЁ]{4,}\b"),
+        }
 
-    def predict(self, text: str) -> str | None:
-        low = text.lower()
-        if any(w in low for w in self.spam_words):
-            return "spam"
-        if len(self.url_re.findall(low)) >= 3:
-            return "spam"
-        if len(low) < 20:
-            return "short"
-        return None      # не правило — уходит человеку или модели
+    def spam_score(self, text: str) -> float:
+        t = text.lower()
+        hits = sum(w in t for w in self.spam)
+        return min(1.0, hits / 3)          # мягкая, а не бинарная метка
+
+    def extract(self, text: str) -> dict:
+        return {k: p.findall(text) for k, p in self.patterns.items()}
 ```
 
-- Правила дают **мгновенную и объяснимую** метку; `None` — это осознанный отказ, а не ошибка
-- Покрытие и точность считайте по каждому правилу отдельно, иначе широкое правило «съест» узкое
+</div>
+</div>
+
+<span class="callout good">Ключевое: правила дают **точность** на узком классе и нулевое покрытие вне него. Используйте их как LF с `ABSTAIN`, а не как «истину».</span>
 
 ---
 
-## Точность и покрытие правил
+## Confident Learning: поиск ошибок в метках
 
-<!-- доп. -->
+**Идея cleanlab:** если модель уверенно предсказывает класс $k$ там, где стоит метка $c \neq k$ — вероятна ошибка в метке.
 
-| Правило | Precision | Coverage | Комментарий |
-|:--------|----------:|---------:|:------------|
-| Словарь спама | 0.98 | 0.06 | почти не ошибается, мало ловит |
-| 3+ ссылки в тексте | 0.92 | 0.11 | хороший сигнал для ботов |
-| Длина > 500 и 1 ссылка | 0.71 | 0.40 | шумно, но покрывает много |
+1. Оценить $\hat{Q}(y=k, \tilde{y}=c)$ по out-of-fold предсказаниям
+2. Обрезать порогом $\bar{p}_k$ (средняя уверенность по классу) и нормировать → **confident joint**
+3. Ранжировать объекты по *self-confidence* $p_{\tilde{y}}(x)$: снизу — подозрительные
 
-- Правило с precision 0.7 **полезно**, если его можно скомбинировать с другим: вместе они дают и точность, и покрытие
-- Не автоматизируйте класс, где **ошибка дороже часа разметки**: цена ложной метки быстро перекрывает экономию
-
-> Ключевое: правило оценивают парой **(precision, coverage)**, а не одной цифрой «точность».
-
----
-
-## Confident Learning
-
-- Идея: сравнить **уверенность модели** с данной меткой и найти объекты, где они расходятся
-- Предсказание $\hat{y}=\arg\max_j p_j$; кандидат на ошибку, если $\hat y \ne y$ и $p_{\hat y} > t$
-- Порог $t$ отсекает пограничные случаи: мы ищем не «трудные», а **уверенно переубеждённые** метки
-
-```tikz
-\documentclass[tikz]{standalone}
-\usepackage[T2A]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage[russian]{babel}
-\usetikzlibrary{arrows.meta, positioning, matrix}
-\begin{document}
-\begin{tikzpicture}[font=\scriptsize,
-    cell/.style={minimum size=0.95cm, draw, align=center},
-    diag/.style={cell, fill=green!25},
-    off/.style={cell, fill=red!18}]
-    \useasboundingbox (-1.9,-2.2) rectangle (3.9,2.5);
-
-    \node at (0.95,2.15) {$\tilde y$ (дано)};
-    \node[rotate=90] at (-1.15,0) {$y$ (модель)};
-
-    \foreach \i/\x in {1/0, 2/0.95, 3/1.9} {
-        \node[font=\scriptsize] at (\x,1.65) {\i};
-        \node[font=\scriptsize] at (-0.72,{1.0-0.95*(\i-1)}) {\i};
-    }
-
-    \node[diag] at (0,1.0) {0.86};
-    \node[off]  at (0.95,1.0) {0.03};
-    \node[off]  at (1.9,1.0) {0.01};
-    \node[off]  at (0,0.05) {0.04};
-    \node[diag] at (0.95,0.05) {0.79};
-    \node[off]  at (1.9,0.05) {0.02};
-    \node[off]  at (0,-0.9) {0.01};
-    \node[off]  at (0.95,-0.9) {0.03};
-    \node[diag] at (1.9,-0.9) {0.91};
-
-    \node[align=center] at (0.95,-1.75) {off-diagonal = оценка шума};
-\end{tikzpicture}
-\end{document}
-```
-
-> Ключевое: Confident Learning оценивает шум **без эталона**, но опирается на калибровку модели.
-
----
-
-## cleanlab на практике
+$$
+\hat{Q}_{k,c} = \frac{1}{n}\sum_{i:\, \tilde{y}_i = c} \mathbb{1}\big[\hat{p}_k(x_i) \ge \bar{p}_k\big],
+\qquad
+\text{self-confidence}_i = \hat{p}_{\tilde{y}_i}(x_i)
+$$
 
 ```python
 from cleanlab.filter import find_label_issues
 
 issues = find_label_issues(
-    labels=y,
-    pred_probs=model.predict_proba(X),
-    return_indices_ranked_by="self_confidence",
-    frac_noise=0.02,        # проверить 2% самых подозрительных
+    labels=y_train,
+    pred_probs=model.predict_proba(X_train),   # out-of-fold!
+    return_indices_ranked_by="normalized_margin",
+    frac_noise=0.05,                            # ожидаемая доля ошибок
 )
+suspect_idx = issues[:200]                      # в первую очередь на переразметку
 ```
 
-- Смотрите **топ-N** и переразмечайте вручную, а не удаляйте пачкой: часть «ошибок» — спорные случаи
-- Не удаляйте всё, что нашлось: редкий класс часто выглядит как шум для модели
-- Следите за дрейфом: доля найденных ошибок должна падать, иначе проблема в данных или в калибровке
+- Порядок важнее числа: первые 200 подозрительных полезнее случайных 200
+- Валидируйте на эталоне: там бывают спорные кейсы, а не ошибки
 
 ---
 
-## HITL: принцип распределения усилий
+## Confident learning на картинке
 
-```tikz
-\documentclass[tikz]{standalone}
-\usepackage[T2A]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage[russian]{babel}
-\usetikzlibrary{arrows.meta, positioning, matrix}
-\begin{document}
-\begin{tikzpicture}[font=\scriptsize]
-    \useasboundingbox (-1.1,-2.7) rectangle (10.9,2.4);
+![](Лекция5_figs/tikz_20.png)
 
-    \fill[red!55]    (0,0) rectangle (2,0.9);
-    \fill[orange!55] (2,0) rectangle (5,0.9);
-    \fill[green!55]  (5,0) rectangle (10,0.9);
-    \draw[thick] (0,0) rectangle (10,0.9);
-
-    \node[align=center, text width=1.8cm] at (1,0.45) {эксперт\\разбирает};
-    \node[align=center, text width=2.7cm] at (3.5,0.45) {человек\\подтверждает};
-    \node[align=center, text width=4.5cm] at (7.5,0.45) {авто,\\$c>0.95$};
-
-    \node[align=center] at (1,-0.45) {$c<0.6$};
-    \node[align=center] at (3.5,-0.45) {$0.6\le c\le0.95$};
-    \node[align=center] at (7.5,-0.45) {$c>0.95$};
-
-    \node at (1,-1.25) {5\%};
-    \node at (3.5,-1.25) {25\%};
-    \node at (7.5,-1.25) {70\%};
-    \node[gray] at (5.5,-1.75) {доли — пример, не норматив};
-
-    \draw[-{Stealth}, thick] (0.2,1.45) -- (9.8,1.45);
-    \node[above] at (5,1.5) {рост уверенности модели};
-\end{tikzpicture}
-\end{document}
-```
-
-- Зоны задаются **порогами**, а не интуицией: их калибруют по цене ошибки и доле ручной работы
-- Дешёвые ошибки можно отдавать автопилоту, дорогие — всегда человеку, даже при высокой $c$
-
-> Ключевое: HITL — это не «человек на всякий случай», а **маршрутизация по уверенности**.
+- Диагональ — согласие модели и метки; недиагональные ячейки — подозрительные
+- Большой недиагональный блок = систематическая путаница классов, а не случайный шум
+- Отсюда сразу видно, **какие пары классов** надо разбирать в инструкции
 
 ---
 
-## HITL: где человек реально нужен
+## HITL: паттерны взаимодействия
 
-- **Низкая уверенность**: модель не различает классы — решает человек
-- **Конфликт моделей**: предразметка и правило расходятся — нужен арбитр
-- **Новый класс / дрейф**: данных ещё нет в обучении — эксперт задаёт эталон
-- **Дорогая ошибка**: медицина, финансы, безопасность — проверка обязательна
-- **Обучающий сигнал**: часть объектов идёт в эталон и в обучение модели
+| Паттерн | Когда применять | Что делает человек |
+|:--------|:----------------|:-------------------|
+| Pre-labeling | старт проекта | правит предсказание |
+| Active learning | есть базовая модель | размечает выбранное |
+| Review | высокая цена ошибки | подтверждает/отклоняет |
+| Escalation | неуверенность модели | решает сложное |
+| Disagreement mining | модель и человек спорят | разбирает систематику |
 
-| Тип случая | Кто решает |
-|:-----------|:-----------|
-| Уверенная авто-метка | никто, только выборочный QA |
-| Средняя уверенность | разметчик по инструкции |
-| Спорная граница классов | эксперт / владелец схемы |
-| Новый класс или дрейф | эксперт + обновление инструкции |
 
 ---
 
-## Масштабирование: очередь задач
+## HITL: архитектура
+
+![](Лекция5_figs/tikz_21.png)
+
+- Ключевая метрика — **доля ручных решений** при заданном качестве
+- «Человек на цикле» (аудит) дешевле, «человек в цикле» (каждое решение) надёжнее
+
+---
+
+## Масштабирование процесса
+
+**Технически**
+
+- Очереди задач (Celery/RabbitMQ, SQS), идемпотентные обработчики
+- Шардирование по проектам: разные модели — разные пайплайны
+- Батчевый inference (GPU), кэш предсказаний по хешу объекта
+
+**Организационно**
+
+- Балансировка нагрузки по сложности, а не по количеству
+- Отдельные очереди: «быстрое» (валидация) и «сложное» (эксперт)
+- Метрики потока: throughput, WIP, время в очереди, доля возвратов
 
 ```python
-from celery import Celery
+@app.task(bind=True, max_retries=3)
+def annotate_batch(self, task_ids: list[str]):
+    items = load_items(task_ids)
+    preds = model.predict_batch(items)          # один вызов на батч
+    auto, manual = [], []
+    for it, p in zip(items, preds):
+        (auto if p.confidence >= THRESHOLD else manual).append((it, p))
 
-app = Celery("labels", broker="redis://localhost:6379/0")
-
-@app.task(bind=True, max_retries=3, rate_limit="50/s")
-def annotate_batch(self, ids):
-    texts = load_texts(ids)
-    scores = model.predict_proba(texts)[:, 1]
-    auto = scores >= 0.95
-    store(ids[auto], scores[auto])
-    queue_manual(ids[~auto])
-    return {"auto": int(auto.sum()), "manual": int((~auto).sum())}
+    save_annotations([(it, p.label, "auto") for it, p in auto])
+    enqueue_human([(it, p) for it, p in manual])
+    metrics.incr("auto_accepted", len(auto))
+    return {"auto": len(auto), "manual": len(manual)}
 ```
-
-- **Очередь** отделяет приём данных от разметки: пики не роняют пайплайн
-- **Воркеры** масштабируются горизонтально; модель грузится один раз на процесс
-- **Backpressure**: ограничивайте длину очереди и размер батча, иначе ручная очередь растёт быстрее, чем её разбирают
 
 ---
 
-## Синтетика и аугментация
+## Синтетические данные и аугментация
 
-<!-- доп. -->
+| Подход | Когда помогает | Риск |
+|:-------|:---------------|:-----|
+| Аугментация (flip, crop, noise) | CV, аудио | не создаёт новых классов |
+| Парафразы, back-translation | текст | меняет смысл, ломает NER |
+| Генерация LLM | дефицитные классы | фактическое правдоподобие, утечка стиля |
+| Симуляция (правила, движок) | редкие события, аварии | domain gap |
+| Mixup/CutMix | регуляризация | артефакты на границах |
 
 ```python
 import albumentations as A
-import nlpaug.augmenter.word as naw
 
-image_aug = A.Compose([
+train_tf = A.Compose([
     A.HorizontalFlip(p=0.5),
     A.RandomBrightnessContrast(p=0.3),
-    A.Rotate(limit=10, p=0.3),
-])
-text_aug = naw.SynonymAug(aug_src="wordnet", aug_p=0.1)
-
-aug_image = image_aug(image=img)["image"]
-aug_text = text_aug.augment(text)
+    A.Rotate(limit=15, p=0.5, border_mode=0),
+    A.GaussNoise(p=0.2),
+])   # ВАЖНО: bbox_params / ключевые точки нужно передавать явно
 ```
 
-- **Distribution shift**: аугментации меняют распределение — проверяйте на реальной валидации, а не на синтетике
-- **Shortcut learning**: модель цепляется за артефакт аугментации, а не за класс
-- **Дубликаты**: копии одного объекта в train и test завышают метрики — дедуплицируйте до сплита
+<span class="callout good">Ключевое: синтетика расширяет **покрытие**, но не заменяет проверку. Синтетический тест-сет — прямая дорога к самообману.</span>
 
 ---
 
 ## KPI автоматизации
 
-| Метрика | Как считать | Целевой ориентир |
-|:--------|:------------|:-----------------|
-| Доля авто-меток | авто / все объекты | 50–80% на зрелом потоке |
-| Precision авто | эталонная выборка из авто | ≥ 0.95 для дешёвых ошибок |
-| Стоимость на объект | бюджет / принятые объекты | ниже ручной разметки в 2–5 раз |
-| Throughput | объектов в час на воркер | стабилен при росте потока |
-| Доля переделок | возвраты / авто-метки | < 5% и не растёт |
+| Метрика | Формула / смысл | Ориентир |
+|:--------|:----------------|:---------|
+| Automation rate | доля объектов без человека | 40–80% |
+| Auto-label precision | точность принятых автоматически | $\ge$ качества ручной |
+| Review time | секунд на объект при проверке | в 3–10 раз меньше ручной |
+| Cost per label | полная стоимость / число меток | падает с итерациями |
+| Coverage | доля классов/сценариев с метками | все целевые классы |
+| Rework rate | доля возвратов из QA | < 10% |
 
-- Метрики считайте **на одном окне** и с одинаковым эталоном, иначе сравнение бессмысленно
-- Рост доли авто при падении precision — это не успех, а отложенная переделка
-
----
-
-## Дашборд
-
-```tikz
-\documentclass[tikz]{standalone}
-\usepackage[T2A]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage[russian]{babel}
-\usetikzlibrary{arrows.meta, positioning, matrix}
-\begin{document}
-\begin{tikzpicture}[font=\scriptsize]
-    \useasboundingbox (-3.2,-2.7) rectangle (13.6,3.2);
-
-    % gauge
-    \draw[line width=10pt, red!70, line cap=round]    (120:2.2) arc[start angle=120, end angle=180, radius=2.2];
-    \draw[line width=10pt, orange!80, line cap=round] (60:2.2)  arc[start angle=60,  end angle=120, radius=2.2];
-    \draw[line width=10pt, green!65!black, line cap=round] (0:2.2) arc[start angle=0, end angle=60, radius=2.2];
-
-    \draw[-{Stealth}, very thick] (0,0) -- (45:1.75);
-    \fill (0,0) circle (2pt);
-    \node at (0,-0.85) {автоматизация 75\%};
-    \node at (-2.55,-0.25) {0};
-    \node at (2.55,-0.25) {100};
-    \node at (0,2.45) {50};
-
-    % mini chart
-    \draw[-{Stealth}] (5,-1.4) -- (12.0,-1.4) node[right] {недели};
-    \draw[-{Stealth}] (5,-1.4) -- (5,2.7) node[above] {точность};
-
-    \node[anchor=east] at (4.95,-1.0) {0.80};
-    \node[anchor=east] at (4.95,0.8)  {0.90};
-    \node[anchor=east] at (4.95,2.6)  {1.00};
-
-    \draw[blue!75!black, thick] (5.6,0.8) -- (6.4,0.98) -- (7.2,0.8) -- (8.0,1.16)
-        -- (8.8,0.98) -- (9.6,-0.28) -- (10.4,0.44) -- (11.2,0.8);
-    \foreach \p in {(5.6,0.8),(6.4,0.98),(7.2,0.8),(8.0,1.16),(8.8,0.98),(10.4,0.44),(11.2,0.8)}
-        \fill[blue!75!black] \p circle (1.8pt);
-    \fill[red] (9.6,-0.28) circle (3pt);
-    \draw[-{Stealth}, red] (9.9,-0.95) -- (9.65,-0.42);
-    \node[red, align=center] at (10.5,-1.0) {drift};
-
-    \node at (5.6,-1.75) {1};
-    \node at (11.2,-1.75) {8};
-\end{tikzpicture}
-\end{document}
-```
-
-- Слева — **сводка** «сколько автоматизировано», справа — **тренд** точности авто-меток
-- Провал на графике важнее среднего: он показывает, где нужен пересмотр порога или дообучение
+- Считайте **стоимость на валидную метку**, а не на клик: дешёвая, но неверная метка дороже
+- Стройте график «automation rate vs precision»: рост автоматизации обычно стоит точности
 
 ---
 
-## Best practices
+## Дашборд проекта разметки
 
-- Начинайте с **правил и baseline**, автоматизацию добавляйте только поверх измеренного процесса
-- Калибруйте порог на пилоте и фиксируйте его в конфиге, а не в голове дежурного
-- Логируйте уверенность, версию модели и версию правил для каждой метки
-- Считайте **стоимость ошибки**, а не только долю автоматизации
-- Пересматривайте пороги и KPI после каждого дрейфа и каждого обновления модели
+![](Лекция5_figs/tikz_22.png)
 
-> Ключевое: автоматизация — это **управляемый компромисс** между покрытием, точностью и ценой проверки.
+- Показывайте **три вещи**: сколько сделано, насколько хорошо, что с трендом
+- Дашборд без владельца и порогов — декорация
+
+---
+
+## Best practices автоматизации
+
+- Начинайте с **простых правил**, затем добавляйте модель: правила — бесплатный baseline
+- Валидируйте автоматику на **стратифицированной** выборке, а не на случайных 100 объектах
+- Отслеживайте дрейф: точность авто падает раньше, чем метрика модели
+- Храните для каждой метки **происхождение** (rule / model / human) и версию
+- Документируйте пороги и причины их выбора
+- Не автоматизируйте то, что не умеете измерять
+
+<span class="callout good">Ключевое: автоматизация — это **продукт с SLA**. У него есть точность, покрытие, стоимость и владелец.</span>
 
 ---
 
@@ -1797,24 +1437,25 @@ aug_text = text_aug.augment(text)
 
 **Какой процент автоматизации разметки приемлем для вашей задачи?**
 
-Подсказка: сравните стоимость одной ошибки авто-метки (переделка, инцидент, штраф) со стоимостью часа разметчика. Если ошибка дороже часа — поднимайте порог и долю ручной проверки; если дешевле — агрессивнее автоматизируйте и следите за precision на эталоне.
+От чего зависит ответ: цена ошибки, объём, обратимость решения?
 
 ---
 
 ## Резюме блока 4
 
-- Автоматизация идёт по уровням: правила → модель-предразметка → LLM few-shot
-- Предразметка — это контур с порогом, QA и дообучением, а не одноразовый скрипт
-- Confident Learning и cleanlab находят шум без эталона, но требуют калибровки
-- HITL маршрутизирует объекты по уверенности и цене ошибки
-- KPI автоматизации — доля авто, precision, стоимость, throughput и переделки
+- Предразметка ускоряет процесс, но требует калибровки и порогов по precision
+- Правила и эвристики дополняют ML: узкая точность + `ABSTAIN`
+- Confident learning находит ошибки в метках, а не только в модели
+- HITL концентрирует людей на сложном и измеряет долю ручного труда
+- Масштабирование — вопрос очередей, батчей и организационных ролей
+- Синтетика расширяет покрытие, но не заменяет валидацию
 
 ---
 
-<!-- _class: lead -->
+<!-- _class: section -->
 
 # Блок 5
-## Кейсы, пайплайн и этика
+## Кейсы, пайплайн, этика
 
 <!-- ~10 мин -->
 
@@ -1822,406 +1463,427 @@ aug_text = text_aug.augment(text)
 
 ## Кейс 1: NER для новостей
 
-| Параметр | Значение |
-|:---------|:---------|
-| Данные | 10 000 новостных статей (ru/en) |
-| Схема | PER, ORG, LOC, MISC |
-| Срок | 2 месяца |
-| Бюджет | ≈300 ч разметки, 2 разметчика |
-| Выход | модель + датасет + инструкция |
+**Дано:** 10 000 статей, классы PER/ORG/LOC/MISC, бюджет ограничен, срок — 2 месяца
 
-```tikz
-\documentclass[tikz]{standalone}
-\usepackage[T2A]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage[russian]{babel}
-\usetikzlibrary{arrows.meta, positioning, matrix}
-\begin{document}
-\begin{tikzpicture}[font=\scriptsize,
-    box/.style={rectangle, rounded corners, draw, align=center, minimum height=1.0cm, minimum width=3.0cm, text width=2.75cm},
-    arr/.style={->, semithick}]
-    \node[box, fill=blue!10]   (n1) at (0,1.6)    {10K статей\\входной пул};
-    \node[box, fill=orange!15] (n2) at (3.6,1.6)  {Предразметка\\BERT-NER};
-    \node[box, fill=orange!15] (n3) at (7.2,1.6)  {Фильтр по\\уверенности $c$};
-    \node[box, fill=orange!15] (n4) at (10.8,1.6) {2K авто\\8K на проверку};
-    \node[box, fill=violet!12] (n5) at (10.8,-1.1){Активное обучение\\3K приоритетных};
-    \node[box, fill=green!14]  (n6) at (7.2,-1.1) {Финальная\\модель};
-    \node[box, fill=green!14]  (n7) at (3.6,-1.1) {Предразметка\\остатка};
-    \node[box, fill=green!14]  (n8) at (0,-1.1)   {Валидация\\на эталоне};
+**Ограничение:** ручная разметка всех статей = $\approx$ 1 500 часов, бюджет не выдержит
 
-    \draw[arr] (n1) -- (n2);
-    \draw[arr] (n2) -- (n3);
-    \draw[arr] (n3) -- (n4);
-    \draw[arr] (n4.south) -- (n5.north);
-    \draw[arr] (n5) -- (n6);
-    \draw[arr] (n6) -- (n7);
-    \draw[arr] (n7) -- (n8);
-\end{tikzpicture}
-\end{document}
+![](Лекция5_figs/tikz_23.png)
+
+**Итог:** 3 200 ручных объектов вместо 10 000 → бюджет $\approx$ 32% от исходного; $\kappa = 0.84$; F1 0.89
+
+---
+
+## Кейс 2: детекция объектов на дорогах
+
+**Дано:** 50 000 изображений, bounding boxes, команда 5 разметчиков, высокая цена ошибки
+
+**Процесс качества**
+
+- Пилот на 100 эталонах: договорились о границах боксов («видимо на 30%»)
+- 10% двойной разметки: IoU-согласие + $\kappa$ по классам
+- Автопроверка геометрии: box в кадре, площадь $\ge$ 25 px², без дублей (IoU > 0.9)
+- Еженедельная калибровка; контракт — $\kappa \ge 0.8$, иначе переразметка партии
+
+| Метрика | Пилот | Через месяц |
+|:--------|:------|:------------|
+| $\kappa$ (по классам) | 0.61 | 0.85 |
+| IoU-согласие | 0.72 | 0.88 |
+| Доля возвратов | 22% | 7% |
+| Скорость, изобр./час | 45 | 78 |
+
+<span class="callout good">Ключевое: рост скорости пришёл **после** калибровки, а не вместо неё.</span>
+
+---
+
+## Кейс 3: sentiment на 100 000 отзывов
+
+**Дано:** 100 000 отзывов, 3 класса, краудсорсинг, минимальный бюджет
+
+**Стратегия: weak supervision + выборочная ручная разметка**
+
+<div class="columns">
+<div>
+
+```python
+from snorkel.labeling import labeling_function, ABSTAIN
+
+POS, NEG, NEU = 1, 0, 2
+
+@labeling_function()
+def positive_words(x):
+    words = {"отлично", "супер", "рекомендую", "доволен"}
+    return POS if words & set(x.text.lower().split()) else ABSTAIN
+
+@labeling_function()
+def negative_words(x):
+    words = {"ужасно", "плохо", "не советую", "разочарован"}
+    return NEG if words & set(x.text.lower().split()) else ABSTAIN
+
+@labeling_function()
+def no_emotion(x):
+    return NEU if not any(c in x.text for c in "!?") else ABSTAIN
 ```
 
-- Схема фиксируется до старта: MISC — самая шумная категория
+</div>
+<div>
 
----
+- 6 LF + предобученный ruBERT-классификатор как LF с `ABSTAIN` при низкой уверенности
 
-## Кейс 1: арифметика
-
-| Этап | Расчёт | Часы |
-|:-----|:-------|-----:|
-| Ручная разметка всего пула | 10 000 × 40 с | 111 |
-| Приёмка 2K авто-меток | 2 000 × 5 с | ~3 |
-| Ручная разметка ядра | 3 000 × 35 с | ~29 |
-| QA и переделка (10%) | 0,1 × 32 ч | ~3 |
-| **Итого гибрид** | | **~35** |
-
-> Ключевое: экономия ~3× — из **объёма ручной работы**, а не из скорости. Числа — пример, не бенчмарк.
-
----
-
-## Кейс 2: детекция объектов
-
-50 000 изображений · 5 разметчиков · боксы, 12 классов
-
-- **100 эталонных изображений** — приёмка и регрессии
-- **10% двойной разметки** — расхождения в арбитраж
-- **Автопроверка геометрии** — битые боксы, пересечение > 0,9
-- **Недельная калибровка** — 20 спорных кейсов
-- **Согласие κ > 0,8**; ниже — пересмотр класса
-
-> Ключевое: в CV качество держится на **геометрии и согласии**, а не на числе кадров.
-
----
-
-## Кейс 3: sentiment на краудсорсинге
-
-100 000 отзывов · 3 класса · фиксированный бюджет
-
-| Слой | Что делает |
-|:-----|:-----------|
-| Weak supervision | ключевые слова и смайлы, покрытие ~60% |
-| Краудсорсинг | люди размечают спорное и непокрытое |
-| Агрегация | Dawid–Skene: надёжность исполнителя |
-| Контроль | honeypots и скрытые дубли |
-
-$$
-P(y \mid \ell_1..\ell_m) \;\propto\; \pi_y \prod_{j=1}^{m} P(\ell_j \mid y,\ \text{worker}_j)
-$$
-
-- Honeypot pass rate < 0,9 → переобучение или отстранение
+</div>
+</div>- Label model даёт вероятностные метки → обучение end-модели
+- Ручная разметка — только 8% объектов, где LF конфликтуют или все воздержались
+- Итог: F1 0.83 при стоимости $\approx$ 12% от полной ручной разметки
 
 ---
 
 ## Жизненный цикл данных
 
-```tikz
-\documentclass[tikz]{standalone}
-\usepackage[T2A]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage[russian]{babel}
-\usetikzlibrary{arrows.meta, positioning, matrix}
-\begin{document}
-\begin{tikzpicture}[font=\scriptsize,
-    st/.style={rectangle, rounded corners, draw, align=center, minimum height=0.9cm, minimum width=2.3cm, text width=2.05cm},
-    arr/.style={->, semithick}]
-    \node[st, fill=blue!10]   (collect) at (90:3.3)   {сбор};
-    \node[st, fill=orange!15] (label)   at (30:3.3)   {разметка};
-    \node[st, fill=orange!15] (valid)   at (-30:3.3)  {валидация};
-    \node[st, fill=violet!12] (vers)    at (-90:3.3)  {версионирование};
-    \node[st, fill=green!14]  (train)   at (-150:3.3) {обучение};
-    \node[st, fill=green!14]  (mon)     at (150:3.3)  {мониторинг};
+![](Лекция5_figs/tikz_24.png)
 
-    \draw[arr] (collect) to[bend left=12] (label);
-    \draw[arr] (label)   to[bend left=12] (valid);
-    \draw[arr] (valid)   to[bend left=12] (vers);
-    \draw[arr] (vers)    to[bend left=12] (train);
-    \draw[arr] (train)   to[bend left=12] (mon);
-    \draw[arr, red!70!black] (mon) to[bend left=12] (collect);
-    \node[red!70!black, font=\scriptsize\bfseries] at (-2.9,4.15) {дрейф};
-\end{tikzpicture}
-\end{document}
-```
-
-- Каждый переход — **артефакт**: датасет, отчёт QA, версия модели; нет артефакта — нет перехода
-- **Дрейф** не алертит, а замыкает цикл: данные возвращаются в сбор с новыми метками
+- Данные и модель версионируются **вместе**: коммит, датасет, чекпоинт, метрики
+- Без версии датасета воспроизводимость обучения невозможна — метрики становятся анекдотом
 
 ---
 
-## Версионирование датасетов
+## Версионирование датасета
 
 ```bash
 dvc init
-dvc add data/raw/news.jsonl
-dvc add data/labeled/v3
-git add data/raw/news.jsonl.dvc data/labeled/v3.dvc .gitignore
-git commit -m "data: labeled v3 (NER, 12k spans)"
-dvc remote add -d storage s3://bucket/dvc
-dvc push
-git tag -a data-v3 -m "NER dataset v3"
-git push --tags
+dvc add data/annotations.parquet        # сам файл — в remote, хеш — в git
+git add data/annotations.parquet.dvc data/.gitignore
+git commit -m "annotations v1.2: kappa 0.81, guidelines 2.3"
+
+dvc tag -a v1.2 -m "annotated 12k, QA passed"   # или git tag
+dvc push                                          # в S3/GCS/локальный remote
 ```
 
-- DVC держит в git **хэши и метаданные**, сами данные — в объектном хранилище
-- Тег связывает код, датасет и модель: без этого эксперимент не воспроизводится через месяц
+- В git — только **метаданные и хеши**, данные — в remote storage
+- Воспроизведение: `git checkout <tag> && dvc pull` → ровно тот датасет
+- Дополнительно фиксируйте: версию инструкции, версию схемы, список разметчиков
+- Сплиты **тоже** версионируются: иначе сравнение метрик между версиями бессмысленно
 
 ---
 
-## Метаданные разметки
+## Метаданные разметки: минимум
 
 ```json
 {
-  "dataset": "news_ner", "version": "3.1.0",
-  "created": "2026-09-14", "instruction_sha": "9f2c1a",
-  "schema": {"labels": ["PER", "ORG", "LOC", "MISC"]},
-  "annotators": ["a01", "a07", "a12"], "n_items": 12480,
-  "source": "news_2024_2026.jsonl", "n_spans": 31204,
-  "agreement": {"kappa": 0.84, "double_labeled": 0.1},
-  "gold": "gold_100.jsonl", "model": "bert-ner-ru-1.4",
-  "license": "internal"
+  "dataset_version": "1.2",
+  "guidelines_version": "2.3",
+  "schema_hash": "8f14e45f",
+  "items": [
+    {
+      "id": "img_000412",
+      "labels": ["car", "person"],
+      "geometry": {"type": "bbox", "boxes": [[12, 40, 210, 260]]},
+      "annotator_id": "user_42",
+      "timestamp": "2026-01-15T10:30:00Z",
+      "source": "model_prelabel+human_edit",
+      "model_version": "det-v7",
+      "confidence": 0.95,
+      "time_spent_sec": 45,
+      "qa_status": "gold_checked"
+    }
+  ]
 }
 ```
 
-- **Схема и хэш инструкции** — по каким правилам размечали
-- **Разметчики** — для аудита и переобучения людей
-- **Происхождение и лицензия** — можно ли учить модель
-- **Согласие и gold** — доверие к датасету, а не размер
+- `source` и `model_version` — без них нельзя отделить ошибку модели от ошибки человека
+- `guidelines_version` — позволяет найти все метки, сделанные по устаревшему правилу
+- `time_spent_sec` — дешёвый детектор «кликов на скорость»
 
 ---
 
 ## Мониторинг в продакшене
 
-| Метрика | Сигнал | Действие |
-|:--------|:-------|:---------|
-| Доля HITL-обращений | ↑ на 20% за неделю | проверить порог и дрейф |
-| Средняя уверенность | ↓ или горб у 0,5 | дообучение, ревизия |
-| Распределение классов | новый класс > 1% | добавить класс |
-| Доля переделок | > 5% | аудит инструкции |
-| A/B на эталоне | падение precision | откат, разбор |
+| Что | Как | Триггер |
+|:----|:----|:--------|
+| Распределение предсказаний | доля классов по дням | сдвиг > 10 п.п. |
+| Уверенность модели | средняя $p_{\max}$, доля < порога | падение среднего |
+| Доля ручных решений | HITL-метрика | рост > 20% |
+| Согласие с людьми | выборочный аудит 1% | $\kappa$ падает |
+| Дрифт входов | эмбеддинги, PSI, KS-тест | статистически значимо |
+| Обратная связь | жалобы, корректировки | всплеск |
 
-- Мониторить надо **вход и выход разметки**, а не только метрику модели на отложенной выборке
+- Метрики **данных** падают раньше метрик модели: мониторьте вход и разметку
+- Автоматический триггер → задача на доразметку, а не «посмотрим потом»
 
 ---
 
 ## Continuous annotation
 
-```tikz
-\documentclass[tikz]{standalone}
-\usepackage[T2A]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage[russian]{babel}
-\usetikzlibrary{arrows.meta, positioning, matrix}
-\begin{document}
-\begin{tikzpicture}[font=\scriptsize,
-    st/.style={rectangle, rounded corners, draw, align=center, minimum height=0.9cm, minimum width=2.3cm, text width=2.05cm},
-    arr/.style={->, semithick}]
-    \node[st, fill=green!14]  (prod)    at (90:3.3)   {прод-модель};
-    \node[st, fill=blue!10]   (log)     at (30:3.3)   {сбор\\предсказаний};
-    \node[st, fill=orange!15] (filter)  at (-30:3.3)  {фильтр низкой уверенности};
-    \node[st, fill=orange!15] (queue)   at (-90:3.3)  {очередь разметки};
-    \node[st, fill=violet!12] (review)  at (-150:3.3) {валидация};
-    \node[st, fill=green!14]  (train)   at (150:3.3)  {обучение};
+![](Лекция5_figs/tikz_25.png)
 
-    \draw[arr] (prod)   to[bend left=12] (log);
-    \draw[arr] (log)    to[bend left=12] (filter);
-    \draw[arr] (filter) to[bend left=12] (queue);
-    \draw[arr] (queue)  to[bend left=12] (review);
-    \draw[arr] (review) to[bend left=12] (train);
-    \draw[arr] (train)  to[bend left=12] (prod);
-\end{tikzpicture}
-\end{document}
-```
-
-- Петля окупается только при **дешёвой разметке одного объекта** — иначе очередь не разбирается
-- Порог фильтра пересматривается по precision на эталоне, а не «когда захотелось»
+- Отбирайте в очередь **не случайные** логи: низкая уверенность + новые кластеры + OOD
+- Ограничивайте объём: 50–200 объектов в неделю достаточно для большинства задач
+- Храните «отказы» модели — это самый ценный ресурс для следующей версии
 
 ---
 
-## Инструменты: open source и commercial
+## Экосистема инструментов
 
-| Open source | Commercial |
-|:-----------|:-----------|
-| Label Studio — self-hosted, всё | Labelbox — операции, SLA |
-| CVAT — видео, боксы | Scale AI — данные «под ключ» |
-| Doccano — текст, NER | Supervisely — CV-платформа |
-| Labelme — маски, полигоны | Ground Truth — процесс AWS |
-| — | Google Vertex AI — managed |
+| Инструмент | Ниша | Лицензия |
+|:-----------|:-----|:---------|
+| Label Studio | универсальная платформа | OSS / Cloud |
+| CVAT | компьютерное зрение, видео | OSS (OpenVINO) |
+| Doccano | текст, NER, перевод | OSS |
+| Labelme | простые маски и боксы | OSS |
+| Prodigy | NLP, активное обучение | Commercial |
+| Labelbox | enterprise, CV | Commercial |
+| Supervisely | CV, managed | Commercial |
+| Scale AI | полный цикл «под ключ» | Commercial |
+| SageMaker Ground Truth | AWS managed | Pay-per-use |
+| Argilla | текст, LLM-разметка, ревью | OSS |
 
-- OSS — за **self-hosted и кастомные схемы**, commercial — за скорость запуска
-- Считайте не лицензию, а **стоимость владения**
+**Библиотеки:** `modAL`, `alipy` (активное обучение), `snorkel` (weak supervision), `cleanlab` (ошибки меток), `krippendorff`, `statsmodels` (согласие)
 
 ---
 
-## Библиотеки
+## Код: активное обучение за 20 строк
 
 ```python
 from modAL.models import ActiveLearner
-learner = ActiveLearner(estimator=clf, X_training=X0, y_training=y0)
-idx, _ = learner.query(X_pool, n_instances=64)
-learner.teach(X_pool[idx], y_new)
+from modAL.uncertainty import uncertainty_sampling
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import f1_score
+
+learner = ActiveLearner(
+    estimator=RandomForestClassifier(n_estimators=200, random_state=0),
+    query_strategy=uncertainty_sampling,
+    X_training=X_init, y_training=y_init,
+)
+
+scores = []
+for _ in range(20):
+    idx, x = learner.query(X_pool, n_instances=100)   # батч из 100
+    y_new = oracle(x)                                  # человек/эталон
+    learner.teach(x, y_new)
+    X_pool, y_pool = np.delete(X_pool, idx, 0), np.delete(y_pool, idx, 0)
+    scores.append(f1_score(y_val, learner.predict(X_val), average="macro"))
 ```
 
-```python
-from snorkel.labeling import PandasLFApplier
-from snorkel.labeling.model import LabelModel
-L_train = PandasLFApplier(lfs=lfs).apply(df_train)
-probs = LabelModel(cardinality=2).fit(L_train).predict_proba(L_train)
-```
-
-```python
-from cleanlab.classification import CleanLearning
-cl = CleanLearning(clf=base_model)
-issues = cl.find_label_issues(X=X, y=y)
-cl.fit(X, y)
-```
-
-→ семинар: полные листинги и разбор API
+- `oracle` — это функция: в эксперименте берёт из отложенного набора, в проде — очередь разметки
+- Логируйте каждый запрос: потом посчитаете экономию «объекты → метрика»
 
 ---
 
-## Этика: оплата и условия труда
+## Этика: труд разметчиков
 
-| Оплата | Условия труда |
-|:-------|:--------------|
-| Ставка за час, не «за задачу» | Норма выработки — заранее |
-| Бонус за качество, не за скорость | Перерывы, ротация задач |
-| Переделки по вине инструкции — оплата | Апелляция решения QA |
-| Имя в датасете — по желанию | Нагрузка: модерация |
+- **Оплата:** прозрачная ставка за час, а не «за клик» — иначе скорость важнее качества
+- **Условия:** перерывы, ротация задач, эргономичный интерфейс, отсутствие штрафов за «медленно»
+- **Содержание:** модерация травмирующего контента требует психологической поддержки и лимитов
+- **Права:** NDA не отменяет права на достойные условия; краудсорсинг — не «дешёвый ресурс»
+- **Видимость:** указывайте в данных и статьях, кто и как размечал (Gray & Suri, «Ghost Work»)
 
-- Дешёвая разметка оплачена **чужой усталостью** — видно по качеству через 2–3 недели
+$$
+\text{качество данных} \;\propto\; \text{условия труда разметчиков}
+$$
 
-> Ключевое: этика — это **структура оплаты и KPI**, а не декларация.
-
----
-
-## Bias в разметке
-
-```tikz
-\documentclass[tikz]{standalone}
-\usepackage[T2A]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage[russian]{babel}
-\usetikzlibrary{arrows.meta, positioning, matrix}
-\begin{document}
-\begin{tikzpicture}[font=\scriptsize,
-    box/.style={rectangle, rounded corners, draw, align=center, minimum height=0.95cm, minimum width=2.6cm, text width=2.3cm},
-    arr/.style={->, semithick}]
-    \node[box, fill=blue!10]   (instr) at (0,2.1)  {инструкции и схема};
-    \node[box, fill=orange!15] (ann)   at (4.6,0)  {разметчики};
-    \node[box, fill=green!14]  (model) at (0,-2.1) {модель};
-    \node[box, fill=violet!12] (prod)  at (-4.6,0) {данные в\\продакшене};
-    \node[circle, draw, thick, fill=red!10, align=center, minimum size=2.6cm, text width=2.2cm] (ctr) at (0,0) {ошибка\\возвращается\\как истина};
-
-    \draw[arr] (instr) -- (ann);
-    \draw[arr] (ann) -- (model);
-    \draw[arr] (model) -- (prod);
-    \draw[arr] (prod) -- (instr);
-\end{tikzpicture}
-\end{document}
-```
-
-- **Разнообразие команды**: разные диалекты, возраст, домен — иначе «норма» одна на всех
-- **Слепая разметка**: разметчик не видит предсказание модели и метку коллеги
-- **Аудит подгрупп**: метрики отдельно по полу, возрасту, языку, а не только средний F1
-- **Ревизия схемы**: класс, который всегда размечают по-разному, — плохо определён
+<span class="callout good">Ключевое: «дешёвая разметка» почти всегда означает, что кто-то платит разницей — временем, здоровьем или точностью.</span>
 
 ---
 
-## Конфиденциальность
+## Этика: смещение (bias)
 
-- **Анонимизация до разметки**: PII вырезается или заменяется плейсхолдерами на входе пайплайна
-- **Минимальные права**: разметчик видит только свою порцию, экспорт — только у владельца
-- **NDA и обучение**: подрядчики подписывают договор, а не «соглашаются галочкой»
-- **Сроки хранения**: сырые данные и логи удаляются по политике, а не «когда-нибудь»
-- **GDPR/152-ФЗ**: основание обработки, право на удаление, трансграничная передача — до старта
+**Источники смещения**
 
-> Ключевое: разметка — это **обработка персональных данных** людьми вне вашего контура; проектируйте это как риск, а не как деталь.
+- Состав команды (демография, культура, язык, опыт домена)
+- Формулировка инструкции (что считаем «нормой»)
+- Данные: чьи голоса и лица попали в выборку
+- Обратная связь: чьи жалобы доходят до правки схемы
+
+| Мера | Что даёт |
+|:-----|:---------|
+| Разнообразная команда | меньше слепых зон |
+| Слепая разметка | нет эффекта ожиданий |
+| Несколько разметчиков | агрегация вместо мнения одного |
+| Аудит по подгруппам | видно смещение по срезам |
+| Документирование решений | воспроизводимость |
+
+Каждая мера дешевле переделки модели, обученной на смещённых метках.
 
 ---
 
-## Будущее: foundation models
+## Этика: конфиденциальность
 
-- Предразметка «из коробки»: zero/few-shot вместо своей модели
-- Разметчик — **арбитр и редактор**, а не исполнитель
-- Схемы проще: меньше классов, свободный текст на выходе
-- Дистилляция большой модели в маленькую — часть пайплайна
-- Экономика: платим за токены и проверку, не за часы
+**Чек-лист перед отправкой данных на разметку**
+
+- **Анонимизация** до передачи: удалить или заменить PII (имена, телефоны, адреса, номера)
+- **Минимизация**: отдавать только поля, нужные для решения, без лишнего контекста
+- **Контроль доступа**: роли, NDA, журнал того, кто видел какие объекты
+- **Сроки хранения**: данные и копии удаляются по регламенту, а не «когда-нибудь»
+- **Юридическая база**: GDPR / 152-ФЗ, основание обработки, договор поручения
+- **LLM-предразметка**: отдельная политика — данные уходят вендору, часто за пределы контура
+
+---
+
+## Разметка в эпоху LLM
 
 <!-- доп. -->
-- **LLM-судья смещён**: длина, позиция, собственный стиль
-- **Дорого на масштабе**: 100K объектов × токены дороже разметчика
-- **Нет гарантий**: нет калибровки и воспроизводимости
 
-> Ключевое: foundation-модели снижают **стоимость черновика**, но не отменяют эталон, QA и ответственность за метку.
+- LLM снижают стоимость **создания** метки, но повышают стоимость **проверки**
+- Роли: zero/few-shot классификатор, извлечение сущностей, «судья» для сравнения ответов
+- Риски: переуверенность, чувствительность к промпту, позиционное смещение, дрейф версии модели
+- 2024–2025: согласие LLM с людьми иногда не ниже межлюдского, но **сильно зависит от схемы** (ALPS; «Alternative Annotator Test», ACL 2025)
+
+**Практические правила**
+
+1. Не заменяйте людей — заменяйте **первый проход**, оставляя выборочную валидацию
+2. Всегда отчитывайтесь согласием с человеческим эталоном, а не «looks good»
+3. Фиксируйте версию модели и промпта в метаданных (как `model_version`)
+4. Не отправляйте PII и закрытые данные во внешние API без договора
+5. Проверяйте на **подгруппах**: средняя точность скрывает провалы на редких классах
+
+<span class="callout good">Ключевое: LLM не отменяет разметку — она смещает узкое место с производства меток на **контроль их качества**.</span>
 
 ---
 
-## Декларативная разметка
+## Вопрос для размышления
+
+**Исчезнет ли потребность в ручной разметке с развитием AI?**
+
+Что останется человеку: определение схемы, арбитраж, редкие классы, этические решения?
+
+---
+
+## Тренды
+
+- **AI-assisted annotation**: предразметка как норма, человек — арбитр
+- **Мультимодальная разметка**: текст + изображение + аудио в одном объекте
+- **Real-time collaborative annotation**: несколько экспертов одновременно, консенсус на лету
+- **Федеративная и приватная разметка**: данные не покидают контур
+- **Декларативные пайплайны**: правила, модели и ревью описываются конфигом
 
 ```python
-pipeline = AnnotationPipeline(
-    source=JsonlSource("data/raw/*.jsonl"),
-    prelabel=ModelPrelabel("bert-ner", version="1.4", threshold=0.9),
-    route=RouteByConfidence(auto=0.95, human=0.6),
-    review=SampleReview(rate=0.1, gold="gold_100.jsonl"),
-    export=Export("datasets/ner/v4", format="spans"),
-)
-pipeline.run()
+# иллюстрация идеи: пайплайн разметки как декларация
+pipeline = AnnotationPipeline()
+pipeline.add_rule("regex_spam", confidence=0.8)
+pipeline.add_model("bert_classifier", threshold=0.9, version="v3")
+pipeline.add_human_review(when="confidence < 0.7 or conflict")
+pipeline.add_validation(metric="cohen_kappa", min_value=0.75)
+results = pipeline.run(data)          # аудит, версия, метрики — автоматически
 ```
-
-- Пайплайн лежит в git рядом с данными: шаг, порог и версия модели — **часть артефакта**, а не память дежурного
-- Любое изменение процесса — diff в коде и новая версия датасета, а не «поправили на проде»
 
 ---
 
 ## Ключевые выводы
 
-- Разметка — **производственный процесс**: стоимость, пропускная способность, качество, версии
-- Дорогие задачи определяются числом решений на объект, а не типом данных
-- Активное обучение и weak supervision экономят метки, но требуют baseline для доказательства
-- Качество держится на эталоне, двойной разметке, согласии и живых инструкциях
-- Автоматизация — управляемый компромисс: покрытие × точность × цена проверки
+1. Разметка — **производственный процесс** с бюджетом, пропускной способностью и качеством
+2. Платформа — 10% успеха; остальное — инструкции, люди, QA
+3. Активное обучение экономит 40–60% бюджета — при холодном старте и кривых обучения
+4. Надёжность ($\kappa$, $\alpha$) ≠ валидность: нужны эталоны и аудит
+5. Агрегация (Dawid–Skene и др.) выжимает качество из шумных голосов
+6. Автоматизация работает при калиброванных вероятностях и измеренной точности
+7. Датасет — версионируемый артефакт с метаданными и владельцем
 
-> Ключевое: побеждает не тот, кто купил платформу, а тот, кто **управляет неопределённостью** задачи и людьми.
+---
+
+## Рекомендации для практики
+
+**Старт проекта**
+
+- Определите метрику качества **разметки** (не только модели): $\kappa$, точность на эталоне
+- Напишите инструкцию с примерами и антипримерами, проведите пилот на 100–300 объектах
+- Посчитайте смету с QA и переделкой (×1,5–2 к «наивной»)
+
+**Масштабирование**
+
+- Внедрите предразметку и пороги по precision на валидации
+- Автоматизируйте QA: эталоны в очереди, скрипты валидации, отчёт по разметчикам
+- Версионируйте данные, инструкции и сплиты; логируйте происхождение каждой метки
+- Пересматривайте пороги и инструкции по расписанию, а не по инциденту
 
 ---
 
 ## Домашнее задание
 
-| Задание | Что сдать | Критерий |
-|:--------|:----------|:---------|
-| 1. Разметить 300 объектов по готовой схеме | экспорт JSON + скриншот статистики | согласие с эталоном ≥ 0,85 |
-| 2. Прогнать AL на своём датасете | ноутбук + кривая quality vs budget | есть честный random baseline |
-| 3. Смета проекта на 20K объектов | таблица «часы / деньги» | учтены QA и переделки |
-| 4. Инструкция разметчика | 1 страница | есть спорные кейсы и допуски |
+**1. Платформа.** Развернуть Label Studio (Docker), создать проект NER/классификации, загрузить 100 объектов, настроить `label_config`, выгрузить результат. Документировать установку и конфиг в git.
+
+**2. Активное обучение.** Реализовать цикл (modAL или свой) на открытом датасете. Сравнить random / uncertainty / diversity, построить learning curves, оценить экономию при целевом F1. Отчёт с графиками.
+
+**3. Контроль качества.** Реализовать расчёт Cohen и Fleiss, генератор honeypots, отчёт по разметчикам. Порог $\kappa$, при котором партия уходит на переразметку, обосновать.
+
+**4. Автоматизация (опционально).** Пайплайн: предразметка моделью → порог по precision → очередь ручной проверки → метрики automation rate / auto-precision / cost per label.
 
 ---
 
 ## Литература
 
-1. Settles B. *Active Learning Literature Survey*. UW–Madison, 2012.
-2. Ratner A. et al. *Snorkel: Rapid Training Data Creation*. VLDB, 2020.
-3. Northcutt C. et al. *Confident Learning*. JAIR, 2021.
-4. Monarch R. *Human-in-the-Loop Machine Learning*. Manning, 2021.
-5. Sambasivan N. et al. *“Everyone wants to do the model work”*. CHI, 2021.
-6. Label Studio Docs — labelstud.io/docs
-7. Snorkel Tutorial — snorkel.ai/docs
-8. cleanlab Docs — docs.cleanlab.ai
+**Основная**
+
+1. **Settles, B.** (2012). *Active Learning*. Synthesis Lectures on AI and ML. — канон по стратегиям выбора
+2. **Ratner, A. et al.** (2020). *Snorkel: Rapid Training Data Creation with Weak Supervision*. VLDB J.
+3. **Northcutt, C. et al.** (2021). *Confident Learning: Estimating Uncertainty in Dataset Labels*. JAIR
+4. **Monarch, R.** (2021). *Human-in-the-Loop Machine Learning*. Manning
+
+**Метрики согласия и агрегация**
+
+5. **Cohen, J.** (1960). *A coefficient of agreement for nominal scales*. — оригинал $\kappa$
+6. **Fleiss, J.** (1971). *Measuring nominal scale agreement among many raters*.
+7. **Krippendorff, K.** (2004). *Content Analysis: An Introduction to Its Methodology*.
+8. **Dawid, A., Skene, A.** (1979). *Maximum likelihood estimation of observer error-rates*.
 
 ---
 
-## Вопросы для обсуждения
+## Литература: контекст и этика
 
-- Где в вашем проекте **самое дорогое решение** на один объект — и можно ли его декомпозировать?
-- Какой у вас эталон и кто имеет право его менять?
-- Что произойдёт с пайплайном, если завтра дрейфанёт 20% входа?
-- Как вы измеряете качество разметки, кроме «посмотрели глазами»?
-- Кто отвечает за ошибку авто-метки, попавшую в продакшен?
+9. **Sambasivan, N. et al.** (2021). *"Everyone wants to do the model work, not the data work": Data Cascades in High-Stakes AI*. CHI
 
-**Контакты:** чат курса · семинар — разбор кода блоков 2–4
+10. **Gray, M., Suri, S.** (2019). *Ghost Work: How to Stop Silicon Valley from Building a New Global Underclass*
+
+11. **Zhu, Y. et al.** (2024). *Assessing LLMs for Data Annotation* (ALPS)
+
+12. **Calderon, N. et al.** (2025). *The Alternative Annotator Test for LLM-as-a-Judge*. ACL
+
+13. **Northcutt, C. et al.** (2021). *Pervasive Label Errors in Test Sets Destabilize ML Benchmarks*
+
+<span class="callout good">Ключевое: читайте не только про методы, но и про **производство данных** — там больше всего неожиданного.</span>
 
 ---
 
-<!-- _class: lead -->
+## Ресурсы
+
+- Label Studio: https://labelstud.io/guide/
+- CVAT: https://docs.cvat.ai/
+- Snorkel: https://www.snorkel.org/get-started/
+- cleanlab: https://docs.cleanlab.ai/
+- Argilla: https://docs.argilla.io/
+- Google «Data Labeling Best Practices»
+- Курсы: *Data-Centric AI* (DeepLearning.AI), *Human-Centered ML* (Google, Coursera)
+
+---
+
+## Темы для дискуссии
+
+- Опыт разметки в ваших проектах: что сломалось первым?
+- Выбор между платформой и «своими скриптами + таблица»
+- Когда активное обучение **не** окупается
+- Этические дилеммы: дешёвый краудсорсинг vs качество и условия труда
+- Заменит ли LLM разметчиков — и что тогда считать эталоном
+
+---
+
+## Связь с курсом
+
+| Лекция | Связь |
+|:-------|:------|
+| Лекция 3 | валидация данных **после** разметки |
+| Лекция 4 | признаки на размеченных данных |
+| **Лекция 5** | производство и контроль разметки |
+| Лекция 6 | разметка как шаг ETL/ELT-пайплайна |
+| Лекция 8 | мониторинг качества разметки в продакшене |
+
+---
+
+<!-- _class: title -->
 
 # Спасибо за внимание!
 
-**Следующая лекция: ETL/ELT пайплайны и оркестрация**
+## Следующая лекция: ETL/ELT пайплайны и оркестрация
+
+**Вопросы и материалы**
+- Office Hours: четверг, 14:00–16:00
+- Канал курса: Telegram / Slack
+- Схемы: папка `Лекция5_figs/`
+
+<div class="meta">Вопросы и материалы — в репозитории курса</div>

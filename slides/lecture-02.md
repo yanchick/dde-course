@@ -30,7 +30,7 @@ section {
   background: var(--bg);
   font-size: 29px;
   line-height: 1.35;
-  padding: 56px 78px;
+  padding: 64px 78px 48px;
 }
 
 h1 { font-size: 1.5em; color: var(--primary); margin: 0 0 .35em; font-weight: 800; letter-spacing: -.01em; }

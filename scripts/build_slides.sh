@@ -11,10 +11,13 @@ mkdir -p "$OUT"
 
 # Marp writes HTML into docs/slides/, while the decks reference assets/
 # relative to slides/. Mirror the asset directories next to the generated files.
-for asset_dir in assets Лекция4_figs tikz; do
-  if [[ -d "$ROOT/slides/$asset_dir" ]]; then
-    cp -a "$ROOT/slides/$asset_dir" "$OUT/"
+for src in "$ROOT/slides/assets" "$ROOT/slides/tikz" "$ROOT"/slides/Лекция*_figs; do
+  if [[ ! -d "$src" ]]; then
+    continue
   fi
+  asset_dir="$(basename "$src")"
+  rm -rf "$OUT/$asset_dir"
+  cp -a "$src" "$OUT/"
 done
 
 if [[ -x "$ROOT/node_modules/.bin/marp" ]]; then

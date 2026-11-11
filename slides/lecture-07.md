@@ -3,26 +3,116 @@ marp: true
 theme: default
 size: 16:9
 paginate: true
+header: 'Лекция 7 · Современные хранилища данных'
+footer: 'ИТМО · Магистратура «Инженерия данных» · Осень 2025'
 math: katex
 ---
-# Лекция 7: Современные хранилища данных
 
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
 
-## Слайд 1: Титульный слайд
+:root {
+  --primary: #1d4ed8;
+  --primary-dark: #1e3a8a;
+  --accent: #0ea5e9;
+  --ink: #0f172a;
+  --muted: #64748b;
+  --bg: #ffffff;
+  --soft: #f1f5f9;
+  --teal: #0d9488;
+  --amber: #d97706;
+  --rose: #e11d48;
+}
 
-# Современные хранилища данных
+section {
+  font-family: 'Inter', 'Noto Sans', 'Segoe UI', system-ui, sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+  font-size: 24px;
+  line-height: 1.35;
+  padding: 72px 56px 40px;
+}
 
-**Лекция 7**
+h1 { font-size: 1.5em; color: var(--primary); margin: 0 0 .35em; font-weight: 800; letter-spacing: -.01em; }
+h2 { font-size: 1.18em; color: var(--ink); margin: 0 0 .55em; font-weight: 700; }
+h3 { font-size: .82em; color: var(--muted); margin: 0 0 .3em; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
 
-- Реляционные БД и SQL
-- Data Lakes vs Data Warehouses
-- Колоночные базы данных
-- NoSQL решения
-- Распределенные файловые системы
+ul, ol { margin: 0 0 .55em; padding-left: 1.25em; }
+li { margin: .16em 0; }
+li strong, li b { color: var(--primary-dark); }
+p { margin: 0 0 .5em; }
+
+a { color: var(--primary); }
+
+table { width: 100%; border-collapse: collapse; font-size: .68em; }
+th { background: var(--primary); color: #fff; padding: 9px 14px; text-align: left; font-weight: 600; }
+td { padding: 8px 14px; border-bottom: 1px solid #e2e8f0; vertical-align: top; }
+tr:nth-child(even) td { background: #f8fafc; }
+
+img { display: block; margin: .25em auto; max-width: 100%; max-height: 360px; }
+
+code { background: var(--soft); border-radius: 4px; padding: 1px 6px; font-size: .82em; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+pre { background: #0f172a; color: #e2e8f0; border-radius: 10px; padding: 16px 22px; font-size: .56em; line-height: 1.5; }
+pre code { background: transparent; color: inherit; padding: 0; }
+
+.hljs-comment, .hljs-quote { color: #94a3b8; font-style: italic; }
+.hljs-keyword, .hljs-selector-tag, .hljs-built_in, .hljs-type { color: #93c5fd; }
+.hljs-string, .hljs-attr, .hljs-regexp { color: #86efac; }
+.hljs-number, .hljs-literal, .hljs-symbol { color: #fbbf24; }
+.hljs-title, .hljs-section, .hljs-name { color: #f0abfc; }
+.hljs-variable, .hljs-template-variable { color: #fca5a5; }
+.hljs-meta { color: #cbd5e1; }
+
+.columns { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+.cols3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px; align-items: start; }
+
+section.section {
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 55%, #1d4ed8 100%);
+  color: #fff; justify-content: center; text-align: center;
+}
+section.section h1 { color: #fff; font-size: 2.1em; border: none; }
+section.section h2 { color: rgba(255,255,255,.85); font-weight: 400; font-size: 1.1em; }
+section.section::after { content: ''; }
+
+section.title {
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 55%, #1d4ed8 100%);
+  color: #fff; justify-content: center; text-align: center;
+}
+section.title h1 { color: #fff; font-size: 2.5em; border: none; }
+section.title h2 { color: rgba(255,255,255,.9); font-weight: 400; }
+section.title p { color: rgba(255,255,255,.8); }
+section.title ul, section.title ol, section.section ul, section.section ol { display: inline-block; text-align: left; }
+section.title code, section.section code { background: rgba(255,255,255,.16); color: #fff; }
+
+section.title .meta { margin-top: 1.4em; font-size: .8em; color: rgba(255,255,255,.7); letter-spacing: .06em; text-transform: uppercase; }
+
+.callout { display: block; border-left: 5px solid var(--accent); background: #eff6ff; border-radius: 6px; padding: 14px 20px; margin: .5em 0; }
+.callout.warn { border-left-color: var(--amber); background: #fffbeb; }
+.callout.good { border-left-color: var(--teal); background: #ecfdf5; }
+.callout.bad { border-left-color: var(--rose); background: #fef2f2; }
+
+.muted { color: var(--muted); font-size: .8em; }
+.small { font-size: .8em; }
+.badge { display: inline-block; background: var(--soft); border-radius: 999px; padding: 4px 14px; margin: 3px; font-size: .74em; font-weight: 600; color: var(--primary-dark); }
+</style>
+<!-- _class: title -->
+
+# Лекция 7
+## Современные хранилища данных
+
+<div class="meta">Инженерия данных · Магистратура ИТМО · Осень 2025</div>
 
 ---
 
-## Слайд 2: План лекции
+<!-- _class: section -->
+
+# План лекции
+
+## 5 разделов · 80 минут
+
+---
+
+## План лекции
 
 ### Структура лекции
 
@@ -34,11 +124,14 @@ math: katex
 
 ---
 
-## РАЗДЕЛ 1: Реляционные БД и SQL
+<!-- _class: section -->
+
+# Раздел 1
+## Реляционные БД и SQL
 
 ---
 
-## Слайд 3: Введение в реляционные БД
+## Введение в реляционные БД
 
 ### Что такое реляционная база данных?
 
@@ -50,7 +143,7 @@ math: katex
 
 ---
 
-## Слайд 4: ACID свойства
+## ACID свойства
 
 ### Гарантии надежности транзакций
 
@@ -59,39 +152,19 @@ math: katex
 - **I**solation - изолированность транзакций
 - **D**urability - долговечность результатов
 
-**Пример:** Банковский перевод между счетами
+<span class="callout">**Пример:** Банковский перевод между счетами</span>
 
 ---
 
-## Слайд 5: Архитектура РСУБД
+## Архитектура РСУБД
 
-```mermaid
-graph LR
-    Client[Клиентское приложение]
-    Parser[SQL Parser]
-    Optimizer[Query Optimizer]
-    Executor[Execution Engine]
-    Storage[Storage Engine]
-    Buffer[Buffer Pool]
-    Disk[(Диск)]
-    
-    Client -->|SQL запрос| Parser
-    Parser -->|Синтаксическое дерево| Optimizer
-    Optimizer -->|План выполнения| Executor
-    Executor <-->|Чтение/Запись| Buffer
-    Buffer <-->|Страницы данных| Storage
-    Storage <-->|Физические блоки| Disk
-    
-    style Client fill:#e1f5ff
-    style Optimizer fill:#fff4e1
-    style Storage fill:#e8f5e9
-```
+![](Лекция7_figs/mermaid_01.svg)
 
-**Основные компоненты:** Parser → Optimizer → Executor → Storage
+<span class="callout">**Основные компоненты:** Parser → Optimizer → Executor → Storage</span>
 
 ---
 
-## Слайд 6: Популярные РСУБД
+## Популярные РСУБД
 
 ### Основные представители
 
@@ -103,7 +176,7 @@ graph LR
 
 ---
 
-## Слайд 7: Основы SQL - DDL
+## Основы SQL - DDL
 
 ### Data Definition Language
 
@@ -125,7 +198,7 @@ DROP TABLE users;
 
 ---
 
-## Слайд 8: Основы SQL - DML
+## Основы SQL - DML
 
 ### Data Manipulation Language
 
@@ -144,7 +217,7 @@ DELETE FROM users WHERE user_id = 5;
 
 ---
 
-## Слайд 9: Основы SQL - DQL
+## Основы SQL - DQL
 
 ### Data Query Language
 
@@ -164,34 +237,13 @@ SELECT COUNT(*) as total_users FROM users;
 
 ---
 
-## Слайд 10: SQL JOIN операции
+## SQL JOIN операции
 
-```mermaid
-graph LR
-    subgraph "Типы JOIN"
-        A[INNER JOIN]
-        B[LEFT JOIN]
-        C[RIGHT JOIN]
-        D[FULL OUTER JOIN]
-        E[CROSS JOIN]
-    end
-    
-    A --> F[Только совпадения]
-    B --> G[Все из левой + совпадения]
-    C --> H[Все из правой + совпадения]
-    D --> I[Все записи из обеих таблиц]
-    E --> J[Декартово произведение]
-    
-    style A fill:#4CAF50
-    style B fill:#2196F3
-    style C fill:#FF9800
-    style D fill:#9C27B0
-    style E fill:#F44336
-```
+![](Лекция7_figs/mermaid_02.svg)
 
 ---
 
-## Слайд 11: Примеры JOIN
+## Примеры JOIN
 
 ### Объединение таблиц
 
@@ -210,7 +262,7 @@ GROUP BY u.username;
 
 ---
 
-## Слайд 12: Индексы в РСУБД
+## Индексы в РСУБД
 
 ### Ускорение поиска данных
 
@@ -222,7 +274,7 @@ GROUP BY u.username;
 
 ---
 
-## Слайд 13: Создание индексов
+## Создание индексов
 
 ```sql
 -- Простой индекс
@@ -242,29 +294,15 @@ ON users(username) WHERE is_active = true;
 
 ---
 
-## Слайд 14: Нормализация БД
+## Нормализация БД
 
-```mermaid
-graph LR
-    A[Ненормализованная форма] -->|Устранение повторяющихся групп| B[1NF]
-    B -->|Устранение частичных зависимостей| C[2NF]
-    C -->|Устранение транзитивных зависимостей| D[3NF]
-    D -->|Устранение многозначных зависимостей| E[BCNF]
-    E -->|Дальнейшая декомпозиция| F[4NF, 5NF]
-    
-    style A fill:#ffcdd2
-    style B fill:#fff9c4
-    style C fill:#c8e6c9
-    style D fill:#b2dfdb
-    style E fill:#b3e5fc
-    style F fill:#e1bee7
-```
+![](Лекция7_figs/mermaid_03.svg)
 
-**На практике:** Обычно достаточно 3NF
+<span class="callout">**На практике:** Обычно достаточно 3NF</span>
 
 ---
 
-## Слайд 15: Пример нормализации
+## Пример нормализации
 
 ### Ненормализованная таблица
 
@@ -278,11 +316,11 @@ CREATE TABLE orders_bad (
 );
 ```
 
-**Проблемы:** Повторение данных клиента, списки в полях
+<span class="callout">**Проблемы:** Повторение данных клиента, списки в полях</span>
 
 ---
 
-## Слайд 16: Нормализованная структура
+## Нормализованная структура
 
 ### 3NF схема
 
@@ -292,19 +330,16 @@ CREATE TABLE customers (
     name VARCHAR(100),
     email VARCHAR(100) UNIQUE
 );
-
 CREATE TABLE products (
     product_id SERIAL PRIMARY KEY,
     name VARCHAR(100),
     price DECIMAL(10,2)
 );
-
 CREATE TABLE orders (
     order_id SERIAL PRIMARY KEY,
     customer_id INT REFERENCES customers(customer_id),
     order_date TIMESTAMP
 );
-
 CREATE TABLE order_items (
     order_id INT REFERENCES orders(order_id),
     product_id INT REFERENCES products(product_id),
@@ -315,7 +350,7 @@ CREATE TABLE order_items (
 
 ---
 
-## Слайд 17: Денормализация
+## Денормализация
 
 ### Когда нарушать правила?
 
@@ -327,7 +362,7 @@ CREATE TABLE order_items (
 
 ---
 
-## Слайд 18: Транзакции и изоляция
+## Транзакции и изоляция
 
 ### Уровни изоляции
 
@@ -348,31 +383,15 @@ COMMIT; -- или ROLLBACK;
 
 ---
 
-## Слайд 19: Уровни изоляции
+## Уровни изоляции
 
-```mermaid
-graph TB
-    A[Read Uncommitted]
-    B[Read Committed]
-    C[Repeatable Read]
-    D[Serializable]
-    
-    A -->|Dirty Reads| E[Наименьшая изоляция]
-    B -->|Предотвращает Dirty Reads| F[PostgreSQL по умолчанию]
-    C -->|Предотвращает Non-repeatable Reads| G[MySQL InnoDB по умолчанию]
-    D -->|Полная изоляция| H[Наибольшая изоляция]
-    
-    style A fill:#ffcdd2
-    style B fill:#fff9c4
-    style C fill:#c8e6c9
-    style D fill:#b2dfdb
-```
+![](Лекция7_figs/mermaid_04.svg)
 
-**Выбор зависит от:** требований к консистентности vs производительности
+<span class="callout">**Выбор зависит от:** требований к консистентности vs производительности</span>
 
 ---
 
-## Слайд 20: Оптимизация запросов
+## Оптимизация запросов
 
 ### Инструменты анализа
 
@@ -393,11 +412,11 @@ GROUP BY u.username;
 
 ---
 
-## Слайд 21: Вопрос для проверки 1
+## Вопрос для проверки 1
 
 ### Проверьте себя
 
-**Вопрос:** Какой тип JOIN вернет все записи из левой таблицы, даже если нет совпадений в правой?
+<span class="callout warn">**Вопрос:** Какой тип JOIN вернет все записи из левой таблицы, даже если нет совпадений в правой?</span>
 
 A) INNER JOIN  
 B) LEFT JOIN  
@@ -406,11 +425,11 @@ D) CROSS JOIN
 
 ---
 
-## Слайд 22: Вопрос для проверки 2
+## Вопрос для проверки 2
 
 ### Проверьте себя
 
-**Вопрос:** Какое свойство ACID гарантирует, что транзакция либо выполнится полностью, либо не выполнится вообще?
+<span class="callout warn">**Вопрос:** Какое свойство ACID гарантирует, что транзакция либо выполнится полностью, либо не выполнится вообще?</span>
 
 A) Atomicity  
 B) Consistency  
@@ -419,9 +438,11 @@ D) Durability
 
 ---
 
-## Слайд 23: Резюме раздела 1
+## Резюме раздела 1
 
 ### Реляционные БД и SQL
+
+<div class="callout good">
 
 - **Структура:** Таблицы, связи, схемы
 - **ACID:** Надежность транзакций
@@ -430,32 +451,24 @@ D) Durability
 - **Нормализация:** Устранение избыточности
 - **Оптимизация:** EXPLAIN, правильные индексы
 
----
-
-## РАЗДЕЛ 2: Data Lakes vs Data Warehouses
+</div>
 
 ---
 
-## Слайд 24: Эволюция хранилищ
+<!-- _class: section -->
 
-```mermaid
-timeline
-    title Эволюция хранилищ данных
-    1980s : Реляционные БД
-          : OLTP системы
-    1990s : Data Warehouses
-          : OLAP кубы
-    2000s : Hadoop
-          : Big Data
-    2010s : Data Lakes
-          : Schema-on-Read
-    2020s : Data Lakehouses
-          : Unified Analytics
-```
+# Раздел 2
+## Data Lakes vs Data Warehouses
 
 ---
 
-## Слайд 25: Data Warehouse
+## Эволюция хранилищ
+
+![](Лекция7_figs/mermaid_05.svg)
+
+---
+
+## Data Warehouse
 
 ### Хранилище данных
 
@@ -467,122 +480,29 @@ timeline
 
 ---
 
-## Слайд 26: Архитектура DWH
+## Архитектура DWH
 
-```mermaid
-graph LR
-    subgraph Sources
-        A1[(OLTP DB)]
-        A2[(CRM)]
-        A3[(ERP)]
-    end
-    
-    subgraph ETL
-        B[Extract]
-        C[Transform]
-        D[Load]
-    end
-    
-    subgraph DWH
-        E[(Staging Area)]
-        F[(Data Warehouse)]
-        G[Data Marts]
-    end
-    
-    subgraph Consumers
-        H[BI Tools]
-        I[Reports]
-        J[Dashboards]
-    end
-    
-    A1 --> B
-    A2 --> B
-    A3 --> B
-    B --> C
-    C --> D
-    D --> E
-    E --> F
-    F --> G
-    G --> H
-    G --> I
-    G --> J
-    
-    style F fill:#4CAF50
-    style G fill:#2196F3
-```
+![](Лекция7_figs/mermaid_06.svg)
 
 ---
 
-## Слайд 27: Схемы DWH - Звезда
+## Схемы DWH - Звезда
 
-```mermaid
-graph TD
-    F[Fact Table<br/>Sales]
-    D1[Dim: Time]
-    D2[Dim: Product]
-    D3[Dim: Customer]
-    D4[Dim: Store]
-    
-    F --- D1
-    F --- D2
-    F --- D3
-    F --- D4
-    
-    style F fill:#FF9800
-    style D1 fill:#4CAF50
-    style D2 fill:#4CAF50
-    style D3 fill:#4CAF50
-    style D4 fill:#4CAF50
-```
+![](Лекция7_figs/mermaid_07.svg)
 
-**Преимущества:** Простота, производительность JOIN'ов
+<span class="callout">**Преимущества:** Простота, производительность JOIN'ов</span>
 
 ---
 
-## Слайд 28: Схемы DWH - Снежинка
+## Схемы DWH - Снежинка
 
-```mermaid
-graph TD
-    F[Fact Table<br/>Sales]
-    D1[Dim: Date]
-    D2[Dim: Product]
-    D3[Dim: Customer]
-    
-    D1_1[Month]
-    D1_2[Quarter]
-    D1_3[Year]
-    
-    D2_1[Category]
-    D2_2[Subcategory]
-    
-    D3_1[City]
-    D3_2[Country]
-    
-    F --- D1
-    F --- D2
-    F --- D3
-    
-    D1 --- D1_1
-    D1_1 --- D1_2
-    D1_2 --- D1_3
-    
-    D2 --- D2_1
-    D2_1 --- D2_2
-    
-    D3 --- D3_1
-    D3_1 --- D3_2
-    
-    style F fill:#FF9800
-    style D1 fill:#4CAF50
-    style D2 fill:#4CAF50
-    style D3 fill:#4CAF50
-```
+![](Лекция7_figs/mermaid_08.svg)
 
-**Преимущества:** Нормализация, меньше избыточности
+<span class="callout">**Преимущества:** Нормализация, меньше избыточности</span>
 
 ---
 
-## Слайд 29: Data Lake
+## Data Lake
 
 ### Озеро данных
 
@@ -594,51 +514,13 @@ graph TD
 
 ---
 
-## Слайд 30: Архитектура Data Lake
+## Архитектура Data Lake
 
-```mermaid
-graph TB
-    subgraph Sources
-        S1[IoT Sensors]
-        S2[Logs]
-        S3[Databases]
-        S4[APIs]
-        S5[Files]
-    end
-    
-    subgraph Ingestion
-        I1[Batch]
-        I2[Streaming]
-    end
-    
-    subgraph Lake Zones
-        Z1[Raw Zone<br/>Сырые данные]
-        Z2[Processed Zone<br/>Очищенные данные]
-        Z3[Curated Zone<br/>Бизнес-данные]
-    end
-    
-    subgraph Consumers
-        C1[Data Scientists]
-        C2[Analysts]
-        C3[ML Models]
-        C4[Applications]
-    end
-    
-    S1 & S2 --> I2
-    S3 & S4 & S5 --> I1
-    I1 & I2 --> Z1
-    Z1 --> Z2
-    Z2 --> Z3
-    Z3 --> C1 & C2 & C3 & C4
-    
-    style Z1 fill:#ffcdd2
-    style Z2 fill:#fff9c4
-    style Z3 fill:#c8e6c9
-```
+![](Лекция7_figs/mermaid_09.svg)
 
 ---
 
-## Слайд 31: Зоны Data Lake
+## Зоны Data Lake
 
 ### Организация данных
 
@@ -650,7 +532,7 @@ graph TB
 
 ---
 
-## Слайд 32: Data Lakehouse
+## Data Lakehouse
 
 ### Лучшее из двух миров
 
@@ -662,44 +544,13 @@ graph TB
 
 ---
 
-## Слайд 33: Сравнение подходов
+## Сравнение подходов
 
-```mermaid
-graph TB
-    subgraph "Data Warehouse"
-        DW1[Структурированные данные]
-        DW2[Schema-on-Write]
-        DW3[Высокая производительность]
-        DW4[BI и отчетность]
-        DW5[Высокая стоимость]
-    end
-    
-    subgraph "Data Lake"
-        DL1[Любые типы данных]
-        DL2[Schema-on-Read]
-        DL3[Масштабируемость]
-        DL4[ML и исследования]
-        DL5[Низкая стоимость]
-    end
-    
-    subgraph "Data Lakehouse"
-        LH1[Объединяет преимущества]
-        LH2[ACID + Гибкость]
-        LH3[Универсальная платформа]
-    end
-    
-    DW1 & DW2 & DW3 & DW4 --> LH1
-    DL1 & DL2 & DL3 & DL4 --> LH1
-    LH1 --> LH2 --> LH3
-    
-    style DW1 fill:#4CAF50
-    style DL1 fill:#2196F3
-    style LH1 fill:#9C27B0
-```
+![](Лекция7_figs/mermaid_10.svg)
 
 ---
 
-## Слайд 34: Метаданные и каталоги
+## Метаданные и каталоги
 
 ### Управление знаниями о данных
 
@@ -711,11 +562,11 @@ graph TB
 
 ---
 
-## Слайд 35: Вопрос для проверки 3
+## Вопрос для проверки 3
 
 ### Проверьте себя
 
-**Вопрос:** В какой зоне Data Lake хранятся сырые, необработанные данные?
+<span class="callout warn">**Вопрос:** В какой зоне Data Lake хранятся сырые, необработанные данные?</span>
 
 A) Curated Zone  
 B) Processed Zone  
@@ -724,9 +575,11 @@ D) Sandbox
 
 ---
 
-## Слайд 36: Резюме раздела 2
+## Резюме раздела 2
 
 ### Data Lakes vs Data Warehouses
+
+<div class="callout good">
 
 - **DWH:** Структура, производительность, BI
 - **Data Lake:** Гибкость, масштабируемость, ML
@@ -735,44 +588,27 @@ D) Sandbox
 - **Зоны:** Raw → Processed → Curated
 - **Метаданные:** Каталоги, lineage, discovery
 
----
-
-## РАЗДЕЛ 3: Колоночные базы данных
+</div>
 
 ---
 
-## Слайд 37: Строковое vs Колоночное хранение
+<!-- _class: section -->
 
-```mermaid
-graph TB
-    subgraph "Row-Oriented (OLTP)"
-        R1[Row 1: id=1, name=Alice, age=25, city=NY]
-        R2[Row 2: id=2, name=Bob, age=30, city=LA]
-        R3[Row 3: id=3, name=Charlie, age=35, city=SF]
-    end
-    
-    subgraph "Column-Oriented (OLAP)"
-        C1[id: 1, 2, 3]
-        C2[name: Alice, Bob, Charlie]
-        C3[age: 25, 30, 35]
-        C4[city: NY, LA, SF]
-    end
-    
-    style R1 fill:#ffcdd2
-    style R2 fill:#ffcdd2
-    style R3 fill:#ffcdd2
-    style C1 fill:#c8e6c9
-    style C2 fill:#c8e6c9
-    style C3 fill:#c8e6c9
-    style C4 fill:#c8e6c9
-```
+# Раздел 3
+## Колоночные базы данных
+
+---
+
+## Строковое vs Колоночное хранение
+
+![](Лекция7_figs/mermaid_11.svg)
 
 **Запрос:** `SELECT AVG(age) FROM users;`  
 **Колоночное:** Читает только столбец `age`
 
 ---
 
-## Слайд 38: Преимущества колоночного хранения
+## Преимущества колоночного хранения
 
 ### Почему быстрее для аналитики?
 
@@ -784,7 +620,7 @@ graph TB
 
 ---
 
-## Слайд 39: ClickHouse - обзор
+## ClickHouse - обзор
 
 ### Быстрая колоночная СУБД
 
@@ -796,44 +632,13 @@ graph TB
 
 ---
 
-## Слайд 40: ClickHouse - архитектура
+## ClickHouse - архитектура
 
-```mermaid
-graph TB
-    subgraph Cluster
-        N1[Node 1]
-        N2[Node 2]
-        N3[Node 3]
-    end
-    
-    subgraph "Node 1 Structure"
-        T1[Table Engine]
-        P1[Partitions]
-        I1[Indexes]
-        C1[Compression]
-    end
-    
-    ZK[ZooKeeper<br/>Координация]
-    
-    Client[Client] -->|SQL Query| N1
-    N1 <-->|Репликация| N2
-    N2 <-->|Репликация| N3
-    N3 <-->|Репликация| N1
-    
-    N1 --> T1
-    T1 --> P1 & I1 & C1
-    
-    N1 & N2 & N3 <-->|Метаданные| ZK
-    
-    style N1 fill:#4CAF50
-    style N2 fill:#4CAF50
-    style N3 fill:#4CAF50
-    style ZK fill:#FF9800
-```
+![](Лекция7_figs/mermaid_12.svg)
 
 ---
 
-## Слайд 41: ClickHouse - типы таблиц
+## ClickHouse - типы таблиц
 
 ### Table Engines
 
@@ -858,7 +663,7 @@ ORDER BY (date, user_id);
 
 ---
 
-## Слайд 42: ClickHouse - материализованные представления
+## ClickHouse - материализованные представления
 
 ```sql
 -- Создание материализованного представления
@@ -875,11 +680,11 @@ FROM events
 GROUP BY date, event_type;
 ```
 
-**Преимущество:** Предагрегированные данные для быстрых запросов
+<span class="callout">**Преимущество:** Предагрегированные данные для быстрых запросов</span>
 
 ---
 
-## Слайд 43: BigQuery - обзор
+## BigQuery - обзор
 
 ### Serverless Data Warehouse от Google
 
@@ -891,44 +696,15 @@ GROUP BY date, event_type;
 
 ---
 
-## Слайд 44: BigQuery - архитектура
+## BigQuery - архитектура
 
-```mermaid
-graph TB
-    subgraph "Compute Layer"
-        Q[Query Executor]
-        S[Scheduler]
-    end
-    
-    subgraph "Storage Layer (Colossus)"
-        D1[Dataset 1]
-        D2[Dataset 2]
-        D3[Dataset 3]
-    end
-    
-    subgraph "Metadata Layer"
-        M[Dremel Metadata]
-        C[Catalog]
-    end
-    
-    Client[Client] -->|SQL| Q
-    Q --> S
-    S -->|Parallel Execution| D1 & D2 & D3
-    Q <--> M
-    M <--> C
-    
-    style Q fill:#4285F4
-    style D1 fill:#34A853
-    style D2 fill:#34A853
-    style D3 fill:#34A853
-    style M fill:#FBBC04
-```
+![](Лекция7_figs/mermaid_13.svg)
 
-**Разделение:** Вычисления и хранение независимы
+<span class="callout">**Разделение:** Вычисления и хранение независимы</span>
 
 ---
 
-## Слайд 45: BigQuery - партиционирование
+## BigQuery - партиционирование
 
 ```sql
 -- Партиционирование по дате
@@ -947,11 +723,11 @@ PARTITION BY RANGE_BUCKET(user_id, GENERATE_ARRAY(0, 1000000, 10000))
 AS SELECT * FROM source_users;
 ```
 
-**Преимущество:** Сканирование только нужных партиций
+<span class="callout">**Преимущество:** Сканирование только нужных партиций</span>
 
 ---
 
-## Слайд 46: BigQuery - кластеризация
+## BigQuery - кластеризация
 
 ```sql
 -- Кластеризация для оптимизации запросов
@@ -966,11 +742,11 @@ AS SELECT
 FROM source_table;
 ```
 
-**Эффект:** Данные физически сортируются по указанным столбцам
+<span class="callout">**Эффект:** Данные физически сортируются по указанным столбцам</span>
 
 ---
 
-## Слайд 47: Оптимизация запросов
+## Оптимизация запросов
 
 ### Лучшие практики
 
@@ -982,11 +758,11 @@ FROM source_table;
 
 ---
 
-## Слайд 48: Вопрос для проверки 4
+## Вопрос для проверки 4
 
 ### Проверьте себя
 
-**Вопрос:** Почему колоночные БД быстрее для аналитических запросов?
+<span class="callout warn">**Вопрос:** Почему колоночные БД быстрее для аналитических запросов?</span>
 
 A) Хранят меньше данных  
 B) Читают только нужные столбцы  
@@ -995,9 +771,11 @@ D) Используют быстрые диски
 
 ---
 
-## Слайд 49: Резюме раздела 3
+## Резюме раздела 3
 
 ### Колоночные базы данных
+
+<div class="callout good">
 
 - **Принцип:** Хранение по столбцам, не по строкам
 - **Преимущества:** Компрессия, I/O, агрегации
@@ -1006,77 +784,32 @@ D) Используют быстрые диски
 - **Оптимизация:** Партиции, кластеризация, индексы
 - **Применение:** OLAP, аналитика, отчетность
 
----
-
-## РАЗДЕЛ 4: NoSQL решения
+</div>
 
 ---
 
-## Слайд 50: Теорема CAP
+<!-- _class: section -->
 
-```mermaid
-graph TD
-    CAP[CAP Theorem]
-    
-    C[Consistency<br/>Согласованность]
-    A[Availability<br/>Доступность]
-    P[Partition Tolerance<br/>Устойчивость к разделению]
-    
-    CAP --> C
-    CAP --> A
-    CAP --> P
-    
-    CP[CP Systems<br/>MongoDB, HBase]
-    AP[AP Systems<br/>Cassandra, DynamoDB]
-    CA[CA Systems<br/>RDBMS<br/>Нереалистично в распределенных системах]
-    
-    C & P --> CP
-    A & P --> AP
-    C & A --> CA
-    
-    style CAP fill:#9C27B0
-    style C fill:#4CAF50
-    style A fill:#2196F3
-    style P fill:#FF9800
-    style CP fill:#c8e6c9
-    style AP fill:#b3e5fc
-    style CA fill:#ffcdd2
-```
+# Раздел 4
+## NoSQL решения
+
+---
+
+## Теорема CAP
+
+![](Лекция7_figs/mermaid_14.svg)
 
 **Выбирайте 2 из 3**
 
 ---
 
-## Слайд 51: Типы NoSQL БД
+## Типы NoSQL БД
 
-```mermaid
-graph TB
-    NoSQL[NoSQL Databases]
-    
-    D[Document<br/>MongoDB, CouchDB]
-    KV[Key-Value<br/>Redis, DynamoDB]
-    C[Column-Family<br/>Cassandra, HBase]
-    G[Graph<br/>Neo4j, ArangoDB]
-    
-    NoSQL --> D
-    NoSQL --> KV
-    NoSQL --> C
-    NoSQL --> G
-    
-    D --> D1[Гибкая схема<br/>JSON документы]
-    KV --> KV1[Простота<br/>Высокая скорость]
-    C --> C1[Масштабируемость<br/>Большие данные]
-    G --> G1[Связи<br/>Графовые запросы]
-    
-    style D fill:#4CAF50
-    style KV fill:#2196F3
-    style C fill:#FF9800
-    style G fill:#9C27B0
-```
+![](Лекция7_figs/mermaid_15.svg)
 
 ---
 
-## Слайд 52: MongoDB - обзор
+## MongoDB - обзор
 
 ### Документо-ориентированная БД
 
@@ -1088,7 +821,7 @@ graph TB
 
 ---
 
-## Слайд 53: MongoDB - структура данных
+## MongoDB - структура данных
 
 ```javascript
 // Пример документа
@@ -1109,11 +842,11 @@ graph TB
 }
 ```
 
-**Преимущество:** Вложенные структуры без JOIN'ов
+<span class="callout">**Преимущество:** Вложенные структуры без JOIN'ов</span>
 
 ---
 
-## Слайд 54: MongoDB - агрегации
+## MongoDB - агрегации
 
 ```javascript
 // Aggregation Pipeline
@@ -1138,7 +871,7 @@ db.orders.aggregate([
 
 ---
 
-## Слайд 55: Cassandra - обзор
+## Cassandra - обзор
 
 ### Распределенная колоночная БД
 
@@ -1150,40 +883,15 @@ db.orders.aggregate([
 
 ---
 
-## Слайд 56: Cassandra - архитектура
+## Cassandra - архитектура
 
-```mermaid
-graph TB
-    subgraph "Cassandra Cluster"
-        N1[Node 1<br/>Token Range: 0-25]
-        N2[Node 2<br/>Token Range: 26-50]
-        N3[Node 3<br/>Token Range: 51-75]
-        N4[Node 4<br/>Token Range: 76-100]
-    end
-    
-    Client[Client]
-    
-    Client -->|Write/Read| N1
-    N1 <-->|Gossip| N2
-    N2 <-->|Gossip| N3
-    N3 <-->|Gossip| N4
-    N4 <-->|Gossip| N1
-    
-    N1 -->|Replica| N2
-    N2 -->|Replica| N3
-    N3 -->|Replica| N4
-    
-    style N1 fill:#4CAF50
-    style N2 fill:#4CAF50
-    style N3 fill:#4CAF50
-    style N4 fill:#4CAF50
-```
+![](Лекция7_figs/mermaid_16.svg)
 
-**Peer-to-peer:** Все узлы равноправны
+<span class="callout">**Peer-to-peer:** Все узлы равноправны</span>
 
 ---
 
-## Слайд 57: Cassandra - модель данных
+## Cassandra - модель данных
 
 ```sql
 -- Создание keyspace
@@ -1204,11 +912,11 @@ CREATE TABLE ecommerce.orders (
 ) WITH CLUSTERING ORDER BY (order_date DESC);
 ```
 
-**Ключ:** Partition key + Clustering columns
+<span class="callout good">**Ключ:** Partition key + Clustering columns</span>
 
 ---
 
-## Слайд 58: Redis - обзор
+## Redis - обзор
 
 ### In-Memory Key-Value Store
 
@@ -1220,7 +928,7 @@ CREATE TABLE ecommerce.orders (
 
 ---
 
-## Слайд 59: Redis - структуры данных
+## Redis - структуры данных
 
 ```python
 import redis
@@ -1247,7 +955,7 @@ r.zadd('leaderboard', {'player1': 1000, 'player2': 1500})
 
 ---
 
-## Слайд 60: Neo4j - графовая БД
+## Neo4j - графовая БД
 
 ### Работа со связями
 
@@ -1268,46 +976,17 @@ RETURN colleague.name
 
 ---
 
-## Слайд 61: Выбор NoSQL решения
+## Выбор NoSQL решения
 
-```mermaid
-graph TD
-    Start[Выбор NoSQL БД]
-    
-    Q1{Тип данных?}
-    Q2{Связи важны?}
-    Q3{Скорость записи?}
-    Q4{In-memory?}
-    
-    Start --> Q1
-    Q1 -->|Документы| MongoDB
-    Q1 -->|Графы| Q2
-    Q1 -->|Временные ряды| Q3
-    Q1 -->|Кэш/Сессии| Q4
-    
-    Q2 -->|Да| Neo4j
-    Q2 -->|Нет| MongoDB
-    
-    Q3 -->|Критична| Cassandra
-    Q3 -->|Средняя| ClickHouse
-    
-    Q4 -->|Да| Redis
-    Q4 -->|Нет| MongoDB
-    
-    style MongoDB fill:#4CAF50
-    style Neo4j fill:#9C27B0
-    style Cassandra fill:#FF9800
-    style Redis fill:#2196F3
-    style ClickHouse fill:#00BCD4
-```
+![](Лекция7_figs/mermaid_17.svg)
 
 ---
 
-## Слайд 62: Вопрос для проверки 5
+## Вопрос для проверки 5
 
 ### Проверьте себя
 
-**Вопрос:** Какая NoSQL БД лучше всего подходит для хранения социального графа с множеством связей?
+<span class="callout warn">**Вопрос:** Какая NoSQL БД лучше всего подходит для хранения социального графа с множеством связей?</span>
 
 A) MongoDB  
 B) Redis  
@@ -1316,9 +995,11 @@ D) Neo4j
 
 ---
 
-## Слайд 63: Резюме раздела 4
+## Резюме раздела 4
 
 ### NoSQL решения
+
+<div class="callout good">
 
 - **Типы:** Document, Key-Value, Column-Family, Graph
 - **CAP теорема:** Выбор между C, A, P
@@ -1327,44 +1008,24 @@ D) Neo4j
 - **Redis:** In-memory, структуры данных
 - **Neo4j:** Графы и связи
 
----
-
-## РАЗДЕЛ 5: Распределенные файловые системы
+</div>
 
 ---
 
-## Слайд 64: HDFS - архитектура
+<!-- _class: section -->
 
-```mermaid
-graph TB
-    Client[HDFS Client]
-    NN[NameNode<br/>Метаданные]
-    SNN[Secondary NameNode<br/>Backup]
-    
-    DN1[DataNode 1<br/>Блоки данных]
-    DN2[DataNode 2<br/>Блоки данных]
-    DN3[DataNode 3<br/>Блоки данных]
-    
-    Client -->|Запрос метаданных| NN
-    Client -->|Чтение/Запись| DN1 & DN2 & DN3
-    
-    NN <-->|Heartbeat| DN1 & DN2 & DN3
-    NN <-->|Checkpoint| SNN
-    
-    DN1 <-->|Репликация| DN2
-    DN2 <-->|Репликация| DN3
-    DN3 <-->|Репликация| DN1
-    
-    style NN fill:#FF9800
-    style SNN fill:#FFC107
-    style DN1 fill:#4CAF50
-    style DN2 fill:#4CAF50
-    style DN3 fill:#4CAF50
-```
+# Раздел 5
+## Распределенные файловые системы
 
 ---
 
-## Слайд 65: Amazon S3 - обзор
+## HDFS - архитектура
+
+![](Лекция7_figs/mermaid_18.svg)
+
+---
+
+## Amazon S3 - обзор
 
 ### Object Storage
 
@@ -1376,37 +1037,15 @@ graph TB
 
 ---
 
-## Слайд 66: S3 - классы хранения
+## S3 - классы хранения
 
-```mermaid
-graph LR
-    S3[Amazon S3]
-    
-    STD[Standard<br/>Частый доступ<br/>$$$]
-    IA[Infrequent Access<br/>Редкий доступ<br/>$$]
-    GL[Glacier<br/>Архив<br/>$]
-    DGL[Deep Glacier<br/>Долгий архив<br/>¢]
-    
-    S3 --> STD
-    S3 --> IA
-    S3 --> GL
-    S3 --> DGL
-    
-    STD -->|Lifecycle Policy| IA
-    IA -->|Lifecycle Policy| GL
-    GL -->|Lifecycle Policy| DGL
-    
-    style STD fill:#4CAF50
-    style IA fill:#2196F3
-    style GL fill:#FF9800
-    style DGL fill:#9C27B0
-```
+![](Лекция7_figs/mermaid_19.svg)
 
-**Выбор зависит от:** частоты доступа и требований к latency
+<span class="callout">**Выбор зависит от:** частоты доступа и требований к latency</span>
 
 ---
 
-## Слайд 67: Delta Lake - ACID на озере
+## Delta Lake - ACID на озере
 
 ### Транзакционный слой
 
@@ -1418,7 +1057,7 @@ graph LR
 
 ---
 
-## Слайд 68: Delta Lake - пример
+## Delta Lake - пример
 
 ```python
 from delta import *
@@ -1444,7 +1083,7 @@ deltaTable.alias("target").merge(
 
 ---
 
-## Слайд 69: Форматы файлов
+## Форматы файлов
 
 ### Оптимизация хранения
 
@@ -1456,40 +1095,17 @@ deltaTable.alias("target").merge(
 
 ---
 
-## Слайд 70: Сравнение форматов
+## Сравнение форматов
 
-```mermaid
-graph TB
-    subgraph "Характеристики"
-        C1[Компрессия]
-        C2[Скорость чтения]
-        C3[Скорость записи]
-        C4[Schema Evolution]
-        C5[Читаемость]
-    end
-    
-    Parquet[Parquet<br/>★★★★★ Компрессия<br/>★★★★★ Чтение<br/>★★★☆☆ Запись]
-    ORC[ORC<br/>★★★★★ Компрессия<br/>★★★★★ Чтение<br/>★★★☆☆ Запись]
-    Avro[Avro<br/>★★★☆☆ Компрессия<br/>★★★☆☆ Чтение<br/>★★★★★ Запись]
-    JSON[JSON<br/>★☆☆☆☆ Компрессия<br/>★★☆☆☆ Чтение<br/>★★★★☆ Запись]
-    
-    C1 --> Parquet & ORC
-    C2 --> Parquet & ORC
-    C3 --> Avro
-    C4 --> Avro
-    C5 --> JSON
-    
-    style Parquet fill:#4CAF50
-    style ORC fill:#2196F3
-    style Avro fill:#FF9800
-    style JSON fill:#9C27B0
-```
+![](Лекция7_figs/mermaid_20.svg)
 
 ---
 
-## Слайд 71: Резюме раздела 5
+## Резюме раздела 5
 
 ### Распределенные файловые системы
+
+<div class="callout good">
 
 - **HDFS:** Hadoop, блоки, репликация
 - **S3:** Object storage, классы хранения
@@ -1498,59 +1114,56 @@ graph TB
 - **Выбор:** Зависит от паттернов доступа
 - **Оптимизация:** Партиции, компрессия, формат
 
+</div>
+
 ---
 
-## Слайд 72: Общее резюме лекции
+## Общее резюме лекции
 
 ### Современные хранилища данных
 
-**Реляционные БД:**
+<div class="columns">
+<div>
+
+**Реляционные БД**
+<div class="callout good">
+
 - ACID, SQL, нормализация
-- OLTP системы
+- OLTP-системы
 
-**Data Lakes & Warehouses:**
+</div>
+
+**Data Lakes & Warehouses**
 - DWH для BI, Lake для гибкости
-- Lakehouse - лучшее из обоих
+- Lakehouse — лучшее из обоих
 
-**Колоночные БД:**
+**Колоночные БД**
 - ClickHouse, BigQuery
 - Оптимизация для аналитики
 
-**NoSQL:**
+</div>
+<div>
+
+**NoSQL**
 - Document, Key-Value, Column, Graph
 - Выбор по типу данных
 
-**Распределенные FS:**
+**Распределённые ФС**
 - HDFS, S3, Delta Lake
-- Масштабируемость и надежность
+- Масштабируемость и надёжность
+
+</div>
+</div>
 
 ---
 
-## Слайд 73: Связи с другими лекциями
+## Связи с другими лекциями
 
-```mermaid
-graph TB
-    L1[Лекция 1:<br/>Архитектура систем]
-    L2[Лекция 2:<br/>Сбор данных]
-    L6[Лекция 6:<br/>ETL/ELT]
-    L7[Лекция 7:<br/>Хранилища<br/>ТЕКУЩАЯ]
-    L8[Лекция 8:<br/>Мониторинг]
-    
-    L1 -->|Выбор архитектуры| L7
-    L2 -->|Источники данных| L7
-    L6 -->|Загрузка в хранилища| L7
-    L7 -->|Мониторинг качества| L8
-    
-    style L7 fill:#4CAF50
-    style L1 fill:#e1f5ff
-    style L2 fill:#e1f5ff
-    style L6 fill:#e1f5ff
-    style L8 fill:#fff4e1
-```
+![](Лекция7_figs/mermaid_21.svg)
 
 ---
 
-## Слайд 74: Домашнее задание
+## Домашнее задание
 
 ### Практические задачи
 
@@ -1567,11 +1180,11 @@ graph TB
 - Реализовать простое приложение с MongoDB или Redis
 - Сравнить производительность с реляционной БД
 
-**Срок сдачи:** 2 недели
+<span class="callout">**Срок сдачи:** 2 недели</span>
 
 ---
 
-## Слайд 75: Список литературы
+## Список литературы
 
 ### Основная литература
 
@@ -1594,7 +1207,7 @@ graph TB
 
 ---
 
-## Слайд 76: Вопросы и обсуждение
+## Вопросы и обсуждение
 
 ### Обсудим вместе
 
@@ -1612,17 +1225,18 @@ graph TB
 
 ---
 
-## Слайд 77: Спасибо за внимание!
+<!-- _class: title -->
 
-# Вопросы?
+# Спасибо за внимание!
 
-**Следующая лекция:**
-Лекция 8: Мониторинг, тестирование и DevOps
+## Следующая лекция: построение дашбордов и обзор BI-систем
 
-**Подготовьтесь:**
+**Подготовьтесь**
 - Установите Docker
 - Зарегистрируйтесь в облачном провайдере (trial)
 - Повторите основы Git
+
+<div class="meta">Вопросы и материалы — в репозитории курса</div>
 
 ---
 
