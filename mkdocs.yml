@@ -76,7 +76,6 @@ not_in_nav: /404.md
 
 nav:
   - Главная: index.md
-  - Программа: syllabus.md
   - Лекции:
       - Обзор: lectures/index.md
       - 01. Архитектура систем обработки данных: lectures/01-architecture.md
@@ -103,7 +102,7 @@ nav:
       - 10. Сквозной прогон: seminars/10-end-to-end.md
   - Проект: project.md
   - Самопроверка: self-check.md
-  - FAQ: faq.md
+  - Учебный стенд: faq.md
   - Литература: literature.md
 
 extra:
