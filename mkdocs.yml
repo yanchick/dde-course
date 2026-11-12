@@ -86,8 +86,6 @@ nav:
       - 06. ETL/ELT и оркестрация: lectures/06-etl-orchestration.md
       - 07. Хранилища данных: lectures/07-storage.md
       - 08. Дашборды и BI: lectures/08-bi-dashboards.md
-      - 09. LLM и AI-агенты: lectures/09-llm-agents.md
-      - 10. Agentic workflows и LLMOps: lectures/10-agentic-workflows.md
   - Семинары:
       - Обзор: seminars/index.md
       - 01. Архитектура: seminars/01-architecture.md
