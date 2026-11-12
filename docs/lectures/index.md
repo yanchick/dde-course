@@ -20,8 +20,6 @@ description: Десять опубликованных колод курса «�
 | 06 | [ETL/ELT пайплайны и оркестрация](06-etl-orchestration.md) | [HTML](../slides/lecture-06.html) · [PDF](../slides/lecture-06.pdf) | [Семинар 7](../seminars/07-orchestration.md) | [код](https://github.com/yanchick/dde-course/tree/main/code/seminars/07_orchestration) |
 | 07 | [Современные хранилища данных](07-storage.md) | [HTML](../slides/lecture-07.html) · [PDF](../slides/lecture-07.pdf) | [Семинар 8](../seminars/08-storage.md) | [код](https://github.com/yanchick/dde-course/tree/main/code/seminars/08_storage) |
 | 08 | [Дашборды и BI-системы](08-bi-dashboards.md) | [HTML](../slides/lecture-08.html) · [PDF](../slides/lecture-08.pdf) | — | — |
-| 09 | [Экосистема LLM и архитектура AI-агентов](09-llm-agents.md) | [HTML](../slides/lecture-09.html) · [PDF](../slides/lecture-09.pdf) | — | — |
-| 10 | [Agentic workflows и LLMOps](10-agentic-workflows.md) | [HTML](../slides/lecture-10.html) · [PDF](../slides/lecture-10.pdf) | — | — |
 
 ## Как читать слайды
 
