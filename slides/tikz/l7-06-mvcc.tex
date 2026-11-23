@@ -1,0 +1,57 @@
+\documentclass[tikz,border=12pt]{standalone}
+\usepackage{fontspec}
+\setmainfont{Noto Sans}
+\setsansfont{Noto Sans}
+\usepackage{xcolor}
+\usetikzlibrary{positioning,arrows.meta,calc,fit,backgrounds,decorations.pathreplacing}
+\definecolor{primary}{RGB}{29,78,216}
+\definecolor{primarydark}{RGB}{30,58,138}
+\definecolor{accent}{RGB}{14,165,233}
+\definecolor{ink}{RGB}{15,23,42}
+\definecolor{muted}{RGB}{100,116,139}
+\definecolor{soft}{RGB}{241,245,249}
+\definecolor{teal}{RGB}{13,148,136}
+\definecolor{amber}{RGB}{217,119,6}
+\definecolor{rose}{RGB}{225,29,72}
+\definecolor{line}{RGB}{226,232,240}
+\tikzset{
+  tx/.style={draw=accent, fill=accent!8, line width=1pt, rounded corners=5pt,
+    text width=3.4cm, align=left, inner sep=7pt, font=\sffamily\scriptsize, text=ink},
+  ver/.style={draw=primary, fill=soft, line width=1pt, rounded corners=5pt,
+    text width=4.3cm, align=left, inner sep=7pt, font=\sffamily\scriptsize, text=ink},
+  old/.style={draw=muted!60, fill=white, line width=0.8pt, rounded corners=5pt,
+    text width=4.6cm, align=left, inner sep=7pt, font=\sffamily\scriptsize, text=muted},
+  arr/.style={-{Stealth[length=2.4mm]}, line width=1.1pt, draw=primary!70},
+  arrold/.style={-{Stealth[length=2.2mm]}, line width=0.9pt, draw=muted!60, dashed},
+}
+\begin{document}
+\begin{tikzpicture}[font=\sffamily]
+\node[ver] (v3) at (2.6,-3.4)
+  {\textbf{версия 3} \hfill \textcolor{muted}{xmin = 140}\\[2pt]
+   balance = 300 \textperiodcentered\ \textcolor{teal}{актуальна}};
+\node[ver] (v2) at (2.6,-1.8)
+  {\textbf{версия 2} \hfill \textcolor{muted}{xmin = 120}\\[2pt]
+   balance = 400 \textperiodcentered\ \textcolor{muted}{устарела}};
+\node[ver] (v1) at (2.6,-0.2)
+  {\textbf{версия 1} \hfill \textcolor{muted}{xmin = 100}\\[2pt]
+   balance = 500 \textperiodcentered\ \textcolor{muted}{устарела}};
+\draw[-{Stealth[length=2.4mm]}, line width=1.2pt, draw=amber] (v2.north east) -- (v1.south east)
+  node[midway, right=3pt, font=\sffamily\tiny, text=amber, align=left] {UPDATE\\100 $\to$ -100};
+\draw[-{Stealth[length=2.4mm]}, line width=1.2pt, draw=amber] (v3.north east) -- (v2.south east)
+  node[midway, right=3pt, font=\sffamily\tiny, text=amber, align=left] {UPDATE\\-100};
+\node[tx] (ta) at (-5.2,-0.2)
+  {\textbf{Транзакция A}\\ \textcolor{muted}{snapshot = 110}\\ читает \textbf{версию 1}};
+\node[tx] (tb) at (-5.2,-3.4)
+  {\textbf{Транзакция B}\\ \textcolor{muted}{snapshot = 160}\\ читает \textbf{версию 3}};
+\draw[arr] (ta.east) -- (v1.west);
+\draw[arr] (tb.east) -- (v3.west);
+% time axis
+\draw[-{Stealth[length=2.6mm]}, line width=1pt, draw=muted] (-6.8,2.3) -- (7.4,2.3);
+\foreach \x/\t in {-5.2/100, -1.4/120, 2.6/140, 6.0/160} {
+  \draw[line width=1pt, draw=muted] (\x,2.3) -- (\x,2.05);
+  \node[font=\sffamily\tiny, text=muted, anchor=south] at (\x,2.34) {\t};
+}
+\node[font=\sffamily\scriptsize, text=muted, anchor=east] at (-6.9,2.3) {время $\to$};
+% notes
+\end{tikzpicture}
+\end{document}

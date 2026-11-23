@@ -1,0 +1,43 @@
+\documentclass[tikz,border=12pt]{standalone}
+\usepackage{fontspec}
+\setmainfont{Noto Sans}
+\setsansfont{Noto Sans}
+\usepackage{xcolor}
+\usetikzlibrary{positioning,arrows.meta,calc,fit,backgrounds}
+\definecolor{primary}{RGB}{29,78,216}
+\definecolor{primarydark}{RGB}{30,58,138}
+\definecolor{accent}{RGB}{14,165,233}
+\definecolor{ink}{RGB}{15,23,42}
+\definecolor{muted}{RGB}{100,116,139}
+\definecolor{soft}{RGB}{241,245,249}
+\definecolor{teal}{RGB}{13,148,136}
+\definecolor{amber}{RGB}{217,119,6}
+\definecolor{line}{RGB}{226,232,240}
+\tikzset{
+  stage/.style={draw=primary!45, fill=white, line width=0.9pt, rounded corners=5pt,
+    minimum width=2.55cm, minimum height=1.35cm, align=left, inner sep=6pt,
+    font=\sffamily\scriptsize, text=ink},
+  hot/.style={draw=amber, fill=amber!8, line width=1.2pt},
+  store/.style={draw=teal!55, fill=teal!6, line width=1pt},
+  arr/.style={-{Stealth[length=2.6mm]}, line width=1.1pt, draw=muted!70},
+  note/.style={font=\sffamily\tiny, text=muted, align=center},
+}
+\begin{document}
+\begin{tikzpicture}[font=\sffamily]
+\node[stage, fill=soft] (c) at (0,0) {\textbf{Клиент}\\[1pt]{\tiny\color{muted}SQL-запрос}};
+\node[stage, right=0.75cm of c] (p) {\textbf{Parser}\\[1pt]{\tiny\color{muted}дерево разбора}};
+\node[stage, right=0.75cm of p] (r) {\textbf{Rewriter}\\[1pt]{\tiny\color{muted}views, подзапросы}};
+\node[stage, hot, right=0.75cm of r] (o) {\textbf{Optimizer}\\[1pt]{\tiny\color{muted}план по стоимости}};
+\node[stage, right=0.75cm of o] (e) {\textbf{Executor}\\[1pt]{\tiny\color{muted}join, sort, agg}};
+\node[stage, store, right=0.75cm of e] (b) {\textbf{Buffer pool}\\[1pt]{\tiny\color{muted}страницы 8 КБ}};
+\node[stage, store, right=0.75cm of b] (s) {\textbf{Storage}\\[1pt]{\tiny\color{muted}heap, индексы}};
+\foreach \a/\b in {c/p,p/r,r/o,o/e,e/b,b/s} { \draw[arr] (\a.east) -- (\b.west); }
+\node[stage, store, minimum width=2.55cm, below=0.9cm of b] (d) {\textbf{Диск}\\[1pt]{\tiny\color{muted}WAL, datafiles}};
+\draw[arr] (s.south) -- ++(0,-0.35) -| (d.west);
+\node[note, below=0.15cm of r] {семантика};
+\node[note, below=0.15cm of o] {стоимость};
+\node[note, below=0.15cm of e] {исполнение};
+
+\node[note, above=0.18cm of b] {кэш страниц};
+\end{tikzpicture}
+\end{document}

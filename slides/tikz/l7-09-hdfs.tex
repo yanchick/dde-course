@@ -1,0 +1,73 @@
+\documentclass[tikz,border=12pt]{standalone}
+\usepackage{fontspec}
+\setmainfont{Noto Sans}
+\setsansfont{Noto Sans}
+\usepackage{xcolor}
+\usetikzlibrary{positioning,arrows.meta,calc,fit,backgrounds}
+\definecolor{primary}{RGB}{29,78,216}
+\definecolor{primarydark}{RGB}{30,58,138}
+\definecolor{accent}{RGB}{14,165,233}
+\definecolor{ink}{RGB}{15,23,42}
+\definecolor{muted}{RGB}{100,116,139}
+\definecolor{soft}{RGB}{241,245,249}
+\definecolor{teal}{RGB}{13,148,136}
+\definecolor{amber}{RGB}{217,119,6}
+\definecolor{line}{RGB}{226,232,240}
+\tikzset{
+  nodebox/.style={draw=primary, fill=white, line width=0.9pt, rounded corners=4pt,
+    minimum width=2.4cm, minimum height=0.85cm, font=\sffamily\scriptsize\bfseries, text=primarydark},
+  blk/.style={draw=muted!50, fill=soft, line width=0.6pt, rounded corners=2pt,
+    minimum width=0.62cm, minimum height=0.42cm, font=\sffamily\tiny, text=muted, inner sep=0pt},
+  hot/.style={draw=amber, fill=amber!25, line width=1pt, text=amber!70!ink, font=\sffamily\tiny\bfseries},
+  rack/.style={draw=muted!40, fill=muted!4, line width=0.9pt, rounded corners=6pt, dashed},
+}
+\begin{document}
+\begin{tikzpicture}[font=\sffamily]
+\node[nodebox, minimum width=3.4cm, fill=soft] (nn) at (0,5.4) {NameNode · метаданные};
+\node[nodebox, minimum width=2.8cm, draw=accent, fill=accent!6] (cl) at (-8.4,5.4) {HDFS Client};
+\draw[<->, line width=1pt, draw=accent] (cl.east) -- (nn.west)
+  node[midway, above=1pt, font=\sffamily\tiny, text=muted] {где лежит блок};
+% racks
+\draw[rack] (-6.9,0.6) rectangle (-0.35,3.7);
+\draw[rack] (0.35,0.6) rectangle (6.9,3.7);
+\node[font=\sffamily\tiny, text=muted, anchor=south west] at (-6.75,0.72) {стойка 1};
+\node[font=\sffamily\tiny, text=muted, anchor=south west] at (0.5,0.72) {стойка 2};
+% datanodes
+\node[nodebox] (d1) at (-5.05,2.95) {DataNode 1};
+\node[nodebox] (d2) at (-2.2,2.95) {DataNode 2};
+\node[nodebox] (d3) at (2.2,2.95) {DataNode 3};
+\node[nodebox] (d4) at (5.05,2.95) {DataNode 4};
+% blocks
+\node[blk, hot] at (-5.67,2.0) {B1};
+\node[blk] at (-5.05,2.0) {B2};
+\node[blk] at (-4.43,2.0) {B3};
+\node[blk, hot] at (-2.82,2.0) {B1};
+\node[blk] at (-2.2,2.0) {B3};
+\node[blk] at (-1.58,2.0) {B4};
+\node[blk] at (1.58,2.0) {B2};
+\node[blk] at (2.2,2.0) {B4};
+\node[blk] at (2.82,2.0) {B5};
+\node[blk, hot] at (4.43,2.0) {B1};
+\node[blk] at (5.05,2.0) {B5};
+\node[blk] at (5.67,2.0) {B6};
+\draw[line width=0.8pt, draw=muted!40] (d1.south) -- (-5.05,2.24);
+\draw[line width=0.8pt, draw=muted!40] (d2.south) -- (-2.2,2.24);
+\draw[line width=0.8pt, draw=muted!40] (d3.south) -- (2.2,2.24);
+\draw[line width=0.8pt, draw=muted!40] (d4.south) -- (5.05,2.24);
+% heartbeat
+\foreach \d in {d1,d2,d3,d4} {
+  \draw[-{Stealth[length=1.8mm]}, draw=muted!55, dashed, line width=0.7pt]
+    (nn.south) to[out=-90,in=90] (\d.north);
+}
+\node[font=\sffamily\tiny, text=muted, anchor=west] at (0.9,4.35) {heartbeat · block report};
+% client read/write
+\draw[-{Stealth[length=2.4mm]}, draw=accent, line width=1.1pt] (cl.south) to[out=-90,in=175]
+  (d1.west);
+\node[font=\sffamily\tiny, text=muted, anchor=east, align=right] at (-6.15,4.05)
+  {чтение и запись\\ блоков};
+% replication note
+\node[draw=amber!60, fill=amber!6, rounded corners=4pt, text width=5.2cm, align=left,
+      font=\sffamily\tiny, inner sep=6pt, anchor=north west] at (-6.9,0.2)
+  {\textbf{Блок B1} лежит на двух стойках: падение стойки не теряет данные (репликация 3).};
+\end{tikzpicture}
+\end{document}

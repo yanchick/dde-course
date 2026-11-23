@@ -1,0 +1,67 @@
+\documentclass[tikz,border=12pt]{standalone}
+\usepackage{fontspec}
+\setmainfont{Noto Sans}
+\setsansfont{Noto Sans}
+\usepackage{xcolor}
+\usetikzlibrary{positioning,arrows.meta,calc,fit,backgrounds}
+\definecolor{primary}{RGB}{29,78,216}
+\definecolor{primarydark}{RGB}{30,58,138}
+\definecolor{accent}{RGB}{14,165,233}
+\definecolor{ink}{RGB}{15,23,42}
+\definecolor{muted}{RGB}{100,116,139}
+\definecolor{soft}{RGB}{241,245,249}
+\definecolor{teal}{RGB}{13,148,136}
+\definecolor{amber}{RGB}{217,119,6}
+\definecolor{line}{RGB}{226,232,240}
+\begin{document}
+\begin{tikzpicture}[font=\sffamily, x=1cm, y=1cm,
+  page/.style={draw=primary!70, fill=soft, line width=0.8pt, rounded corners=3pt,
+    minimum width=3.1cm, minimum height=0.92cm, font=\sffamily\small, text=ink},
+  leaf/.style={draw=teal!70, fill=teal!7, line width=0.8pt, rounded corners=3pt,
+    minimum width=2.0cm, minimum height=0.8cm, font=\sffamily\small, text=ink},
+  hot/.style={draw=accent, fill=accent!14, line width=1.4pt, text=accent!60!ink},
+  ed/.style={-{Stealth[length=2.2mm]}, draw=muted!70, line width=0.8pt},
+  edhot/.style={-{Stealth[length=2.4mm]}, draw=accent, line width=1.6pt},
+  lbl/.style={font=\sffamily\tiny, text=muted, fill=white, inner sep=1.5pt},
+]
+% leaves
+\node[leaf] (l1) at (-5.75,0) {5 \;\textbar\; 10};
+\node[leaf] (l2) at (-3.45,0) {15 \;\textbar\; 20};
+\node[leaf] (l3) at (-1.15,0) {30 \;\textbar\; 40};
+\node[leaf, hot] (l4) at (1.15,0) {45 \;\textbar\; 50};
+\node[leaf] (l5) at (3.45,0) {65 \;\textbar\; 70};
+\node[leaf] (l6) at (5.75,0) {75 \;\textbar\; 80};
+\foreach \a/\b in {l1/l2,l2/l3,l3/l4,l4/l5,l5/l6} {
+  \draw[-{Stealth[length=1.6mm]}, draw=muted!50, line width=0.6pt, dashed] (\a.east) -- (\b.west);
+}
+% level 2
+\node[page] (p1) at (-4.6,2.1) {10 \;\textbar\; 20};
+\node[page, hot] (p2) at (0,2.1) {40 \;\textbar\; 50};
+\node[page] (p3) at (4.6,2.1) {70 \;\textbar\; 80};
+% root
+\node[page, minimum width=3.6cm] (root) at (0,4.2) {30 \;\textbar\; 60};
+% edges
+\draw[ed] (root.south) -- ++(0,-0.45) -| (p1.north);
+\draw[edhot] (root.south) -- (p2.north);
+\draw[ed] (root.south) -- ++(0,-0.45) -| (p3.north);
+\draw[ed] (p1.south) -- ++(0,-0.35) -| (l1.north);
+\draw[ed] (p1.south) -- ++(0,-0.35) -| (l2.north);
+\draw[ed] (p2.south) -- ++(0,-0.35) -| (l3.north);
+\draw[edhot] (p2.south) -- ++(0,-0.35) -| (l4.north);
+\draw[ed] (p3.south) -- ++(0,-0.35) -| (l5.north);
+\draw[ed] (p3.south) -- ++(0,-0.35) -| (l6.north);
+% labels
+\node[lbl] at (-2.3,3.2) {< 30};
+\node[lbl] at (0,3.2) {30\,--\,60};
+\node[lbl] at (2.3,3.2) {$\geq$ 60};
+\node[lbl, text=accent] at (2.7,1.15) {40\,--\,50};
+\node[font=\sffamily\tiny, text=muted] at (0,-0.85) {листья связаны указателями: range scan идёт вдоль уровня, без подъёма в корень};
+% side annotations
+\node[draw=amber!70, fill=amber!7, rounded corners=4pt, align=left, text width=4.5cm,
+      font=\sffamily\scriptsize, text=ink, inner sep=7pt, anchor=west] at (7.0,3.4)
+  {\textbf{Страница} $\approx$ 8 КБ\\ $\approx$ 100 ключей\\ fanout $\approx$ 100};
+\node[draw=primary!30, fill=white, rounded corners=4pt, align=left, text width=4.6cm,
+      font=\sffamily\scriptsize, text=ink, inner sep=7pt, anchor=west] at (7.0,1.2)
+  {\textbf{3 уровня} $\approx 100^3$\\ $= 10^6$ строк\\ за 3 чтения с диска};
+\end{tikzpicture}
+\end{document}

@@ -1,0 +1,41 @@
+\documentclass[tikz,border=12pt]{standalone}
+\usepackage{fontspec}
+\setmainfont{Noto Sans}
+\setsansfont{Noto Sans}
+\usepackage{xcolor}
+\usetikzlibrary{positioning,arrows.meta,calc,fit,backgrounds}
+\definecolor{primary}{RGB}{29,78,216}
+\definecolor{primarydark}{RGB}{30,58,138}
+\definecolor{accent}{RGB}{14,165,233}
+\definecolor{ink}{RGB}{15,23,42}
+\definecolor{muted}{RGB}{100,116,139}
+\definecolor{soft}{RGB}{241,245,249}
+\definecolor{teal}{RGB}{13,148,136}
+\definecolor{amber}{RGB}{217,119,6}
+\definecolor{violet}{RGB}{124,58,237}
+\definecolor{line}{RGB}{226,232,240}
+\tikzset{
+  stage/.style={draw=primary!45, fill=white, line width=0.9pt, rounded corners=5pt,
+    minimum width=2.55cm, minimum height=1.5cm, align=center, inner sep=5pt,
+    font=\sffamily\scriptsize, text=ink},
+  src/.style={draw=muted!45, fill=soft},
+  etl/.style={draw=amber!70, fill=amber!7},
+  core/.style={draw=teal, fill=teal!8, line width=1.1pt},
+  mart/.style={draw=primary, fill=primary!7, line width=1.1pt},
+  arr/.style={-{Stealth[length=2.6mm]}, line width=1.1pt, draw=muted!70},
+  clbl/.style={font=\sffamily\tiny, text=muted, align=center},
+}
+\begin{document}
+\begin{tikzpicture}[font=\sffamily]
+\node[stage, src] (s) at (0,0) {\textbf{Источники}\\[2pt]{\tiny OLTP · CRM · ERP}};
+\node[stage, etl, right=0.6cm of s] (e) {\textbf{ETL / ELT}\\[2pt]{\tiny Extract · Transform}};
+\node[stage, right=0.6cm of e] (st) {\textbf{Staging}\\[2pt]{\tiny приёмник «как есть»}};
+\node[stage, core, right=0.6cm of st] (dw) {\textbf{Core DWH}\\[2pt]{\tiny 3NF или звезда}};
+\node[stage, mart, right=0.6cm of dw] (m) {\textbf{Marts}\\[2pt]{\tiny витрины}};
+\node[stage, src, right=0.6cm of m] (bi) {\textbf{BI}\\[2pt]{\tiny отчёты, дашборды}};
+\foreach \a/\b in {s/e,e/st,st/dw,dw/m,m/bi} { \draw[arr] (\a.east) -- (\b.west); }
+\node[clbl, below=0.45cm of e] {очистка и обогащение};
+\node[clbl, below=0.45cm of dw] {единственный источник правды};
+\node[clbl, below=0.45cm of m] {под конкретный вопрос};
+\end{tikzpicture}
+\end{document}

@@ -1,0 +1,71 @@
+\documentclass[tikz,border=12pt]{standalone}
+\usepackage{fontspec}
+\setmainfont{Noto Sans}
+\setsansfont{Noto Sans}
+\usepackage{xcolor}
+\usetikzlibrary{positioning,arrows.meta,calc,fit,backgrounds}
+\definecolor{primary}{RGB}{29,78,216}
+\definecolor{primarydark}{RGB}{30,58,138}
+\definecolor{accent}{RGB}{14,165,233}
+\definecolor{ink}{RGB}{15,23,42}
+\definecolor{muted}{RGB}{100,116,139}
+\definecolor{soft}{RGB}{241,245,249}
+\definecolor{teal}{RGB}{13,148,136}
+\definecolor{amber}{RGB}{217,119,6}
+\definecolor{line}{RGB}{226,232,240}
+\tikzset{
+  dim/.style={draw=line, fill=white, line width=0.7pt, rounded corners=6pt,
+    text width=2.8cm, align=left, inner sep=7pt, font=\sffamily\scriptsize, text=muted},
+  fact/.style={draw=amber, fill=amber!9, line width=1.1pt, rounded corners=6pt,
+    text width=3.6cm, align=left, inner sep=9pt, font=\sffamily\scriptsize, text=muted},
+  rel/.style={draw=muted!60, line width=1pt},
+  cardlbl/.style={font=\sffamily\tiny\bfseries, text=white, inner sep=2pt, fill=muted!80, rounded corners=2pt},
+}
+\begin{document}
+\begin{tikzpicture}[font=\sffamily]
+\node[fact] (f) at (0,0)
+  {\textcolor{amber}{\textbf{fact\_sales}}\\[2pt]
+   \textcolor{line}{\rule{3.4cm}{0.4pt}}\\[3pt]
+   date\_key \textperiodcentered\ product\_key\\
+   store\_key\\[4pt]
+   \textcolor{ink}{\textbf{меры}}\\ quantity, revenue};
+\node[dim] (prod) at (0,3.1)
+  {\textcolor{primary}{\textbf{dim\_product}}\\[2pt]
+   \textcolor{line}{\rule{2.8cm}{0.4pt}}\\[3pt]
+   product\_key\\ name, price\\ category\_key};
+\node[dim] (cat) at (0,6.0)
+  {\textcolor{primary}{\textbf{dim\_category}}\\[2pt]
+   \textcolor{line}{\rule{2.8cm}{0.4pt}}\\[3pt]
+   category\_key\\ name\\ department\_key};
+\node[dim] (dept) at (0,8.5)
+  {\textcolor{primarydark}{\textbf{dim\_department}}\\[2pt]
+   \textcolor{line}{\rule{2.8cm}{0.4pt}}\\[3pt]
+   department\_key\\ name, manager};
+\node[dim] (date) at (-5.7,0)
+  {\textcolor{teal}{\textbf{dim\_date}}\\[2pt]
+   \textcolor{line}{\rule{2.8cm}{0.4pt}}\\[3pt]
+   date\_key, full\_date\\ month\_key};
+\node[dim] (month) at (-9.9,0)
+  {\textcolor{teal}{\textbf{dim\_month}}\\[2pt]
+   \textcolor{line}{\rule{2.8cm}{0.4pt}}\\[3pt]
+   month\_key\\ year, quarter};
+\node[dim] (store) at (5.7,0)
+  {\textcolor{primarydark}{\textbf{dim\_store}}\\[2pt]
+   \textcolor{line}{\rule{2.8cm}{0.4pt}}\\[3pt]
+   store\_key, name\\ city\_key};
+\node[dim] (city) at (9.9,0)
+  {\textcolor{primarydark}{\textbf{dim\_city}}\\[2pt]
+   \textcolor{line}{\rule{2.8cm}{0.4pt}}\\[3pt]
+   city\_key, name\\ region, country};
+\foreach \a/\b in {f/prod, prod/cat, cat/dept, f/date, date/month, f/store, store/city} {
+  \draw[rel] (\a) -- (\b);
+}
+\node[cardlbl] at ($(f)!0.5!(prod)$) {1 : N};
+\node[cardlbl] at ($(prod)!0.5!(cat)$) {N : 1};
+\node[cardlbl] at ($(cat)!0.5!(dept)$) {N : 1};
+\node[cardlbl] at ($(f)!0.5!(date)$) {1 : N};
+\node[cardlbl] at ($(date)!0.5!(month)$) {N : 1};
+\node[cardlbl] at ($(f)!0.5!(store)$) {1 : N};
+\node[cardlbl] at ($(store)!0.5!(city)$) {N : 1};
+\end{tikzpicture}
+\end{document}

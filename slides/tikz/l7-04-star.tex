@@ -1,0 +1,61 @@
+\documentclass[tikz,border=12pt]{standalone}
+\usepackage{fontspec}
+\setmainfont{Noto Sans}
+\setsansfont{Noto Sans}
+\usepackage{xcolor}
+\usetikzlibrary{positioning,arrows.meta,calc,fit,backgrounds}
+\definecolor{primary}{RGB}{29,78,216}
+\definecolor{primarydark}{RGB}{30,58,138}
+\definecolor{accent}{RGB}{14,165,233}
+\definecolor{ink}{RGB}{15,23,42}
+\definecolor{muted}{RGB}{100,116,139}
+\definecolor{soft}{RGB}{241,245,249}
+\definecolor{teal}{RGB}{13,148,136}
+\definecolor{amber}{RGB}{217,119,6}
+\definecolor{violet}{RGB}{124,58,237}
+\definecolor{line}{RGB}{226,232,240}
+\tikzset{
+  dim/.style={draw=line, fill=white, line width=0.7pt, rounded corners=6pt,
+    text width=3.3cm, align=left, inner sep=8pt, font=\sffamily\scriptsize, text=muted},
+  fact/.style={draw=amber, fill=amber!9, line width=1.1pt, rounded corners=6pt,
+    text width=4.0cm, align=left, inner sep=9pt, font=\sffamily\scriptsize, text=muted},
+  rel/.style={draw=muted!60, line width=1pt},
+  cardlbl/.style={font=\sffamily\tiny\bfseries, text=white, inner sep=2pt, fill=muted!80, rounded corners=2pt},
+}
+\begin{document}
+\begin{tikzpicture}[font=\sffamily]
+\node[fact] (f) at (0,0)
+  {\textcolor{amber}{\textbf{fact\_sales}}\\[2pt]
+   \textcolor{line}{\rule{3.8cm}{0.4pt}}\\[3pt]
+   date\_key \textperiodcentered\ product\_key\\
+   store\_key \textperiodcentered\ customer\_key\\[4pt]
+   \textcolor{ink}{\textbf{меры}}\\
+   quantity, revenue,\\
+   discount, cost};
+\node[dim] (d1) at (-6.1,2.6)
+  {\textcolor{teal}{\textbf{dim\_date}}\\[2pt]
+   \textcolor{line}{\rule{3.1cm}{0.4pt}}\\[3pt]
+   date\_key, full\_date\\ year, quarter, month\\ day\_of\_week, is\_holiday};
+\node[dim] (d2) at (6.1,2.6)
+  {\textcolor{primary}{\textbf{dim\_product}}\\[2pt]
+   \textcolor{line}{\rule{3.1cm}{0.4pt}}\\[3pt]
+   product\_key, name\\ category, brand\\ price, unit};
+\node[dim] (d3) at (-6.1,-2.6)
+  {\textcolor{violet}{\textbf{dim\_store}}\\[2pt]
+   \textcolor{line}{\rule{3.1cm}{0.4pt}}\\[3pt]
+   store\_key, name\\ city, region\\ format, open\_date};
+\node[dim] (d4) at (6.1,-2.6)
+  {\textcolor{primarydark}{\textbf{dim\_customer}}\\[2pt]
+   \textcolor{line}{\rule{3.1cm}{0.4pt}}\\[3pt]
+   customer\_key, name\\ segment, city\\ signup\_date};
+\foreach \d in {d1,d2,d3,d4} {
+  \draw[rel] (f) -- (\d);
+}
+\node[cardlbl] at ($(f)!0.5!(d1)$) {1 : N};
+\node[cardlbl] at ($(f)!0.5!(d2)$) {1 : N};
+\node[cardlbl] at ($(f)!0.5!(d3)$) {1 : N};
+\node[cardlbl] at ($(f)!0.5!(d4)$) {1 : N};
+\node[font=\sffamily\tiny, text=muted, anchor=north] at (0,-3.55)
+  {одна таблица фактов, денормализованные измерения, два уровня JOIN};
+\end{tikzpicture}
+\end{document}

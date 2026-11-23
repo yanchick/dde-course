@@ -1,0 +1,63 @@
+\documentclass[tikz,border=12pt]{standalone}
+\usepackage{fontspec}
+\setmainfont{Noto Sans}
+\setsansfont{Noto Sans}
+\usepackage{xcolor}
+\usetikzlibrary{positioning,arrows.meta,calc,fit,backgrounds,decorations.pathreplacing}
+\definecolor{primary}{RGB}{29,78,216}
+\definecolor{primarydark}{RGB}{30,58,138}
+\definecolor{accent}{RGB}{14,165,233}
+\definecolor{ink}{RGB}{15,23,42}
+\definecolor{muted}{RGB}{100,116,139}
+\definecolor{soft}{RGB}{241,245,249}
+\definecolor{teal}{RGB}{13,148,136}
+\definecolor{amber}{RGB}{217,119,6}
+\definecolor{rose}{RGB}{225,29,72}
+\definecolor{line}{RGB}{226,232,240}
+\begin{document}
+\begin{tikzpicture}[font=\sffamily, x=1cm, y=1cm,
+  hd/.style={font=\sffamily\scriptsize\bfseries, text=muted},
+  cell/.style={font=\sffamily\scriptsize, text=ink, anchor=center},
+  hcell/.style={font=\sffamily\scriptsize\bfseries, text=primarydark, anchor=center},
+]
+% ================= ROW STORE =================
+\node[anchor=south west, font=\sffamily\bfseries\footnotesize, text=primarydark] at (-5.3,0.25)
+  {Строковое хранение \textperiodcentered\ OLTP};
+\foreach \i/\id/\nm/\ag/\dep in {0/1/Alice/25/Msk, 1/2/Bob/32/Spb, 2/3/Carol/41/Kzn, 3/4/Dan/29/Msk} {
+  \pgfmathsetmacro{\y}{-0.15-\i*0.72}
+  \fill[rose!6, draw=rose!25, line width=0.5pt, rounded corners=3pt] (-5.3,\y) rectangle (-1.1,\y-0.62);
+  \node[hcell] at (-4.85,\y-0.31) {\id};
+  \node[cell] at (-3.9,\y-0.31) {\nm};
+  \node[cell, text=rose!70!ink] at (-2.85,\y-0.31) {\ag};
+  \node[cell] at (-1.85,\y-0.31) {\dep};
+}
+\foreach \x/\t in {-4.85/{id}, -3.9/{name}, -2.85/{age}, -1.85/{dept}} {
+  \node[hd] at (\x,0.05) {\t};
+}
+\node[font=\sffamily\tiny, text=rose!70!ink, anchor=north] at (-3.2,-3.15)
+  {читаем все страницы: 4 строки $\times$ 100\% столбцов};
+% ================= COLUMN STORE =================
+\node[anchor=south west, font=\sffamily\bfseries\footnotesize, text=teal] at (0.6,0.25)
+  {Колоночное хранение \textperiodcentered\ OLAP};
+\foreach \x/\name/\vfour/\hi in {1.35/id/{1,2,3,4}/0, 2.35/name/{Alice,Bob,Carol,Dan}/0, 3.45/age/{25,32,41,29}/1, 4.75/dept/{Msk,Spb,Kzn,Msk}/0} {
+  \node[hd] at (\x,0.05) {\name};
+  \foreach \v [count=\k from 0] in \vfour {
+    \pgfmathsetmacro{\y}{-0.15-\k*0.62}
+    \ifnum\hi=1
+      \fill[accent!20, draw=accent, line width=0.9pt, rounded corners=2.5pt] (\x-0.42,\y) rectangle (\x+0.42,\y-0.5);
+    \else
+      \fill[white, draw=line, line width=0.6pt, rounded corners=2.5pt] (\x-0.42,\y) rectangle (\x+0.42,\y-0.5);
+    \fi
+    \node[cell] at (\x,\y-0.25) {\v};
+  }
+}
+
+\node[font=\sffamily\tiny, text=teal, anchor=north] at (3.1,-3.15)
+  {читаем только столбец \texttt{age}: 1 блок из 4};
+% ================= NOTE =================
+\node[draw=line, fill=soft, rounded corners=5pt, align=left, text width=13.4cm,
+      font=\sffamily\scriptsize, text=ink, inner sep=8pt, anchor=north west] at (-5.3,-3.55)
+  {\textbf{Запрос} \texttt{SELECT avg(age) FROM users}: строковая СУБД поднимет с диска всю таблицу целиком,
+   колоночная прочитает один непрерывный участок. На 50 столбцах это разница в 50 раз --- ещё до сжатия.};
+\end{tikzpicture}
+\end{document}

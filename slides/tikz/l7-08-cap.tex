@@ -1,0 +1,57 @@
+\documentclass[tikz,border=14pt]{standalone}
+\usepackage{fontspec}
+\setmainfont{Noto Sans}
+\setsansfont{Noto Sans}
+\usepackage{xcolor}
+\usetikzlibrary{positioning,arrows.meta,calc,shapes.geometric,backgrounds}
+\definecolor{primary}{RGB}{29,78,216}
+\definecolor{primarydark}{RGB}{30,58,138}
+\definecolor{accent}{RGB}{14,165,233}
+\definecolor{ink}{RGB}{15,23,42}
+\definecolor{muted}{RGB}{100,116,139}
+\definecolor{soft}{RGB}{241,245,249}
+\definecolor{teal}{RGB}{13,148,136}
+\definecolor{amber}{RGB}{217,119,6}
+\definecolor{rose}{RGB}{225,29,72}
+\definecolor{violet}{RGB}{124,58,237}
+\definecolor{line}{RGB}{226,232,240}
+\begin{document}
+\begin{tikzpicture}[font=\sffamily]
+\coordinate (C) at (0,3.4);
+\coordinate (A) at (-5.0,-2.6);
+\coordinate (P) at (5.0,-2.6);
+% filled triangle
+\fill[soft] (C) -- (A) -- (P) -- cycle;
+% edges
+\draw[line width=5pt, draw=amber, opacity=.55] (C) -- (A);
+\draw[line width=5pt, draw=primary, opacity=.55] (C) -- (P);
+\draw[line width=5pt, draw=teal, opacity=.55] (A) -- (P);
+% vertices
+\node[circle, fill=primary, text=white, font=\sffamily\bfseries\large, minimum size=1.2cm,
+      inner sep=0pt] (nc) at (C) {C};
+\node[circle, fill=teal, text=white, font=\sffamily\bfseries\large, minimum size=1.2cm,
+      inner sep=0pt] (na) at (A) {A};
+\node[circle, fill=violet, text=white, font=\sffamily\bfseries\large, minimum size=1.2cm,
+      inner sep=0pt] (np) at (P) {P};
+% vertex captions
+\node[font=\sffamily\scriptsize, text=muted, anchor=south, align=center] at (0,4.15)
+  {Consistency\\ \textcolor{muted}{все узлы видят одно и то же}};
+\node[font=\sffamily\scriptsize, text=muted, anchor=north east, align=right] at (-5.9,-2.9)
+  {Availability\\ \textcolor{muted}{ответ на любой запрос}};
+\node[font=\sffamily\scriptsize, text=muted, anchor=north west, align=left] at (5.9,-2.9)
+  {Partition tolerance\\ \textcolor{muted}{система живёт при обрыве связи}};
+% edge labels
+\node[draw=amber!60, fill=amber!8, rounded corners=4pt, align=left, font=\sffamily\tiny,
+      text width=3.4cm, inner sep=6pt, anchor=east] (cp) at (-2.0,0.9)
+  {\textbf{CP} --- отказ вместо расхождения\\ MongoDB, HBase, ZooKeeper};
+\node[draw=primary!40, fill=primary!6, rounded corners=4pt, align=left, font=\sffamily\tiny,
+      text width=3.4cm, inner sep=6pt, anchor=west] (ca) at (2.0,0.9)
+  {\textbf{CA} --- только без разделения\\ один узел PostgreSQL};
+\node[draw=teal!50, fill=teal!7, rounded corners=4pt, align=center, font=\sffamily\tiny,
+      text width=5.6cm, inner sep=6pt, anchor=north] (ap) at (0,-3.35)
+  {\textbf{AP} --- ответ, возможно устаревший\\ Cassandra, DynamoDB, Riak};
+% center note
+\node[font=\sffamily\scriptsize, text=ink, align=center, text width=3.6cm] at (0,0.35)
+  {В распределённой системе \textbf{P} не обсуждается:\\ выбираем между \textbf{C} и \textbf{A}};
+\end{tikzpicture}
+\end{document}

@@ -1,0 +1,58 @@
+\documentclass[tikz,border=14pt]{standalone}
+\usepackage{fontspec}
+\setmainfont{Noto Sans}
+\setsansfont{Noto Sans}
+\usepackage{xcolor}
+\usetikzlibrary{positioning,arrows.meta,calc,fit,backgrounds}
+\definecolor{primary}{RGB}{29,78,216}
+\definecolor{primarydark}{RGB}{30,58,138}
+\definecolor{accent}{RGB}{14,165,233}
+\definecolor{ink}{RGB}{15,23,42}
+\definecolor{muted}{RGB}{100,116,139}
+\definecolor{teal}{RGB}{13,148,136}
+\definecolor{violet}{RGB}{124,58,237}
+\definecolor{line}{RGB}{226,232,240}
+\newcommand{\storagecard}[6]{%
+  \begin{scope}[shift={(#1,0)}]
+    \begin{scope}
+      \clip[rounded corners=7pt] (0,0) rectangle (3.95,5.25);
+      \fill[white] (0,0) rectangle (3.95,5.25);
+      \fill[#2] (0,4.25) rectangle (3.95,5.25);
+    \end{scope}
+    \draw[line width=0.8pt, draw=line, rounded corners=7pt] (0,0) rectangle (3.95,5.25);
+    \node[anchor=north west, font=\sffamily\bfseries\footnotesize, text=white, inner sep=0pt]
+      at (0.24,4.92) {#3};
+    \node[anchor=north west, font=\sffamily\scriptsize, text=ink, align=left, inner sep=0pt, text width=3.4cm]
+      at (0.24,3.86) {#4};
+    \node[anchor=north west, font=\sffamily\scriptsize, text=muted, align=left, inner sep=0pt, text width=3.4cm]
+      at (0.24,2.52) {#5};
+    \node[anchor=south west, font=\sffamily\bfseries\scriptsize, text=#2, inner sep=0pt]
+      at (0.24,0.22) {#6};
+  \end{scope}
+}
+\begin{document}
+\begin{tikzpicture}[font=\sffamily]
+\storagecard{0}{primary}{OLTP}
+  {PostgreSQL\\MySQL\\SQL Server}
+  {Короткие транзакции\\Жёсткая схема\\Строки на диске\\ACID и JOIN}
+  {истина в моменте}
+\storagecard{5.02}{primarydark}{Data Warehouse}
+  {Snowflake\\Redshift\\BigQuery}
+  {Звезда и снежинка\\ETL / ELT\\Колонки, партиции\\BI и отчётность}
+  {вопросы бизнеса}
+\storagecard{10.04}{accent}{Data Lake}
+  {S3\\HDFS\\ADLS}
+  {Любые файлы\\Schema-on-read\\Дешёвое хранение\\ML и исследования}
+  {сырьё не теряем}
+\storagecard{15.06}{violet}{Lakehouse}
+  {Delta Lake\\Iceberg\\Hudi}
+  {ACID поверх файлов\\Один каталог\\SQL и ML рядом\\Time travel}
+  {одна платформа}
+\foreach \x in {3.95,8.97,13.99} {
+  \draw[-{Stealth[length=2.4mm]}, line width=1pt, draw=muted!60] (\x+0.08,2.5) -- (\x+0.54,2.5);
+}
+\draw[-{Stealth[length=3mm]}, line width=1.2pt, draw=primary!80] (-0.1,-0.62) -- (19.1,-0.62);
+\node[font=\sffamily\scriptsize, text=muted, anchor=north] at (2.2,-0.74) {растёт объём и гибкость};
+\node[font=\sffamily\scriptsize, text=muted, anchor=north] at (13.4,-0.74) {падает требовательность к задержке};
+\end{tikzpicture}
+\end{document}

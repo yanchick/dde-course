@@ -1,0 +1,49 @@
+\documentclass[tikz,border=12pt]{standalone}
+\usepackage{fontspec}
+\setmainfont{Noto Sans}
+\setsansfont{Noto Sans}
+\usepackage{xcolor}
+\usetikzlibrary{positioning,arrows.meta,calc,fit,backgrounds}
+\definecolor{primary}{RGB}{29,78,216}
+\definecolor{primarydark}{RGB}{30,58,138}
+\definecolor{accent}{RGB}{14,165,233}
+\definecolor{ink}{RGB}{15,23,42}
+\definecolor{muted}{RGB}{100,116,139}
+\definecolor{soft}{RGB}{241,245,249}
+\definecolor{teal}{RGB}{13,148,136}
+\definecolor{amber}{RGB}{217,119,6}
+\definecolor{line}{RGB}{226,232,240}
+\begin{document}
+\begin{tikzpicture}[font=\sffamily]
+% file frame
+\draw[line width=1pt, draw=muted!60, rounded corners=6pt] (0,0) rectangle (17.2,3.5);
+% magic
+\fill[primarydark] (0.05,0.05) rectangle (1.05,3.45);
+\node[rotate=90, text=white, font=\sffamily\tiny\bfseries] at (0.55,1.75) {PAR1};
+% row groups
+\foreach \i/\lbl in {0/{row group 1}, 1/{row group 2}, 2/{row group 3}} {
+  \pgfmathsetmacro{\x}{1.25+\i*4.35}
+  \draw[draw=primary!35, fill=soft, line width=0.8pt, rounded corners=3pt] (\x,0.12) rectangle (\x+4.15,3.38);
+  \node[font=\sffamily\tiny\bfseries, text=primarydark, anchor=north west] at (\x+0.12,3.28) {\lbl};
+  \foreach \j/\cname in {0/{id}, 1/{name}, 2/{age}} {
+    \pgfmathsetmacro{\y}{2.35-\j*0.72}
+    \fill[white, draw=line, line width=0.5pt, rounded corners=2pt] (\x+0.12,\y) rectangle (\x+4.03,\y-0.55);
+    \node[font=\sffamily\tiny, text=muted, anchor=west] at (\x+0.22,\y-0.28) {\cname};
+    \node[font=\sffamily\tiny, text=accent!70!ink, anchor=east] at (\x+3.92,\y-0.28) {страницы};
+  }
+}
+% footer
+\draw[draw=amber!70, fill=amber!7, line width=0.9pt, rounded corners=3pt] (14.35,0.12) rectangle (17.1,3.38);
+\node[rotate=90, font=\sffamily\tiny\bfseries, text=amber!80!ink] at (15.72,1.75) {FileMetaData};
+% zoom on a column chunk
+\draw[-{Stealth[length=2mm]}, draw=primary!60, dashed, line width=0.8pt] (3.5,0.1) -- (3.5,-0.55);
+\node[draw=primary!35, fill=white, line width=0.8pt, rounded corners=4pt, text width=6.0cm,
+      align=left, inner sep=7pt, font=\sffamily\tiny, anchor=north west] (z) at (0.4,-0.6)
+  {\textbf{Страница (page)} $\approx$ 1 МБ: \textcolor{muted}{заголовок · dictionary · RLE-кодирование значений}\\
+   \textcolor{muted}{min/max по странице $\to$ предикат отсекает страницу без её чтения}};
+\node[draw=teal!50, fill=teal!6, rounded corners=4pt, text width=6.6cm, align=left,
+      font=\sffamily\tiny, inner sep=7pt, anchor=north west] at (7.3,-0.6)
+  {\textbf{Футер} хранит схему, список row groups, смещения и статистику. Читатель сначала берёт футер,
+   потом только нужные column chunks.};
+\end{tikzpicture}
+\end{document}

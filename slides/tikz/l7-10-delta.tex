@@ -1,0 +1,62 @@
+\documentclass[tikz,border=12pt]{standalone}
+\usepackage{fontspec}
+\setmainfont{Noto Sans}
+\setsansfont{Noto Sans}
+\usepackage{xcolor}
+\usetikzlibrary{positioning,arrows.meta,calc,fit,backgrounds}
+\definecolor{primary}{RGB}{29,78,216}
+\definecolor{primarydark}{RGB}{30,58,138}
+\definecolor{accent}{RGB}{14,165,233}
+\definecolor{ink}{RGB}{15,23,42}
+\definecolor{muted}{RGB}{100,116,139}
+\definecolor{soft}{RGB}{241,245,249}
+\definecolor{teal}{RGB}{13,148,136}
+\definecolor{amber}{RGB}{217,119,6}
+\definecolor{rose}{RGB}{225,29,72}
+\definecolor{line}{RGB}{226,232,240}
+\tikzset{
+  log/.style={draw=primary!55, fill=white, line width=0.8pt, rounded corners=4pt,
+    text width=3.7cm, align=left, inner sep=6pt, font=\sffamily\tiny, text=muted},
+  ver/.style={circle, fill=primarydark, text=white, font=\sffamily\bfseries\scriptsize,
+    minimum size=0.62cm, inner sep=0pt},
+  parq/.style={draw=teal!55, fill=teal!8, line width=0.7pt, rounded corners=3pt,
+    text width=2.6cm, align=center, inner sep=4pt, font=\sffamily\tiny, text=teal!60!ink},
+  gone/.style={draw=muted!40, fill=muted!6, line width=0.7pt, rounded corners=3pt,
+    text width=2.6cm, align=center, inner sep=4pt, font=\sffamily\tiny, text=muted, dashed},
+}
+\begin{document}
+\begin{tikzpicture}[font=\sffamily]
+% version columns
+\node[ver] (v0) at (-6.2,2.55) {0};
+\node[ver] (v1) at (0,2.55) {1};
+\node[ver] (v2) at (6.2,2.55) {2};
+\node[font=\sffamily\tiny, text=muted, anchor=west] at (-5.72,2.55) {\_delta\_log/000\dots000.json};
+\node[font=\sffamily\tiny, text=muted, anchor=west] at (0.48,2.55) {\_delta\_log/000\dots001.json};
+\node[font=\sffamily\tiny, text=muted, anchor=west] at (6.68,2.55) {\_delta\_log/000\dots002.json};
+% log contents
+\node[log] (l0) at (-6.2,1.35) {\textbf{commit 0}\\ \textcolor{teal}{add} part-00000\\ \textcolor{muted}{schema v1}};
+\node[log] (l1) at (0,1.35) {\textbf{commit 1}\\ \textcolor{teal}{add} part-00001\\ \textcolor{rose}{remove} ---};
+\node[log] (l2) at (6.2,1.35) {\textbf{commit 2}\\ \textcolor{teal}{add} part-00002\\ \textcolor{rose}{remove} part-00001};
+% data files = состояние таблицы
+\node[font=\sffamily\tiny\bfseries, text=muted] at (-6.2,0.15) {состояние};
+\node[font=\sffamily\tiny\bfseries, text=muted] at (0,0.15) {состояние};
+\node[font=\sffamily\tiny\bfseries, text=muted] at (6.2,0.15) {состояние};
+\node[parq] at (-6.2,-0.45) {part-00000};
+\node[parq, fill=muted!5, draw=muted!35, text=muted] at (0,-0.45) {part-00000};
+\node[parq] at (0,-1.05) {part-00001};
+\node[parq, fill=muted!5, draw=muted!35, text=muted] at (6.2,-0.45) {part-00000};
+\node[gone] at (6.2,-1.05) {part-00001};
+\node[parq] at (6.2,-1.65) {part-00002};
+
+% timeline arrows
+\draw[-{Stealth[length=2.6mm]}, line width=1.2pt, draw=amber] (l0.east) -- (l1.west)
+  node[midway, above=1pt, font=\sffamily\tiny, text=amber] {транзакция};
+\draw[-{Stealth[length=2.6mm]}, line width=1.2pt, draw=amber] (l1.east) -- (l2.west)
+  node[midway, above=1pt, font=\sffamily\tiny, text=amber] {транзакция};
+% bottom statement
+\node[draw=primary!25, fill=soft, rounded corners=5pt, text width=13.4cm, align=left,
+      font=\sffamily\scriptsize, inner sep=8pt, anchor=north] at (0,-2.85)
+  {\textbf{Ответ на запрос} собирается реплеем лога: состояние на версии 2 = все \textcolor{teal}{add} минус все
+   \textcolor{rose}{remove}. Отсюда бесплатно получаются time travel и откат. Удалённые файлы не стираются сразу --- их убирает vacuum.};
+\end{tikzpicture}
+\end{document}

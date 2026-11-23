@@ -1,0 +1,51 @@
+\documentclass[tikz,border=12pt]{standalone}
+\usepackage{fontspec}
+\setmainfont{Noto Sans}
+\setsansfont{Noto Sans}
+\usepackage{xcolor}
+\usetikzlibrary{positioning,arrows.meta,calc,fit,backgrounds}
+\definecolor{primary}{RGB}{29,78,216}
+\definecolor{primarydark}{RGB}{30,58,138}
+\definecolor{accent}{RGB}{14,165,233}
+\definecolor{ink}{RGB}{15,23,42}
+\definecolor{muted}{RGB}{100,116,139}
+\definecolor{soft}{RGB}{241,245,249}
+\definecolor{teal}{RGB}{13,148,136}
+\definecolor{amber}{RGB}{217,119,6}
+\definecolor{rose}{RGB}{225,29,72}
+\definecolor{line}{RGB}{226,232,240}
+\tikzset{
+  part/.style={draw=primary!55, fill=soft, line width=0.8pt, rounded corners=3pt,
+    minimum width=1.15cm, minimum height=2.6cm, align=center,
+    font=\sffamily\tiny, text=ink, inner sep=2pt, text=primarydark},
+  big/.style={draw=teal, fill=teal!8, line width=1.1pt, rounded corners=3pt,
+    minimum width=2.4cm, minimum height=2.6cm, align=center, font=\sffamily\tiny, text=teal!70!ink},
+  ins/.style={draw=accent, fill=accent!10, line width=1pt, rounded corners=5pt,
+    text width=3.2cm, align=left, inner sep=7pt, font=\sffamily\scriptsize, text=ink},
+}
+\begin{document}
+\begin{tikzpicture}[font=\sffamily]
+\node[ins] (ins) at (2.0,3.2)
+  {\textbf{INSERT} батчами\\ 1 000--100 000 строк};
+\foreach \i/\a/\b in {0/1/4, 1/5/8, 2/9/12, 3/13/16} {
+  \pgfmathsetmacro{\x}{\i*1.55}
+  \node[part] (p\i) at (\x,0) {K\\ \a\\ \vdots\\ \b};
+  \draw[-{Stealth[length=2mm]}, draw=accent!80, line width=0.9pt]
+    (ins.south) -- (p\i.north);
+}
+\node[font=\sffamily\tiny, text=muted, anchor=north] at (2.3,-1.55) {отсортированные неизменяемые части};
+% merge
+\draw[-{Stealth[length=3mm]}, draw=amber, line width=1.6pt] (5.1,0) -- (6.6,0)
+  node[midway, above=1pt, font=\sffamily\tiny, text=amber] {merge};
+\node[big] (big) at (8.1,0) {K\\ 1\\ \vdots\\ 16};
+\node[big, minimum width=1.6cm, minimum height=1.9cm] (big2) at (10.3,0) {1 \dots 64};
+\draw[-{Stealth[length=3mm]}, draw=amber, line width=1.6pt] (big.east) -- (big2.west);
+\node[font=\sffamily\tiny, text=muted, anchor=north] at (9.2,-1.55) {фоновое слияние: меньше частей --- быстрее чтение};
+% partition note
+\node[draw=line, fill=white, rounded corners=5pt, text width=3.5cm, align=left,
+      font=\sffamily\scriptsize, inner sep=7pt, anchor=north west] (n) at (-5.6,2.0)
+  {\textbf{Партиция} = месяц\\ \texttt{PARTITION BY toYYYYMM(date)}\\[3pt]
+   части внутри партиции упорядочены по \texttt{ORDER BY}};
+\draw[-{Stealth[length=2mm]}, draw=muted!60, dashed] (n.south east) -- (p0.west);
+\end{tikzpicture}
+\end{document}

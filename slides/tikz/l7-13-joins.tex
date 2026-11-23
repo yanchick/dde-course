@@ -1,0 +1,74 @@
+\documentclass[tikz,border=12pt]{standalone}
+\usepackage{fontspec}
+\setmainfont{Noto Sans}
+\setsansfont{Noto Sans}
+\usepackage{xcolor}
+\usetikzlibrary{positioning,arrows.meta,calc,fit,backgrounds}
+\definecolor{primary}{RGB}{29,78,216}
+\definecolor{primarydark}{RGB}{30,58,138}
+\definecolor{accent}{RGB}{14,165,233}
+\definecolor{ink}{RGB}{15,23,42}
+\definecolor{muted}{RGB}{100,116,139}
+\definecolor{soft}{RGB}{241,245,249}
+\definecolor{teal}{RGB}{13,148,136}
+\definecolor{amber}{RGB}{217,119,6}
+\definecolor{rose}{RGB}{225,29,72}
+\definecolor{line}{RGB}{226,232,240}
+\tikzset{
+  hd/.style={fill=primary, text=white, font=\sffamily\tiny\bfseries, minimum height=0.42cm,
+    minimum width=1.25cm, inner sep=2pt},
+  hdg/.style={fill=teal, text=white, font=\sffamily\tiny\bfseries, minimum height=0.42cm,
+    minimum width=1.25cm, inner sep=2pt},
+  hdr/.style={fill=muted!60, text=white, font=\sffamily\tiny\bfseries, minimum height=0.42cm,
+    minimum width=1.25cm, inner sep=2pt},
+  cd/.style={draw=line, fill=white, font=\sffamily\tiny, text=ink, minimum height=0.42cm,
+    minimum width=1.25cm, inner sep=2pt},
+  cdm/.style={draw=line, fill=soft, font=\sffamily\tiny, text=ink, minimum height=0.42cm,
+    minimum width=1.25cm, inner sep=2pt},
+  cdn/.style={draw=line, fill=amber!10, font=\sffamily\tiny, text=amber!70!ink, minimum height=0.42cm,
+    minimum width=1.25cm, inner sep=2pt},
+  ttl/.style={font=\sffamily\tiny\bfseries, text=muted, anchor=south west, inner sep=1pt},
+}
+\newcommand{\rowtwo}[4]{% x, y, left, right
+  \node[cd]  at (#1,      #2) {#3};
+  \node[cd]  at (#1+1.25, #2) {#4};
+}
+\begin{document}
+\begin{tikzpicture}[font=\sffamily]
+% --- users A
+\node[ttl] at (-0.05,0.55) {users};
+\node[hd] at (0.625,0.1) {id};
+\node[hd] at (1.875,0.1) {name};
+\node[cd] at (0.625,-0.32) {1}; \node[cd] at (1.875,-0.32) {Alice};
+\node[cd] at (0.625,-0.74) {2}; \node[cd] at (1.875,-0.74) {Bob};
+\node[cd] at (0.625,-1.16) {3}; \node[cd] at (1.875,-1.16) {Carol};
+% --- orders B
+\node[ttl] at (3.35,0.55) {orders};
+\node[hdg] at (3.875,0.1) {id};
+\node[hdg] at (5.125,0.1) {user\_id};
+\node[cd] at (3.875,-0.32) {101}; \node[cd] at (5.125,-0.32) {1};
+\node[cd] at (3.875,-0.74) {102}; \node[cd] at (5.125,-0.74) {3};
+\node[cd] at (3.875,-1.16) {103}; \node[cd] at (5.125,-1.16) {4};
+% --- INNER join result
+\node[ttl] at (7.2,0.55) {INNER JOIN};
+\node[hdr] at (7.775,0.1) {name};
+\node[hdr] at (9.025,0.1) {order};
+\node[cd] at (7.775,-0.32) {Alice}; \node[cd] at (9.025,-0.32) {101};
+\node[cd] at (7.775,-0.74) {Carol}; \node[cd] at (9.025,-0.74) {102};
+\node[draw=line, fill=muted!4, font=\sffamily\tiny, text=muted, minimum height=0.42cm,
+      minimum width=2.5cm, inner sep=2pt] at (8.4,-1.16) {2 строки};
+% --- LEFT join result
+\node[ttl] at (11.1,0.55) {LEFT JOIN};
+\node[hdr] at (11.675,0.1) {name};
+\node[hdr] at (12.925,0.1) {order};
+\node[cd] at (11.675,-0.32) {Alice}; \node[cd] at (12.925,-0.32) {101};
+\node[cdn] at (11.675,-0.74) {Bob}; \node[cdn] at (12.925,-0.74) {NULL};
+\node[cd] at (11.675,-1.16) {Carol}; \node[cd] at (12.925,-1.16) {102};
+\node[font=\sffamily\tiny, text=muted, anchor=north, align=center] at (6.1,-1.75)
+  {совпадения по \texttt{users.id = orders.user\_id}};
+\node[font=\sffamily\tiny, text=rose, anchor=north, align=center] at (6.1,-2.2)
+  {заказ 103 ссылается на несуществующего пользователя 4 --- он теряется в обоих вариантах};
+\node[font=\sffamily\tiny, text=amber!70!ink, anchor=north, align=center] at (6.1,-2.65)
+  {LEFT JOIN сохраняет Bob: у него нет заказов, но пользователь остаётся};
+\end{tikzpicture}
+\end{document}
